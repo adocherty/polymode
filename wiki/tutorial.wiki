@@ -99,14 +99,13 @@ Try plotting the refractive index of polymer versus the wavelength by typing the
 pmma.plot()
 
 [Note that you may need the draw() command to refresh the plot window]
-
-http://code.google.com/p/polymode/fig1_materials.png
+http://polymode.googlecode.com/svn/wiki/figures/fig1_materials.png
 
 === The Waveguide ===
 To construct an optical fiber we now need to create a waveguide and put different materials in it.
 Try running the example, it should plot the waveguide and look like this:
 
-http://code.google.com/p/polymode/fig2_waveguide.png
+http://polymode.googlecode.com/svn/wiki/figures/fig2_waveguide.png
 
 The different colors represent different materials, here the green is the doped core and the surrounding grey the undoped silica.
 
