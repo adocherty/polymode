@@ -1,0 +1,299 @@
+
+= Tutorials for the Polymode Microstuctured Optical Fiber Solver =
+
+== Running the tutorials ==
+In the directory named “tutorials” which contains a number of test programs that use the Polymode code.
+After installing Polymode you can move this folder anywhere you wish, and run your own code using Polymode from any directory.
+
+The *IPython* interactive python shell is assumed throughout this tutorial, although they
+can be run directly using python non-interactively as well.
+To run these examples open the IPython shell and cd to this directory.
+
+{{{
+cd _tutorial directory_
+}}}
+
+Run the  program (in this case named “ex1_materials.py”) typing:
+
+{{{
+run _name of file_
+}}}
+
+You can include the “.py” extension but it is not necessary.
+
+== Tutorial 1 ==
+
+=== Materials ===
+At the *IPython* interactive prompt run the  program (in this case named “ex1_materials.py”) typing:
+
+{{{
+run  ex1_materials.py
+}}}
+
+You should get an output similar to this:
+
+	PMMA Polymer 
+	Wavelength limits (um): 0.25->1.5 
+	Temperature limits (K): 0->400 
+	Cite: 
+	Refractive index at 1.45um is 1.48074+0i 
+
+	Fused Silicon Oxide (SiO₂) 
+	Wavelength limits (um): 0.2->3.8 
+	Temperature limits (K): 0->400 
+	Cite: Malitson 1965, http://www.opticsinfobase.org/abstract.cfm?URI=josa-55-10-1205 
+	Refractive index at 1.45um is 1.4452+0i 
+
+	Silica doped with Germania 
+	Wavelength limits (um): 0.6->1.8 
+	Temperature limits (K): 0->400 
+	Cite: Sunak, H.R.D.; Bastien, S.P., Photonics Technology Letters V1 N6 142-145, 1989 
+	Refractive index at 1.45um is 1.45313+0i 
+
+The code itself is shown and explained following:
+
+{{{
+from numpy import *
+from ABCSolver import *
+
+#Basic materials 
+air = Material.Air() 
+m145 = Material.Fixed(1.45) 
+}}}
+
+The first two lines are needed in all programs using Polymode, they import the Polymode code for us to use and the
+numerical python code to enable mathematical operations on arrays.
+The next two lines create two of the most common materials. *Material.Fixed* allows you to create a material
+with a fixed refractive index, here 1.45, that doesn't change with wavelength.
+*Material.Air* is the same as  Material.Fixed(1)it gives a material with a fixed refractive index of 1.
+
+{{{
+silica = Material.Silica() 
+germania = Material.Germania() 
+pmma = Material.Polymer() 
+}}}
+
+ These are some common materials for waveguides to be constructed from.
+ They have different refractive indices at different wavelengths which is automatically calculated.
+
+{{{
+sige = Material.SiO2GeO2(0.05) 
+}}}
+
+The inbuilt material SiO2GeO2, Silica doped with Germania , has a higher refractive index than silica and is used for the core of optical fibers. This approximation is accurate for a dopant concentration up to about 20%.
+
+{{{
+wl = 1.45
+
+for mat in [pmma, silica, sige]: 
+	ri = mat.index(wl) 
+	mat.info() 
+	print "Refractive index at %gum is %.6g+%.4gi\n" \
+			% (wl, real(ri), imag(ri))
+}}}
+
+Here we iterate over the materials pmma, silica and sige and print their refractive index at a wavelength wl in micrometers.
+You can get some information about the material, including a reference for where the data is derived using the .info() method for any material.
+You are now at a command prompt for python and can enter commands and explore the materials that have been defined.
+Try plotting the refractive index of polymer versus the wavelength by typing the commands
+pmma.plot()
+
+[Note that you may need the draw() command to refresh the plot window]
+
+http://code.google.com/p/polymode/fig1_materials.png
+
+=== The Waveguide ===
+To construct an optical fiber we now need to create a waveguide and put different materials in it.
+Try running the example, it should plot the waveguide and look like this:
+
+http://code.google.com/p/polymode/fig2_waveguide.png
+
+The different colors represent different materials, here the green is the doped core and the surrounding grey the undoped silica.
+
+Let’s see how this has been done, by looking at the code of test1py. The text of that program looks like this:
+
+There are three parts to creating the waveguide: choosing the waveguide parameters and materials, and then assembling the waveguide structure by placing particular shapes into it. 
+
+wg = Waveguide.Waveguide(material=cladding, symmetry=1) 
+
+Material: The material that comprises the waveguide substrate.
+
+Symmetry: To make the program more efficient we can exploit the rotational symmetry of the fiber. For example, if the waveguide has six identical sectors we only need to solve in a 60 degree segment and the symmetry is 6. A completely asymmetric structure would have a symmetry of 1. Lower symmetries are much slower to calculate.
+
+s1 = Waveguide.Circle(core, center=(0,0), radius=2.0) 
+wg.add_shape(s1) 
+
+ A waveguide needs to have some shapes added to it. There are a number of shaped available in the Waveguide module. The first parameter in any shape is the material it is made from, then there are different parameters for each shape type.
+
+In this case we add the core as a circle at the origin with a radius of 2 μm. To plot the waveguide we now use the command:
+wg.plot()
+
+To plot the refractive index profile that will be used in the solver code you can use this command:
+wg.plot_bitmap(Nx)
+
+Finding Modes of a Step Index Fiber
+This exercise takes the waveguide constructed in the preceeding problem and solves for 5 modes in it.
+
+Running the code by the command (at the ipython command prompt)
+run ex2_step_index_modes
+
+This will eventually give the following output from the mode solver, as the modes are solved:
+I: Mode #0 [13:1.11s] neff:1.46319 + 1.19e-18i res: 6.926e-12 
+I: Mode #1 [12:1.01s] neff:1.46303 + 6.18e-19i res: 1.297e-13 
+I: Mode #0 [12:1.08s] neff:1.47428 - 6.20e-18i res: 6.762e-12 
+
+The information printed during the solving process gives information on the current mode found:
+
+Mode #number [iterations], neff=(effective index), res: approx error
+
+The iterations information is how many iterations is needed to refine the leakage loss of the mode to the stated accuracy; highly leaky modes require more iterations. The value of the residue gives an indication of the accuracy of the modes - clearly neff should not be quoted to more significant figures than indicated the residue.
+
+The code of ex2_step_index_modes is the same as the previous example for creating the waveguide, the only changes are the addition of the mode calculation:
+
+Nx = 100,1	 number of radial & azimuthal points 
+wl = 1.0	 wavelength 
+
+solver = NLSolver.DefaultSolver(Nx, wg, modetype='bound') 
+modes = solver(0, wl, number=2) 
+modes += solver(1, wl, number=1) 
+
+To solve for modes in our created waveguide we need to give the resolution of the numerical solution Nx. This is two numbers the first is the number of points in the radial direction and the second the number points in the azimuthal (ɸ) direction.
+
+Note that the number of radial and azimuthal points defines the resolution of the calculation. Increasing the number of radial points linearly increases the time taken for the calculation, but the increase in calculation time as you increase the azimuthal resolution is much more dramatic. That is unfortunate as features like thin bridges with require a lot of points to resolve them properly. You should always check for proper convergence of the solution by running at different resolutions (for example, doubling the number of points). You need to be even more careful about convergence when considering the imaginary part of neff.
+
+The solver object is created with the number of points and the waveguide as arguments. This solver can then be used to calculate any number of modes calling it with the wavenumber and  the symmetry class.
+
+The modes are returned as a list, if we just type “modes” and hit enter the modes in the list are printed.
+
+Any mode in the list can be inspected interactively, let's investigate the first mode. It has some properties, the effective index, the loss, the symmetry class, the wavelength. To go through each mode and print information on it we use this command:
+
+for mode in modes: 
+	mode.info()
+
+The output is:
+
+VectorMode size: (100, 1), symmetry=1, m0=0, λ=1, rmax=2.1, vecs: RL {} 
+ | neff=1.46319 + 6.10e-19i 	loss=3.327e-11dB/m 	res=2.58e-13 
+ | Effective Area: 10.111 μm² 
+ | Spot size: 0.4035 μm 
+ | Numerical Aperture: 0.1747 
+
+VectorMode size: (100, 1), symmetry=1, m0=0, λ=1, rmax=2.1, vecs: RL {} 
+ | neff=1.46303 - 4.34e-19i 	loss=-2.368e-11dB/m 	res=1.47e-13 
+ | Effective Area: 10.076 μm² 
+ | Spot size: 0.3979 μm 
+ | Numerical Aperture: 0.175 
+
+VectorMode size: (100, 1), symmetry=1, m0=1, λ=1, rmax=2.1, vecs: RL {} 
+ | neff=1.47428 - 7.99e-19i 	loss=-4.358e-11dB/m 	res=4.78e-12 
+ | Effective Area: 5.7825 μm² 
+ | Spot size: 0.7165 μm 
+ | Numerical Aperture: 0.22842 
+
+Tutorial 2 – Leaky Modes of a Step Index Fiber
+Run this tutorial as usual by
+run ex2_leaky_modes
+
+This should print the list of found modes like the previous tutorial and then plot them. 
+I: Mode #0 [13:1.04s] neff:1.46314 + 7.89e-04i res: 4.622e-12 
+I: Mode #1 [12:1.12s] neff:1.46301 + 8.07e-04i res: 5.601e-14 
+I: Mode #0 [12:1.08s] neff:1.47439 + 1.69e-04i res: 1.017e-11 
+
+
+Look at this program file, the program is the same as the previous apart from the waveguide now has a substrate of polymer and an annlus of air that forms the cladding. Plot the refractive index profile of the waveguide:
+wg.plot_bitmap(Nx)
+
+This structure gives rise to modes that are guided by the core and cladding, but energy from them can tunnel through the this air gap and this causes leakage loss.
+
+This loss can be modelled by the program. In the solver we specify we want to look for outward going modes (bound modes are not supported in this structure)
+
+solver = NLSolver.DefaultSolver(Nx, wg, modetype='outward') 
+modes = solver(0, wl, number=2) 
+modes += solver(1, wl, number=1) 
+
+We find modes in symmetry classes 0 and 1 just as previously. However the modes will now be lossy. The loss of each mode can be shown using the info() function:
+
+modes[0].info() 
+VectorMode size: (100, 1), symmetry=1, m0=0, λ=1, rmax=3.15, vecs: RL {} 
+ | neff=1.46314 + 7.89e-04i 	loss=4.305e+04dB/m 	res=4.62e-12 
+ | Effective Area: 10.618 μm² 
+ | Spot size: 0.73925 μm 
+ | Numerical Aperture: 0.17061
+
+You can also find the loss directly using the loss property of the mode:
+modes[0].loss 
+>> 43052.327880062359 
+
+The entire mode list is now plotted with the commands:
+Plotter.plot_modes_in_grid(modes, rmax=5) 
+
+To plot a single mode we can use the command:
+modes[mode number].plot()
+Where the mode number is a number from 0 to [number of modes – 1].
+
+The plot will default to plotting the power, or precisely the z-component of the time-averaged Poynting vector. However other parts of the electromagnetic field can also be plotted. For example the command
+modes[0].plot('Hr')
+plots the radial component of the magnetic fieldof the first mode. 
+
+Other parts of the electromagnetic field that can be plotted are:
+'Sz', 'Hr', 'Ha', 'Er', 'Ea', 'Hz', 'Ez', 'Hx', 'Hy', 'Ex', 'Ey'
+where 'Sz' is the z-component of the Poynting vector.
+
+Also 'pe', 'ph' will plot the electric and magnetic polarisation vectors. If the mode is elliptically or circularly polarised this polarisation plots will be elliptical.
+
+This example used the save_data and load_data commands to save calculated modes and load them back again to plot them. They can be used to save any objects you like including waveguides, materials, shapes and modes.
+save_data(data, filename)
+data = load_data(filename)
+
+Try running the next file ex2_plotting_modes to see some commands in action.
+
+Tutorial 3 – Microstructured fibers
+A microstructured fiber can be created in the same way as the fibers we have created so far, however we will now have much more flexibility of what shapes to create in the waveguide.
+
+Initially let's create a waveguide from PMMA polymer with six circular airholes. The structure we want looks like this:
+
+
+The waveguide can be created in the same way, but now we use the fact that it is six-fold symmetric and set the symmetry to be six. We then only need to add one circule and the rest will be created automatically by the symmetry. The code to do this is:
+
+air = Material.Air() 
+polymer = Material.Polymer() 
+wg = Waveguide.Waveguide(material=polymer, symmetry=6) 
+s1 = Waveguide.Circle(air, center=(3,pi/6), radius=1.25) 
+wg.add_shapes(s1) 
+wg.plot()
+
+There are many other shapes that can be used to create different geometries. Some of them with their options are:
+
+Waveguide.Circle( material, center =, radius = radius, zorder=0, xy=False) 
+
+Waveguide.Ellipse( material, center =, axes =, rot=0, sampling=100, zorder=0, xy=False) 
+
+Waveguide.Rectangle( material, center =, axes =, rot=0, zorder=0, xy=False)
+
+Waveguide.Polygon( material, nodes = [ list of node coords ],  zorder=0, xy=False)
+
+Waveguide.Annulus( material,  r =, phi =, zorder=0)
+
+Waveguide.Image(material, image=None, border=0)
+
+It is important  to note that the coordinate system defaults to polar, however setting the option xy to True enables the center and axes parameters to be given in cartesian coordinates.
+Solving Modes in Microstructured Fibers
+We now want to find some modes in the previous fiber geometry. As before we create a solver object and run the solver with different symmetry indices to get different classes of modes. Note that the symmetry index with a fiber of symmetry N will range from -N/2 … N/2 and the modes for negative and positive indices are degenerate. We will come back to this point. The code to solve for modes in the waveguide is:
+Nx = 100,11
+wl = 1.45
+
+solver = NLSolver.DefaultSolver(Nx, wg) 
+modes = solver(0, wl, number=2) 
+modes += solver(1, wl, number=3) 
+
+save_data((modes, wg), "ex3_modes.dat") 
+Plotter.plot_modes_in_grid(modes) 
+
+We now specify the number of radial and azimuthal points, generally the azimuthal number should be odd. We solver for 2 modes with a symmetry index of 0 and three for a symmetry index of 1.
+The modes as well as the waveguide are saved to the file 'ex3_modes.dat', note the use of brackets to group them together.
+The modes are plotted in a grid as before.
+
+
+
+
+
