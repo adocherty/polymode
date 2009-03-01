@@ -1,7 +1,8 @@
-
 = Tutorials for the Polymode Microstuctured Optical Fiber Solver =
 
 http://polymode.googlecode.com/svn/misc/images/polymode2.png
+
+<wiki:toc max_depth="3" />
 
 == Running the tutorials ==
 In the directory named “tutorials” which contains a number of test programs that use the Polymode code.
@@ -34,8 +35,9 @@ run  ex1_materials.py
 
 You should get an output similar to this:
 
-	PMMA Polymer 
-	Wavelength limits (um): 0.25->1.5 
+{{{
+	PMMA Polymer
+	Wavelength limits (um): 0.25->1.5
 	Temperature limits (K): 0->400 
 	Cite: 
 	Refractive index at 1.45um is 1.48074+0i 
@@ -51,6 +53,7 @@ You should get an output similar to this:
 	Temperature limits (K): 0->400 
 	Cite: Sunak, H.R.D.; Bastien, S.P., Photonics Technology Letters V1 N6 142-145, 1989 
 	Refractive index at 1.45um is 1.45313+0i 
+}}}
 
 The code itself is shown and explained following:
 
@@ -63,11 +66,10 @@ air = Material.Air()
 m145 = Material.Fixed(1.45) 
 }}}
 
-The first two lines are needed in all programs using Polymode, they import the Polymode code for us to use and the
-numerical python code to enable mathematical operations on arrays.
-The next two lines create two of the most common materials. *Material.Fixed* allows you to create a material
+The first two lines are needed in all programs using Polymode, they import the Polymode code for us to use and the numerical python code to enable mathematical operations on arrays.
+The next two lines create two of the most common materials. `Material.Fixed` allows you to create a material
 with a fixed refractive index, here 1.45, that doesn't change with wavelength.
-*Material.Air* is the same as  Material.Fixed(1)it gives a material with a fixed refractive index of 1.
+`Material.Air` is the same as  `Material.Fixed(1)` - it gives a material with a fixed refractive index of 1.
 
 {{{
 silica = Material.Silica() 
@@ -75,8 +77,8 @@ germania = Material.Germania()
 pmma = Material.Polymer() 
 }}}
 
- These are some common materials for waveguides to be constructed from.
- They have different refractive indices at different wavelengths which is automatically calculated.
+These are some common materials for waveguides to be constructed from.
+They have different refractive indices at different wavelengths which is automatically calculated.
 
 {{{
 sige = Material.SiO2GeO2(0.05) 
@@ -95,11 +97,11 @@ for mat in [pmma, silica, sige]:
 }}}
 
 Here we iterate over the materials pmma, silica and sige and print their refractive index at a wavelength wl in micrometers.
-You can get some information about the material, including a reference for where the data is derived using the .info() method for any material.
+You can get some information about the material, including a reference for where the data is derived using the `.info()` method for any material.
 You are now at a command prompt for python and can enter commands and explore the materials that have been defined.
 Try plotting the refractive index of polymer versus the wavelength by typing the command `pmma.plot()`
 
-[Note that you may need the draw() command to refresh the plot window]
+_Note that you may need the draw() command to refresh the plot window_
 
 http://polymode.googlecode.com/svn/wiki/figures/fig1_materials.png
 
@@ -111,23 +113,23 @@ http://polymode.googlecode.com/svn/wiki/figures/fig2_waveguide.png
 
 The different colors represent different materials, here the green is the doped core and the surrounding grey the undoped silica.
 
-Let’s see how this has been done, by looking at the code of test1py.
+Let’s see how this has been done, by looking at the code of `ex1_the_waveguide.py`.
 There are three parts to creating the waveguide: choosing the waveguide parameters and materials, and then assembling the waveguide structure by placing particular shapes into it. 
 
 {{{
 wg = Waveguide.Waveguide(material=cladding, symmetry=1) 
 }}}
 
-Material: The material that comprises the waveguide substrate.
+*Material*: The material that comprises the waveguide substrate.
 
-Symmetry: To make the program more efficient we can exploit the rotational symmetry of the fiber. For example, if the waveguide has six identical sectors we only need to solve in a 60 degree segment and the symmetry is 6. A completely asymmetric structure would have a symmetry of 1. Lower symmetries are much slower to calculate.
+*Symmetry*: To make the program more efficient we can exploit the rotational symmetry of the fiber. For example, if the waveguide has six identical sectors we only need to solve in a 60 degree segment and the symmetry is 6. A completely asymmetric structure would have a symmetry of 1. Lower symmetries are much slower to calculate.
 
 {{{
 s1 = Waveguide.Circle(core, center=(0,0), radius=2.0) 
 wg.add_shape(s1) 
 }}}
 
- A waveguide needs to have some shapes added to it. There are a number of shaped available in the Waveguide module. The first parameter in any shape is the material it is made from, then there are different parameters for each shape type.
+A waveguide needs to have some shapes added to it. There are a number of shaped available in the Waveguide module. The first parameter in any shape is the material it is made from, then there are different parameters for each shape type.
 
 In this case we add the core as a circle at the origin with a radius of 2 μm. To plot the waveguide we now use the command:
 
@@ -136,7 +138,6 @@ wg.plot()
 }}}
 
 Note: to plot the refractive index profile that will be used in the solver code you can use this command `wg.plot_bitmap(Nx)`
-
 
 == Tutorial 2 ==
 
@@ -148,9 +149,11 @@ Running the code by the command `run ex2_step_index_modes`.
 Will construct the waveguide and solve for three modes giving the following output from the mode solver,
 as the modes are solved:
 
+{{{
 	I: Mode #0 [13:1.11s] neff:1.46319 + 1.19e-18i res: 6.926e-12 
 	I: Mode #1 [12:1.01s] neff:1.46303 + 6.18e-19i res: 1.297e-13 
 	I: Mode #0 [12:1.08s] neff:1.47428 - 6.20e-18i res: 6.762e-12 
+}}}
 
 The information printed during the solving process gives information on the current mode found:
 
@@ -177,7 +180,7 @@ Note that the number of radial and azimuthal points defines the resolution of th
 
 The solver object is created with the number of points and the waveguide as arguments. This solver can then be used to calculate any number of modes calling it with the wavenumber and  the symmetry class.
 
-The modes are returned as a list, if we just type “modes” and hit enter the modes in the list are printed.
+The modes are returned as a list, if we just type `modes` and hit enter the modes in the list are printed.
 
 Any mode in the list can be inspected interactively, let's investigate the first mode. It has some properties, the effective index, the loss, the symmetry class, the wavelength. To go through each mode and print information on it we use this command:
 
@@ -188,6 +191,7 @@ for mode in modes:
 
 The output is:
 
+{{{
 	VectorMode size: (100, 1), symmetry=1, m0=0, λ=1, rmax=2.1, vecs: RL {} 
 	 | neff=1.46319 + 6.10e-19i 	loss=3.327e-11dB/m 	res=2.58e-13 
 	 | Effective Area: 10.111 μm² 
@@ -205,15 +209,18 @@ The output is:
 	 | Effective Area: 5.7825 μm² 
 	 | Spot size: 0.7165 μm 
 	 | Numerical Aperture: 0.22842 
+}}}
 
 === Leaky Modes of a Step Index Fiber ===
 
 Run this tutorial as usual by `run ex2_leaky_modes`.
 This should print the list of found modes like the previous tutorial and then plot them. 
 
+{{{
 	I: Mode #0 [13:1.04s] neff:1.46314 + 7.89e-04i res: 4.622e-12 
 	I: Mode #1 [12:1.12s] neff:1.46301 + 8.07e-04i res: 5.601e-14 
 	I: Mode #0 [12:1.08s] neff:1.47439 + 1.69e-04i res: 1.017e-11 
+}}}
 
 Look at this program file, the program is the same as the previous apart from the waveguide now has a substrate of polymer and an annlus of air that forms the cladding. Plot the refractive index profile of the waveguide:
 
@@ -223,7 +230,7 @@ wg.plot_bitmap(Nx)
 
 This structure gives rise to modes that are guided by the core and cladding, but energy from them can tunnel through the this air gap and this causes leakage loss.
 
-This loss can be modelled by the program. In the solver we specify we want to look for outward going modes (bound modes are not supported in this structure)
+This loss can be modelled by the program. In the solver we specify we want to look for outward going modes (bound modes are not supported in this structure).
 
 {{{
 solver = NLSolver.DefaultSolver(Nx, wg, modetype='outward') 
@@ -233,13 +240,15 @@ modes += solver(1, wl, number=1)
 
 We find modes in symmetry classes 0 and 1 just as previously. However the modes will now be lossy. The loss of each mode can be shown using the info() function:
 
-`modes[0].info() `
+{{{
+modes[0].info() 
 
 	VectorMode size: (100, 1), symmetry=1, m0=0, λ=1, rmax=3.15, vecs: RL {} 
 	 | neff=1.46314 + 7.89e-04i 	loss=4.305e+04dB/m 	res=4.62e-12 
 	 | Effective Area: 10.618 μm² 
 	 | Spot size: 0.73925 μm 
 	 | Numerical Aperture: 0.17061
+}}}
 
 You can also find the loss directly using the loss property of the mode:
 
@@ -250,29 +259,32 @@ modes[0].loss
 
 The entire mode list is now plotted with the commands:
 
-`Plotter.plot_modes_in_grid(modes, rmax=5) `
+{{{Plotter.plot_modes_in_grid(modes, rmax=5) }}}
 
 To plot a single mode we can use the command:
 
-`modes[mode number].plot()`
+{{{modes[mode number].plot()}}}
 
-Where the mode number is a number from 0 to [number of modes – 1].
+Where the mode number is a number from `0` to `number of modes – 1`.
 
 The plot will default to plotting the power, or precisely the z-component of the time-averaged Poynting vector. However other parts of the electromagnetic field can also be plotted. For example the command
-modes[0].plot('Hr')
+`modes[0].plot('Hr')`
 plots the radial component of the magnetic fieldof the first mode. 
 
 Other parts of the electromagnetic field that can be plotted are:
-{{{'Sz', 'Hr', 'Ha', 'Er', 'Ea', 'Hz', 'Ez', 'Hx', 'Hy', 'Ex', 'Ey'}}}
+`'Sz', 'Hr', 'Ha', 'Er', 'Ea', 'Hz', 'Ez', 'Hx', 'Hy', 'Ex', 'Ey'`
 where 'Sz' is the z-component of the Poynting vector.
 
-Also 'pe', 'ph' will plot the electric and magnetic polarisation vectors. If the mode is elliptically or circularly polarised this polarisation plots will be elliptical.
+Also `'pe', 'ph'` will plot the electric and magnetic polarisation vectors. If the mode is elliptically or circularly polarised this polarisation plots will be elliptical.
 
 This example used the save_data and load_data commands to save calculated modes and load them back again to plot them. They can be used to save any objects you like including waveguides, materials, shapes and modes.
+
+{{{
 save_data(data, filename)
 data = load_data(filename)
+}}}
 
-Try running the next file ex2_plotting_modes to see some commands in action.
+Try running the next file `ex2_plotting_modes.py` to see some commands in action.
 
 == Tutorial 3 ==
 
@@ -335,12 +347,18 @@ http://polymode.googlecode.com/svn/wiki/figures/fig4_modes.png
 
 === Coating Holes ===
 
-Shapes can be coated with another material of a specified thickness using the Material.coated_shape(shape, coating material, thickness) function. This takes a previously created shape, a coating material and a thickness and returns a shape to use as the coating. Note that any shape can be coated, not just circular inclusions.
-This is seen in the ex4_coated_holes.py file. The relavant portion is shown here, a circle is created and coated with a material of higher refractive index and both shapes are added to the waveguide.
+Shapes can be coated with another material of a specified thickness using the
+{{{
+Material.coated_shape(shape, coating material, thickness)
+}}}
+function. This takes a previously created shape, a coating material and a thickness and returns a shape to use as the coating. Note that any shape can be coated, not just circular inclusions.
+This is seen in the `ex4_coated_holes.py` file. The relavant portion is shown here, a circle is created and coated with a material of higher refractive index and both shapes are added to the waveguide.
+
+{{{
 hole = Waveguide.Circle(air, center=(6.75,0), radius=1.5) 
 coating = Waveguide.coated_shape(hole, m17, 0.2) 
 wg.add_shape(hole, coating) 
-
+}}}
 
 === Waveguide from a bitmap image ===
 
@@ -348,7 +366,7 @@ The second way to enter a structure is to use an image. The example folder gives
 
 Images are used in a similar way to other objects. However first the bitmap must be imported using the Image.ImportBitmap function. 
 
-`image = Image.ImportBitmap(filename, size=(sx,sy), negative=True/False) `
+{{{image = Image.ImportBitmap(filename, size=(sx,sy), negative=True/False) }}}
 
 This imports an image from the named file of a specified x and y dimentions in microns. The negative flag is false if the bright parts of the image are to be considered the material and false if the opposite is the case.
 Then the waveguide shape can be created using the command
@@ -357,11 +375,11 @@ Waveguide.Image(material, image)
 Where material is the material to assign and image the previous image object.
 Other actions can be applied to the image object, it may be necessary to apply some contrast to the image
 
-`image.contrast(scale=15, transition=0.45) `
+{{{image.contrast(scale=15, transition=0.45) }}}
 
 Also a new way to plot the waveguide is given, the plot_bitmap command gives the actual numerical values of the waveguide on a polar grid of 200x60 pixels (in this case), the sectors=1 specified plotting just one of the symmetric sectors and the cmap command chooses the colormap.
 
-`wg.plot_bitmap((200,60), sectors=1, cmap=Plotter.cm.gray) `
+{{{wg.plot_bitmap((200,60), sectors=1, cmap=Plotter.cm.gray) }}}
 
 And the results of the program run are:
 
@@ -369,7 +387,7 @@ And the results of the program run are:
 A non-step dependence on the refractive index of any shape can easily be defined.  The file `ex4_parabolic_index.py` creates a circular core and assignes it a parabolic refractive index.
 A refractive index profile can be specified as a function of the distance from the objects center.
 
-`fn_parabolic = lambda d: 1-(d/radius)**2 `
+{{{fn_parabolic = lambda d: 1-(d/radius)**2 }}}
 
 This uses a Python “lambda function” to specify a function of d, distance. The function should be normalized to 0 and 1, a value of 1 will be assigned the refractive index of the object and 0 will be assigned the refractive index of the background. The defined function is 1 at the center of the circle and 0 at the edge.
 radius = 4 
@@ -417,7 +435,9 @@ for wl in wlrange:
 }}}
 
 The solvers are created and instead of being run immediately we use the initialize function to pass arguments but defer the execution of the mode solver. This allows us to create modes and then to solve them using the batch solve command,
+{{{
 modes = Solver.batch_solve(solvers) 
+}}}
 The effective indices and loss are extracted as a list from the modes using the Python list construction command
 
 {{{
@@ -426,5 +446,3 @@ loss = [ m.loss for m in modes ]
 }}}
 
 Then we can plot the real part of the effective index and loss versus the wavelength in this case for the HE11-like mode.
-
-
