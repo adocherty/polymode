@@ -514,7 +514,7 @@ specify `symmetry=1`. The image is given a specified center as the automatic cen
 
 {{{
 # Create waveguide and specify the problem domain to have radius 15
-wg = Waveguide.Waveguide(rmax=15, material=polymer, symmetry=1)
+wg = Waveguide.Waveguide(rmax=15, material=polymer, interior=polymer, symmetry=1)
 
 # Load a png file and specify the size of the original image
 # The center of the image (pixel offset) must also be specified for symmetry=1
@@ -525,42 +525,46 @@ wg.add_shape(Waveguide.Image(air, image, border=2))
 
 # Waveguide Parameters:
 Nx=100,81		#number of radial & azimuthal points
-wl = 1.55			#Wavelength
+wl=1.55			#Wavelength
 
 # Create the solver
 solver = NLSolver.DefaultSolver(Nx, wg)
 modes = solver(0, wl, number=4)
 
-if 'modes' in locals():
-	Plotter.plot_modes_in_grid(modes)
+Plotter.plot_modes_in_grid(modes)
 }}}
 
-Note the `if 'modes' in locals():` construction is handy. It checks if the variable 'modes' has been defined, if it has then it will plot the modes, there is no 'modes' variable nothing will happen.
+Note the `interior=polymer` is only typically needed for an image waveguide as the code cannot determine what the material of the core is. If the core material or material outside the calculation range (beyond rmax) is different from the waveguide's material then it needs to be specified:
+
+{{{
+Waveguide.Waveguide(material=_material_, interior=_material_, exterior=_material_)
+}}}
 
 Loading an image only allows you to have two different materials in the waveguide - the waveguide itself and the material assigned to the image. However, it is possible to add mode shapes to the waveguide on top of the image with different materials, even other images.
 
 Be aware that using waveguides without symmetry will be very slow to solve for modes as the number of azimuthal points needed is large.
 
+http://polymode.googlecode.com/svn/wiki/figures/fig_imagemodes.png
 
 == Tutorial 5 - Advanced solving ===
 
 === Mode Quantities ===
+This tutorial file is `ex5_modal_quantities.py`.
 
-The `mode` object has a lot of information abou the mode. The basic properties are:
-
-* The wavelength
-* The loss
-* The symmetry class
-* The propagation constant
-* The effective index
+The `mode` object has a lot of information about the mode. The basic properties are:
+ * The wavelength
+ * The loss
+ * The symmetry class
+ * The propagation constant
+ * The effective index
 
 Other quantities can be calculated from the 
-* Group index
-* Proportion of power in the core
-* Spot size
-* Nonlinear effective area, A,,eff,,
+ * Group index
+ * Proportion of power in the core
+ * Spot size
+ * Nonlinear effective area, A,,eff,,
 
-Some of these are accessed in the file `ex5_modal_quantities.py`.
+Some of these are accessed in the tutorial file
 {{{
 for m in modes:
 	m.normalize(by='ext')
@@ -578,6 +582,7 @@ for m in modes:
 }}}
 
 === Convergence ===
+This tutorial file is `ex5_convergence_test.py`
 
 It can be useful to check the accuracy of the calculated effective index or other modal properties. This can be done by running the solver with different numbers of points. The file `ex5_convergence_test.py` does just that, and presents the results.
 
@@ -630,9 +635,10 @@ ylabel(r'Error in $n_{eff}$')
 
 We then change the axes to be logarithmic and put some labels on the axes. Note the use of latex in the axis labels.
 
-http://polymode.googlecode.com/svn/wiki/figures/fig10_parabolic.png
+http://polymode.googlecode.com/svn/wiki/figures/fig10_convergence.png
 
 === Eliptical polarization and degenerate modes ===
+This tutorial file is `ex5_uranus_fiber.py`.
 
 This tutorial calculates the modes in a three-fold symmetric fiber from the paper by 
 [http://www.opticsinfobase.org/oe/abstract.cfm?URI=oe-12-12-2795 Uranus and Hoekstra].
@@ -668,29 +674,37 @@ The modes in mode class 0 are linearly polarized however those in mode class 1 h
 We'll look at extracting two degenerate linearly polarized modes from a circularly polarized mode in the next tutorial.
 
 === Solving over a wavelength range ===
+This tutorial file is `ex5_uranus_wavelength.py`
 
-The wavelength properties of a mode or modes can be evaluated by calculating the mode over a range of wavelengths. The example `ex5_uranus_wavelength.py` does this with the same waveguide as the previous example. Compare this to Fig 7 of the Uranus paper.
-
-{{{
-wlrange = arange(0.4,1.6,0.1) 
-solvers = [] 
-for wl in wlrange: 
-	k0=2*pi/wl 
-	solve = Solver.BracketSolve(Nx, wg) 
-	solve.initialize(1, k0, [silica.index(k0), 1.0], totalnumber=1) 
-	 
-	solvers += [ solve ] 
-}}}
-
-The solvers are created and instead of being run immediately we use the initialize function to pass arguments but defer the execution of the mode solver. This allows us to create modes and then to solve them using the batch solve command,
-{{{
-modes = Solver.batch_solve(solvers) 
-}}}
-The effective indices and loss are extracted as a list from the modes using the Python list construction command
+The wavelength properties of a mode or modes can be evaluated by calculating the mode over a range of wavelengths. The example does this with the same waveguide as the previous example. Compare this to Fig 7 of the Uranus paper.
 
 {{{
-neffs = [ m.neff for m in modes ] 
-loss = [ m.loss for m in modes ] 
+#Create solver instances for each wavelength in a range
+wlrange = arange(0.6,1.7,0.1)
+solvers = []
+for wl in wlrange:
+	solve = NLSolver.DefaultSolver(Nx, wg)
+	solve.initialize(m0, wl, 1.42, number=1)
+	solvers += [ solve ]
+
+#Use this function to solve multiple solver objects (with different parameters)
+modes = Solver.batch_solve(solvers)
 }}}
 
-Then we can plot the real part of the effective index and loss versus the wavelength in this case for the HE11-like mode.
+Any odd modes found that aren't what we are looking for are discarded using the filter function and a _lambda_ function.
+
+{{{
+#Discard spurious modes that have too large a loss
+modes = filter(lambda m: m.loss<5000, modes)
+
+subplot(121)
+Plotter.plot_parameters(modes, 'neff', 'wl', style='r.')
+subplot(122)
+Plotter.plot_parameters(modes, 'loss', 'wl', style='r.')
+}}}
+
+Finally the effective index and loss of the modes versus the wavelength, in this case for the HE11-like mode. Try plotting the wavelength parameters for other types of modes too.
+
+http://polymode.googlecode.com/svn/wiki/figures/fig12_uranus_wavelength.png
+
+
