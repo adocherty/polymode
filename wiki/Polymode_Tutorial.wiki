@@ -313,19 +313,16 @@ wg.plot()
 
 There are many other shapes that can be used to create different geometries. Some of them with their options are:
 
-Waveguide.Circle( material, center=(r,,0,,, ɸ,,0,,), radius=radius, zorder=0, xy=False) 
+ * Waveguide.Circle( material, center=(r,,0,,, ɸ,,0,,), radius=radius, zorder=0, xy=False) 
+ * Waveguide.Ellipse( material, center=(r,,0,,, ɸ,,0,,), axes=(a,b), rot=0, sampling=100, zorder=0, xy=False) 
+ * Waveguide.Rectangle( material, center=(r,,0,,, ɸ,,0,,), axes=(a,b), rot=0, zorder=0, xy=False)
+ * Waveguide.Polygon( material, nodes=[ list of node coords ],  zorder=0, xy=False)
+ * Waveguide.Annulus( material,  r=(r,,min,,, r,,max,,, phi=(ɸ,,min,,, ɸ,,max,,), zorder=0)
+ * Waveguide.Image( material, image=None, border=0)
 
-Waveguide.Ellipse( material, center=(r,,0,,, ɸ,,0,,), axes=(a,b), rot=0, sampling=100, zorder=0, xy=False) 
+The axes parameters for the ellipse and rectangle set the width and height of the objects relative to the coordinate system. They will be aligned along the radial and polar directions by default, however giving an argument to `rot` will change this.
 
-Waveguide.Rectangle( material, center=(r,,0,,, ɸ,,0,,), axes=(a,b), rot=0, zorder=0, xy=False)
-
-Waveguide.Polygon( material, nodes=[ list of node coords ],  zorder=0, xy=False)
-
-Waveguide.Annulus( material,  r=(r,,min,,, r,,max,,, phi=(ɸ,,min,,, ɸ,,max,,), zorder=0)
-
-Waveguide.Image( material, image=None, border=0)
-
-It is important  to note that the coordinate system defaults to polar, however setting the option xy to True enables the center and axes parameters to be given in cartesian coordinates.
+It is important  to note that the coordinate system defaults to polar, however setting the option xy to True enables the center to be given in cartesian coordinates and the axes to line up with the cartesian directions.
 
 === Solving Modes in Microstructured Fibers ===
 We now want to find some modes in the previous fiber geometry. As before we create a solver object and run the solver with different symmetry indices to get different classes of modes. Note that the symmetry index with a fiber of symmetry N will range from -N/2 … N/2 and the modes for negative and positive indices are degenerate. We will come back to this point.
@@ -706,5 +703,101 @@ Plotter.plot_parameters(modes, 'loss', 'wl', style='r.')
 Finally the effective index and loss of the modes versus the wavelength, in this case for the HE11-like mode. Try plotting the wavelength parameters for other types of modes too.
 
 http://polymode.googlecode.com/svn/wiki/figures/fig12_uranus_wavelength.png
+
+
+== Tutorial 6 ==
+
+=== Coordinates  ===
+This tutorial file is `ex6_coordinates.py`
+
+To get the modal fields and perform calculations on them we need to evaluate the fields
+and perform the calculations with a coordinate object.
+
+There are two types that come with *Polymode*, they are
+ * `coordinate.PolarCoord`
+ * `coordinate.CartesianCoord`
+
+They are created with the paramters
+* coordinates.PolarCoord(rrange=(r,,min,,, r,,min,,), arange=(a,,min,,, a,,max,,), N=_number of points_, border=_border_)
+* coordinates.CartesianCoord(X=+/- x,,max,,, Y=+/- y,,max,,,, N=_number of points_)
+
+The number of points can also be specified for both axes as N=(N,,r,,, N,,a,,) for polar and  N=(N,,x,,, N,,y,,) for cartesian objects.
+
+The most important member functions of the coordinate objects are `.polar2d()` and `.cartesian2d()`
+which return a 2d array of radial and azimuthal and x and y locations respectively of the node points in
+cartesian object.
+
+Other useful member functions are:
+ * `.grad_t(f)` calculates the 2d vector gradiant the scalar data f
+ * `.div_t(A)` calculates the 2d divergence of the vector data A
+ * `.curl_t(A)`  calculates the z-component of the transverse vector data A
+ * `.int_dA(f)`  calculates the area integral of the scalar data f
+
+In the tutorial file we create two coordinate objects one for polar and one cartesian. The border is set to 1 for polar coordinates so we avoid problems with division by zero at the origin.
+
+{{{
+res = 200
+
+#Coordinate objects
+c1 = coordinates.PolarCoord(rrange=(0,2), border=1, arange=(-pi,pi), N=(res/2,res))
+c2 = coordinates.CartesianCoord(X=2, Y=2, N=res)
+}}}
+
+Now the cartesian node locations are obtained for each grid:
+{{{
+x1,y1 = c1.cartesian2d()
+x2,y2 = c2.cartesian2d()
+}}}
+
+And they are plotted using the _scatter_ function.
+{{{
+#Plot the point distribution
+subplot(221)
+scatter(x1,y1, 2)
+axis('tight')
+subplot(222)http://polymode.googlecode.com/svn/wiki/figures/fig12_uranus_wavelength.png
+scatter(x2,y2, 2)
+axis('tight')
+}}}
+
+We have a function that is defined in carteisan coordinates. This could be also defined in radial coordinates as well.
+{{{
+f = lambda x,y: y*exp(-2*(x**2 + y**2))
+}}}
+
+The div(grad(f)) scalar function is calculated in both coordinates, this should be the same! We then plot them both in different subplots using the `Plotter.plot_v(coord, f)` function
+{{{
+g1=c1.div_t(c1.grad_t(f(x1,y1)))
+g2=c2.div_t(c2.grad_t(f(x2,y2)))
+
+subplot(223)
+Plotter.plot_v(c1,real(g1))
+axis('tight')
+
+subplot(224)
+Plotter.plot_v(c2,real(g2))
+axis('tight')
+}}}
+
+We evaluate the integral of the absolute value of _f_ again with both coordinates. They again should be equivalent.
+{{{
+print "Function integral on polar grid:", c1.int_dA(abs(f(x1,y1)))
+print "Function integral on cartesian grid:", c2.int_dA(abs(f(x2,y2)))
+}}}
+
+http://polymode.googlecode.com/svn/wiki/figures/fig14_coordinates.png
+
+=== Calculations with coordinates ===
+
+=== Retreiving mode fields ===
+
+=== Degenerate modes ===
+
+=== Calculating the Electric Fields ===
+
+== Tutorial 7 ==
+
+ * Solvers
+
 
 
