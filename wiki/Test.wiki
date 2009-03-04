@@ -6,4 +6,8 @@ Add your content here.
 
 
 = Details =
-<wiki:gadget url="http://polymode.googlecode.com/svn/misc/gg/gg_latex.xml" height="200" border="0" up_eq="x^2+y^2"/>
+
+This is a test
+<wiki:gadget url="http://polymode.googlecode.com/svn/misc/gg/gg_latex.xml" height="20" border="0" up_eq="x^2+y^2"/>
+
+Hello!
