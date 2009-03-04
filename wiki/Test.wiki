@@ -8,6 +8,6 @@ Add your content here.
 = Details =
 
 This is a test
-<wiki:gadget url="http://polymode.googlecode.com/svn/misc/gg/gg_latex.xml" height="20" border="0" up_eq="x^2+y^2"/>
+<wiki:gadget url="http://hosting.gmodules.com/ig/gadgets/file/104661122923567276677/gg_latex.xml" up_eq="\int x^2 + \beta_a dx=\frac{1}{2}/\alpha"/>
 
-Hello!
+Hello!!!
