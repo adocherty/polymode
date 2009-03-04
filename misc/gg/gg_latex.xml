@@ -6,9 +6,8 @@
  <Locale lang="en" country="us"/>
 </ModulePrefs>
 
-<UserPref name="eq" display_name="Equation" default_value="x+y" />
+<UserPref name="eq" display_name="Equation" default_value="\int_{a}^{b}" />
 <UserPref name="zoom" default_value="100" />
-<UserPref name="height" default_value="100" />
 
 <Content type="html"><![CDATA[ 
   <script type="text/javascript">
@@ -19,17 +18,18 @@
     var eq = prefs.getString("eq");
     var zoom =  prefs.getString("zoom");
     imageZoom = parseInt(zoom);
-    var height =  prefs.getString("height");
-    height = parseInt(height);
+
     
     var element = document.getElementById('content_div');
     var html = "";
     //var latexpng = "http://www.forkosh.dreamhost.com/mimetex.cgi?" + eq;
-    var latexpng = "http://www.sitmo.com/gg/latex/latex2png.2.php?z=" + zoom + "&eq=" + encodeURIComponent(eq);
+    //var latexpng = "http://www.sitmo.com/gg/latex/latex2png.2.php?z=" + zoom + "&eq=" + escape(eq);
+    var latexpng = "http://mathtran.open.ac.uk/cgi-bin/mathtran?D=1;tex=" + eq;
+    
     html += '<img src="' + latexpng + '">';
     
-    element.style.height = height;
     element.innerHTML = html;
+    _IG_AdjustIFrameHeight();
   }
   _IG_RegisterOnloadHandler(renderLatex);
   </script>
@@ -37,4 +37,3 @@
   ]]>
 </Content>
 </Module>
-
