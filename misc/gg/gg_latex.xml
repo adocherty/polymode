@@ -1,33 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <Module>
-<ModulePrefs title="Render LaTeX" width="320" height="200" author="Andrew D" description="A very quick gadget that just enders a given latex formula using the server hosted by http://www.sitmo.com" >
+<ModulePrefs title="Render LaTeX" width="320" height="200" author="Andrew D" author_email="drewdemento@yahoo.com" description="A very quick gadget that just enders a given latex formula using the server hosted by http://www.sitmo.com" thumbnail="http://upload.wikimedia.org/wikipedia/commons/thumb/9/92/LaTeX_logo.svg/300px-LaTeX_logo.svg.png" >
  <Require feature="setprefs"/>
  <Require feature="dynamic-height"/>
  <Locale lang="en" country="us"/>
 </ModulePrefs>
 
-<UserPref name="eq" default_value="" datatype="hidden"/>
-<UserPref name="z" default_value="100" datatype="hidden"/>
+<UserPref name="eq" display_name="Equation" default_value="x+y" />
+<UserPref name="zoom" default_value="100" />
+<UserPref name="height" default_value="100" />
 
-<Content type="html">
-  <![CDATA[ 
-  <script language="javascript1.2" >
-  function renderlatex(eq)
+<Content type="html"><![CDATA[ 
+  <script type="text/javascript">
+  var prefs = new _IG_Prefs();
+
+  function renderLatex()
   {
-	document.getElementById('eqImage').innerHTML = "<img src='http://www.forkosh.dreamhost.com/mimetex.cgi?"+eq+"'>";
+    var eq = prefs.getString("eq");
+    var zoom =  prefs.getString("zoom");
+    imageZoom = parseInt(zoom);
+    var height =  prefs.getString("height");
+    height = parseInt(height);
+    
+    var element = document.getElementById('content_div');
+    var html = "";
+    //var latexpng = "http://www.forkosh.dreamhost.com/mimetex.cgi?" + eq;
+    var latexpng = "http://www.sitmo.com/gg/latex/latex2png.2.php?z=" + zoom + "&eq=" + encodeURIComponent(eq);
+    html += '<img src="' + latexpng + '">';
+    
+    element.style.height = height;
+    element.innerHTML = html;
   }
-  
-  function init()
-  {
-	var eq = prefs.getString("eq");
-	renderlatex(eq);
-  }
+  _IG_RegisterOnloadHandler(renderLatex);
   </script>
-
-  <div id="eqImage" style="width:100%">
-  <img src="http://upload.wikimedia.org/wikipedia/commons/thumb/9/92/LaTeX_logo.svg/300px-LaTeX_logo.svg.png">
-  </div>
+  <div id="content_div"></div>
   ]]>
-</Content> 
+</Content>
 </Module>
-
 
