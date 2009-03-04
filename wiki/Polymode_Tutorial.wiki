@@ -821,11 +821,13 @@ print "The group index using cartesian coordinates:", m.group_index(wg, coord=c2
 Now let's calculate something using a coordinate object. Here we calculate the 
 integral approximation to the propagation constant (Synder & Love, 1983, pg 222)
 
+<wiki:gadget url="http://polymode.googlecode.com/svn/misc/gg/gg_latex.xml" height="20" border="0" up_eq="
 \beta = Z_0 k \frac{ \int_A n^2 \mathbf{e} \times h^* \cdot \hat{z} dA}{ \int_A n^2 |\mathbf{e}|^2 dA}
+"/>
 
 Where Z₀ is the impedance of free space. Note that througout the code the electric field is scaled by the impedence of free space, so we can take Z₀=1
 
-E = Z_0 E_\textrm{calculated}
+<wiki:gadget url="http://polymode.googlecode.com/svn/misc/gg/gg_latex.xml" height="20" border="0" up_eq="E = Z_0 E_\textrm{calculated}"/>
 
 {{{
 e = m.electric_field(wg, coord=c1)
