@@ -13,8 +13,8 @@
   <script type="text/javascript">
   var prefs = new _IG_Prefs();
 
-  function renderLatex()
   {
+  function renderLatex()
     var eq = prefs.getString("eq");
     var zoom =  prefs.getString("zoom");
     imageZoom = parseInt(zoom);

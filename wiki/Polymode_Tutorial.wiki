@@ -821,13 +821,17 @@ print "The group index using cartesian coordinates:", m.group_index(wg, coord=c2
 Now let's calculate something using a coordinate object. Here we calculate the 
 integral approximation to the propagation constant (Synder & Love, 1983, pg 222)
 
-<wiki:gadget url="http://polymode.googlecode.com/svn/misc/gg/gg_latex.xml" height="20" border="0" up_eq="
+http://mathurl.com/?img=ceem4w&x.png
+<wiki:comment>
 \beta = Z_0 k \frac{ \int_A n^2 \mathbf{e} \times h^* \cdot \hat{z} dA}{ \int_A n^2 |\mathbf{e}|^2 dA}
-"/>
+</wiki:comment>
 
-Where Z₀ is the impedance of free space. Note that througout the code the electric field is scaled by the impedence of free space, so we can take Z₀=1
+Where _Z₀_ is the impedance of free space. Note that througout the code the electric field is scaled by the impedence of free space, so we can take _Z₀_=1,
 
-<wiki:gadget url="http://polymode.googlecode.com/svn/misc/gg/gg_latex.xml" height="20" border="0" up_eq="E = Z_0 E_\textrm{calculated}"/>
+http://mathurl.com/?img=bjhgob&.png
+<wiki:comment>
+E = Z_0 E_\textrm{calculated}
+</wiki:comment>
 
 {{{
 e = m.electric_field(wg, coord=c1)
@@ -841,48 +845,47 @@ beta = m.k0*c1.int_dA(n2*exhz)/c1.int_dA(n2*e2)
 
 === Retreiving mode fields ===
 
+Now we can extract the electric and magnetic fields from the modes we can do a lot of calculation with them.
+
+The fields are extracted using the methods
+ * _mode_.magnetic_field(cartesian=True/False, coord=_coordinate object_)
+ * _mode_.electric_field(wg=_waveguide_, cartesian=True/False, coord=_coordinate object_)
+
+These return the magnetic field vector and the electric field vector respectively. The magnetic field vector
+will be h=(h_x, h_y, h_z) if the coordinate object is cartesian or the cartesian option is given as true, and h=(h_r, h_ϕ, h_z) if a polar coordinate object is given, or if the cartesian option is given as false. This is similar for the electric field.
+
+Note that the waveguide can be given to the electric field to aid the calculation of the logitudinal component of the electric field, e_z. If it is not given a constant refractive index is assumed throughout, which may or may not be a good approximation to the field depending on the location of the field intensity.
+
+Similarly the transverse field components only can be extracted using the following matching methods
+
+ * _mode_.magnetic_transverse_field(cartesian=True/False, coord=_coordinate object_)
+ * _mode_.electric_transverse_field(cartesian=True/False, coord=_coordinate object_)
+
+Following we use these commands to estimate the relative electric and magnetic fields in the _z_ direction,
+relative to the transverse direction. We can use this to estimate if a mode is TM-like or TE-like.
 {{{
-#Coordinate object for mode
-res = 50
-c1 = coordinates.PolarCoord(rrange=(0,4.25), border=1, arange=(-pi,pi), N=(res,res))
-c2 = coordinates.CartesianCoord(X=10, Y=10, N=res)
+hr,ha,hz = m.magnetic_field(coord=c1)
+er,ea,ez = m.electric_field(wg, coord=c1)
 
-m = modes[0]
-
-#The electric and magnetic fields
-h = m.magnetic_field(coord=c1)
-e = m.electric_field(wg, coord=c1)
-exh = m.ExHc(coord=c1)
-
-#|H|^2 and |E|^2
-h2 = sum(abs(h)**2,axis=0)
-e2 = sum(abs(e)**2,axis=0)
-
-#The refractive index squared
-n2 = m145.index(wl)**2
-
-#The integral approximation to the propagation constat
-beta = 2*(2*pi/wl)*c1.int_dA(n2*exh)/c1.int_dA(h2 + conj(n2)*e2)
-
-print "Propagation constant from integral", beta
-print "Propagation constant of mode", m.beta
-
-#The components of e and h
-hr,ha,hz = h
-er,ea,ez = e
 print "TM like mode factor", sqrt(abs(hr)**2+abs(ha)**2).sum()/abs(hz).sum()
 print "TE like mode factor", sqrt(abs(er)**2+abs(ea)**2).sum()/abs(ez).sum()
+}}}
 
-#The components of e and h for cartesian fields
+The same can be done for the cartesian coordinate, notice that in this case we are automatically returned the cartesian vector field.
+{{{
 h2 = m.magnetic_field(coord=c2)
 e2 = m.electric_field(wg, coord=c2)
 hx,hy,hz = h2
 ex,ey,ez = e2
-wg.plot(fill=0)
+}}}
 
-#The poynting vector
+The Poynting vector is the cross product of the electric and conjugate magnetic fields, http://mathurl.com/?img=ao4vzb%.png
+<wiki:comment>
+S = \frac{1}{2} e \times h^*
+</wiki:comment>
+
+{{{
 poynting = cross(e2,conj(h2), axis=0)
-n2 = wg.index2(wl=wl, coord=m.coord, resample=c2)
 
 #The x-component of the poynting vector
 subplot(131)
@@ -896,14 +899,28 @@ wg.plot(fill=0, boundary=0)
 subplot(133)
 Plotter.plot_v(c2, poynting[2].real)
 wg.plot(fill=0, boundary=0)
-
 }}}
+
+We plot the real part of the three components of the Poynting vector as usual.
 
 http://polymode.googlecode.com/svn/wiki/figures/fig16_poynting.png
 
 === Degenerate modes ===
+This tutorial file is `ex6_degenerate_modes.py`
 
+As was mentioned earlier modes in fibers with a symmetry 3 or greater in mode classes m₀ ≠ 0 are degenerate.
+The mode calculated by *Polymode* will be elliptic and the two degenerate modes can be calculated from one elliptically
+polarized mode.
 
+Of course in fibers that have rotational symmetry that is not exploited by the code (the symmetry=1 option is used in the waveguide) will still have degenerate modes however together they will not be able to be generated from a single calculated mode.
+
+To construct a pair of orthogonal degenerate modes we use the two functions
+
+ * Modes.construct_degenerate_pair(_mode_)
+ * Modes.construct_lp_degenerate_pair(_mode_)
+ 
+ Where `construct_degenerate_pair` constructs two circularly polarized modes and `Modes.construct_lp_degenerate_pair` constructs two linearly polarized modes.
+ 
 {{{
 mc1,mc2 = Modes.construct_degenerate_pair(modes[0])
 
@@ -912,6 +929,8 @@ m1,m2 = Modes.construct_lp_degenerate_pair(modes[0])
 Plotter.plot_modes_in_grid([mc1,mc2,m1,m2], 'pe')
 }}}
 
+Run this example to plot the electric polarizations of the two mode pairs, and note that the circularly polarized modes are orthogonal - the arrows on the circles point in opposite directions.
+
 http://polymode.googlecode.com/svn/wiki/figures/fig17_degenerate.png
 
 ----
@@ -919,6 +938,10 @@ http://polymode.googlecode.com/svn/wiki/figures/fig17_degenerate.png
 == Tutorial 7 ==
 
  * Solvers
+ * Compressing modes
+ 
+== Tutorial 8 ==
 
-
-
+ * Solving parallel jobs with MPI
+ 
+ 
