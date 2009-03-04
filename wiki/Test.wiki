@@ -6,6 +6,4 @@ Add your content here.
 
 
 = Details =
-<wiki:gadget url="http://example.com/gadget.xml" height="200" border="0" />
-
-<wiki:gadget url="url=http://www.sitmo.com/gg/latex/latex.xml" height="200" border="0" up_eq="x^2+y^2"/>
+<wiki:gadget url="http://polymode.googlecode.com/svn/misc/gg/gg_latex.xml" height="200" border="0" up_eq="x^2+y^2"/>
