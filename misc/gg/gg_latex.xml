@@ -1,0 +1,30 @@
+<Module>
+<ModulePrefs title="Render LaTeX" width="320" height="200" author="Andrew D" description="A very quick gadget that just enders a given latex formula using the server hosted by http://www.sitmo.com" thumbnail="http://upload.wikimedia.org/wikipedia/commons/thumb/9/92/LaTeX_logo.svg/800px-LaTeX_logo.svg.png"/>
+
+ <Require feature="setprefs"/>
+ <Require feature="dynamic-height"/>
+ <Locale lang="en" country="us"/>
+</ModulePrefs>
+
+<UserPref name="eq" default_value="" datatype="hidden"/>
+<UserPref name="z" default_value="100" datatype="hidden"/>
+
+<Content type="html">
+  <![CDATA[ 
+  <script language="javascript1.2" >
+  function renderlatex(eq)
+  {
+	document.getElementById('eqImage').innerHTML = "<img src='http://www.forkosh.dreamhost.com/mimetex.cgi?"+eq+"'>";
+  }
+  
+  function init()
+  {
+	var eq = prefs.getString("eq");
+	renderlatex(eq);
+  }
+  </script>
+
+  <div id="eqImage" style="width:100%"><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/9/92/LaTeX_logo.svg/300px-LaTeX_logo.svg.png">
+  ]]>
+ </Content> 
+</Module>

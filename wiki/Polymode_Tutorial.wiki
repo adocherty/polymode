@@ -1,4 +1,4 @@
-= Tutorials for the Polymode Microstuctured Optical Fiber Solver =
+#summary Tutorials for the Polymode Microstuctured Optical Fiber Solver
 
 http://polymode.googlecode.com/svn/misc/images/polymode2.png
 
@@ -29,6 +29,7 @@ for more advanced usage it is useful to have some knowledge of programming in it
 introduction to Python programming is available at the [http://docs.python.org/tutorial/index.htm Python tutorial]
 or the [http://www.diveintopython.org/ Dive Into Python] websites.
 
+----
 
 == Tutorial 1 ==
 
@@ -384,14 +385,14 @@ Here we also plot the modes in caresian coordinates using the `cartesian` flag.
 Documentation for general plotting commands can be found at http://matplotlib.sourceforge.net
 
 === More shapes ===
-The example `ex3_more_shapes.py` creates a waveguide with three different shapes and finds the fundamental mode in it. The result should be
+The example `ex3_more_shapes.py` creates a waveguide with three different shapes and finds the fundamental mode in it.
 
 http://polymode.googlecode.com/svn/wiki/figures/fig5_moreshapes.png
 
 
 == Tutorial 4 - More advanced waveguides ==
 
-=== Coating Holes ===
+=== Coated holes ===
 
 Shapes can be coated with another material of a specified thickness using the
 {{{
@@ -704,6 +705,7 @@ Finally the effective index and loss of the modes versus the wavelength, in this
 
 http://polymode.googlecode.com/svn/wiki/figures/fig12_uranus_wavelength.png
 
+=== Wavelength tracking ===
 
 == Tutorial 6 ==
 
@@ -717,11 +719,11 @@ There are two types that come with *Polymode*, they are
  * `coordinate.PolarCoord`
  * `coordinate.CartesianCoord`
 
-They are created with the paramters
-* coordinates.PolarCoord(rrange=(r,,min,,, r,,min,,), arange=(a,,min,,, a,,max,,), N=_number of points_, border=_border_)
-* coordinates.CartesianCoord(X=+/- x,,max,,, Y=+/- y,,max,,,, N=_number of points_)
+They are created with the parameters
+ * `coordinates.PolarCoord`(rrange=(r,,min,,, r,,min,,), arange=(a,,min,,, a,,max,,), N=_number of points_, border=_border_)
+ * `coordinates.CartesianCoord`(X=+/- x,,max,,, Y=+/- y,,max,,,, N=_number of points_)
 
-The number of points can also be specified for both axes as N=(N,,r,,, N,,a,,) for polar and  N=(N,,x,,, N,,y,,) for cartesian objects.
+The number of points can also be specified for both axes as N=(N,,r,,, N,,a,,) for polar and  N=(N,,x,,, N,,y,,) for cartesian objects. The _border_ option forces the nodes to not go to the full minimum and maximum r. This should usually be set to `border=1` to avoid a zero minimum r.
 
 The most important member functions of the coordinate objects are `.polar2d()` and `.cartesian2d()`
 which return a 2d array of radial and azimuthal and x and y locations respectively of the node points in
@@ -755,7 +757,8 @@ And they are plotted using the _scatter_ function.
 subplot(221)
 scatter(x1,y1, 2)
 axis('tight')
-subplot(222)http://polymode.googlecode.com/svn/wiki/figures/fig12_uranus_wavelength.png
+
+subplot(222)
 scatter(x2,y2, 2)
 axis('tight')
 }}}
@@ -788,12 +791,128 @@ print "Function integral on cartesian grid:", c2.int_dA(abs(f(x2,y2)))
 http://polymode.googlecode.com/svn/wiki/figures/fig14_coordinates.png
 
 === Calculations with coordinates ===
+This tutorial file is `ex6_calculating_with_coordinates.py`
+
+Now most actions with modes can use coordinates. In particular we can plot what
+the mode fields look like sampled on the points of the particular coordinate object
+we have chosen simply by giving the `coord=` paramter to the plot command.
+{{{
+subplot(121)
+m.plot(coord=c1)
+
+subplot(122)
+m.plot(coord=c2)
+}}}
+
+This plots the same mode on the polar and cartesian grids that we created in 
+the previous tutorial. All the same options for the `.plot()` method that
+have been available can be used. Try plotting the _x_ and _y_ components of the
+electric and magnetic fields using both coordinates.
+
+http://polymode.googlecode.com/svn/wiki/figures/fig15_coordinate_fields.png
+
+Also we can use the coord objects as options when we calculate properties of
+the mode, such as the group index.
+{{{
+print "The group index using polar coordinates:", m.group_index(wg, coord=c1).real
+print "The group index using cartesian coordinates:", m.group_index(wg, coord=c2).real
+}}}
+
+Now let's calculate something using a coordinate object. Here we calculate the 
+integral approximation to the propagation constant (Synder & Love, 1983, pg 222)
+
+\beta = Z_0 k \frac{ \int_A n^2 \mathbf{e} \times h^* \cdot \hat{z} dA}{ \int_A n^2 |\mathbf{e}|^2 dA}
+
+Where Z₀ is the impedance of free space. Note that througout the code the electric field is scaled by the impedence of free space, so we can take Z₀=1
+
+E = Z_0 E_\textrm{calculated}
+
+{{{
+e = m.electric_field(wg, coord=c1)
+exhz = m.ExHc_t(coord=c1)
+e2 = sum(abs(e)**2,axis=0)
+
+n2 = m145.index(wl)**2
+
+beta = m.k0*c1.int_dA(n2*exhz)/c1.int_dA(n2*e2)
+}}}
 
 === Retreiving mode fields ===
 
+{{{
+#Coordinate object for mode
+res = 50
+c1 = coordinates.PolarCoord(rrange=(0,4.25), border=1, arange=(-pi,pi), N=(res,res))
+c2 = coordinates.CartesianCoord(X=10, Y=10, N=res)
+
+m = modes[0]
+
+#The electric and magnetic fields
+h = m.magnetic_field(coord=c1)
+e = m.electric_field(wg, coord=c1)
+exh = m.ExHc(coord=c1)
+
+#|H|^2 and |E|^2
+h2 = sum(abs(h)**2,axis=0)
+e2 = sum(abs(e)**2,axis=0)
+
+#The refractive index squared
+n2 = m145.index(wl)**2
+
+#The integral approximation to the propagation constat
+beta = 2*(2*pi/wl)*c1.int_dA(n2*exh)/c1.int_dA(h2 + conj(n2)*e2)
+
+print "Propagation constant from integral", beta
+print "Propagation constant of mode", m.beta
+
+#The components of e and h
+hr,ha,hz = h
+er,ea,ez = e
+print "TM like mode factor", sqrt(abs(hr)**2+abs(ha)**2).sum()/abs(hz).sum()
+print "TE like mode factor", sqrt(abs(er)**2+abs(ea)**2).sum()/abs(ez).sum()
+
+#The components of e and h for cartesian fields
+h2 = m.magnetic_field(coord=c2)
+e2 = m.electric_field(wg, coord=c2)
+hx,hy,hz = h2
+ex,ey,ez = e2
+wg.plot(fill=0)
+
+#The poynting vector
+poynting = cross(e2,conj(h2), axis=0)
+n2 = wg.index2(wl=wl, coord=m.coord, resample=c2)
+
+#The x-component of the poynting vector
+subplot(131)
+Plotter.plot_v(c2, poynting[0].real)
+wg.plot(fill=0, boundary=0)
+
+subplot(132)
+Plotter.plot_v(c2, poynting[1].real)
+wg.plot(fill=0, boundary=0)
+
+subplot(133)
+Plotter.plot_v(c2, poynting[2].real)
+wg.plot(fill=0, boundary=0)
+
+}}}
+
+http://polymode.googlecode.com/svn/wiki/figures/fig16_poynting.png
+
 === Degenerate modes ===
 
-=== Calculating the Electric Fields ===
+
+{{{
+mc1,mc2 = Modes.construct_degenerate_pair(modes[0])
+
+m1,m2 = Modes.construct_lp_degenerate_pair(modes[0])
+
+Plotter.plot_modes_in_grid([mc1,mc2,m1,m2], 'pe')
+}}}
+
+http://polymode.googlecode.com/svn/wiki/figures/fig17_degenerate.png
+
+----
 
 == Tutorial 7 ==
 
