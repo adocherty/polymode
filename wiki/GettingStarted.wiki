@@ -31,15 +31,15 @@ It's available in Python(x,y). Start this from the Windows menu:
 
 http://polymode.googlecode.com/svn/wiki/figures/gs_runpythonxy.png
 
-Both an editor SciTE and the IPython shell can be started using this command window,
+Both an editor *SciTE* and the *IPython* shell can be started using this command window, under the applications menu different applications can be selected and run. The most useful is *SciTE* which allows you to edit python files easily. You can run it selecting the tick button next to the menu.
 
 From the "Interactive consoles" select *IPython(x,y)* and click the leftmost console button, as shown. This will start the IPython shell in a new window.
 
 http://polymode.googlecode.com/svn/wiki/figures/gs_pythonxy.png
 
-You can change directories to where your code is using the \u201ccd\u201d command.
+In the IPython window you can change directories to where your code is using the `cd` command, `ls` will give you a list of files in the current directory.
 
-The "tab" key can be used to auto-complete any partially completed commands. This can be helpful going through directories and running commands.
+The *tab* key can be used to auto-complete any partially completed commands. This can be helpful going through directories and running commands.
 
 A python script file can be run by using the run command, to run a file named "ex1_materials.py" just enter:
 
@@ -61,21 +61,21 @@ Docstring:
 
 Some other useful commands are:
 
- * ls: List the files in the current directory
- * pwd: Return the current working directory path. 
- * edit: starts an editor and allows you to edit the file. After closing the window the file will be run.
- * history: Print input history with most recent last. 
- * logstart: Log an interactive session to a file
- * quickref: Show a quick reference sheet 
- * rep: Repeat previous input. 
- * store: Quickly store variables in a file
- * whos: List used variables in the workspace
- * bookmark: Bookmark a folder
- * logon/logoff: Logs interactive commands to a file
+ * `ls`: List the files in the current directory
+ * `pwd`: Return the current working directory path. 
+ * `edit`: starts an editor and allows you to edit the file. After closing the window the file will be run.
+ * `history`: Print input history with most recent last. 
+ * `logstart`: Log an interactive session to a file
+ * `quickref`: Show a quick reference sheet 
+ * `rep`: Repeat previous input. 
+ * `store`: Quickly store variables in a file
+ * `whos`: List used variables in the workspace
+ * `bookmark`: Bookmark a folder
+ * `logon`/`logoff`: Logs interactive commands to a file
 
 Help for all of these commands is available in IPython by typing the command then a "?" and hitting enter
 
-## Paths in Windows ##
+== Paths in Windows ==
 
 The *PATH* environment variable needs to be set correctly for *PythonXY* to run properly and find the required
 programs. This is automatically set up when *PythonXY* is installed, however if another user wants to use the
@@ -85,6 +85,8 @@ In particular the *PATH* variable should include these directories:
 {{{
 C:\Python25;C:\Python25\DLLs;C:\Python25\Scripts;C:\Python25\Lib\site-packages\PyQt4;C:\PythonXY\console;C:\PythonXY\SciTE-1.77.1
 }}}
+
+See the [http://support.microsoft.com/kb/310519 Microsoft support page] for information on how to change the path.
 
 == Installing on Linux/Mac OSX ==
 
