@@ -393,6 +393,7 @@ http://polymode.googlecode.com/svn/wiki/figures/fig5_moreshapes.png
 == Tutorial 4 - More advanced waveguides ==
 
 === Coated holes ===
+This tutorial file is `ex4_coated_holes.py`.
 
 Shapes can be coated with another material of a specified thickness using the
 {{{
@@ -412,6 +413,7 @@ The fundamental mode is found:
 http://polymode.googlecode.com/svn/wiki/figures/fig6_coatedhole.png
 
 === Waveguide from a bitmap image ===
+This tutorial file is `ex4_waveguide_from_image.py`.
 
 The second way to enter a structure is to use an image. The example folder gives images of waveguide structures this way *MOF_NRL.png*, an example taken from literature of a photonic crysal filber and and *hlfcollapsedKagome.png* a schematic of a kagome structure. Pictures of these structures are found in the directory called images. 
 
@@ -442,6 +444,7 @@ wg.plot_bitmap((200,60), sectors=1, cmap=Plotter.cm.gray)
 http://polymode.googlecode.com/svn/wiki/figures/fig7_image.png
 
 === Merging Shapes ===
+This tutorial file is `ex4_merging_shapes.py`.
 
 If shapes created in the waveguide overlap then they are automatically merged and one will override the other, appearing "in front" of the other. This behaviour can be changed with the shape property `zorder` - this defaults to 0 and the higher zorders appear in front of the lower zorders.
 
@@ -467,45 +470,58 @@ The waveguide on the left should have the blue circles in front of the red ellip
 
 http://polymode.googlecode.com/svn/wiki/figures/fig8_mergeshapes.png
 
+Note the oscillations near the sharp changes in refractive index. This is the Gibb's effect caused by the truncation of the Fourier series that is used internally.
+
 === Refractive index profiles ===
+This tutorial file is `ex4_parabolic_index.py`.
+
 A non-step dependence on the refractive index of any shape can easily be defined. 
-The file `ex4_parabolic_index.py` creates a circular core and assignes it a parabolic refractive index.
+The file `ex4_parabolic_index.py` creates a circular core and assigns it a parabolic refractive index.
 A refractive index profile can be specified as a function of the distance from the objects center.
 
-{{{fn_parabolic = lambda d: 1-(d/radius)**2 }}}
+{{{
+fn_parabolic = lambda d: 1-(d/radius)**2
+}}}
 
-This uses a Python “lambda function” to specify a function of d, distance. The function should be normalized to 0 and 1, a value of 1 will be assigned the refractive index of the object and 0 will be assigned the refractive index of the background. The defined function is 1 at the center of the circle and 0 at the edge.
-radius = 4 
+This uses a Python “lambda function” to specify a function of d, distance. The function should be normalized to 0 and 1, a value of 1 will be assigned the refractive index of the object and 0 will be assigned the refractive index of the background. The defined function is 1 at the center of the circle and 0 when d=radius. The distance d is given to the function as the distance from the center of the object.
+
+Any shape can be set to have an index function using the `set_index_function` method.
 
 {{{
-## Materials 
-si = Material.Silica() 
-ge = Material.Germanium() 
-sige = Material.Composite(materials=[si, ge], weights=[0.98,0.02]) 
+silica = Material.Silica() 
+dsilica = Material.SiO2GeO2(0.2)
+}}}
 
-## Create waveguide 
-wg = Waveguide.Waveguide(rmax=8, material=si, symmetry=2) 
+Here we create the waveguide with a given maximum computational radius, specifying `rmax=8`. If this is not given it is automatically assigned as the largest needed to enclose all the shapes in the waveguide, but sometimes you are required to specify it.
+{{{
+wg = Waveguide.Waveguide(rmax=8, material=silica, symmetry=1) 
+}}}
 
-## Parabolic index profile based on distance from center of object 
+Now we create the doped core and assign the index function to it
+{{{
 fn_parabolic = lambda d: 1-(d/radius)**2 
 
 ## Doped core 
-s1 = Waveguide.Circle(sige, center=(0,0), radius=radius) 
-s1.index_function = fn_parabolic 
+s1 = Waveguide.Circle(dsilica, center=(0,0), radius=radius)
+s1.set_index_function(fn_parabolic)
 
+## Finally add the shape to the waveguide
 wg.add_shape(s1) 
+}}}
 
-Nx = 500,1 
-k = 2*pi/1.0 
+We can plot the actual refractive index profile that is used internally in the program using the `plot_bitmap` command. Try just using the `wg.plot` command and see what it plots.
 
-wg.plot_bitmap(Nx, k0=k) 
+{{{
+wg.plot_bitmap(Nx, wl=1.0) 
 }}}
 
 The output of this example is shown below, the refractive index of Silica (1.4504) and Silica doped with 20% Germania (1.482) at a wavelength of λ=1.0μm is also plotted.
 
 http://polymode.googlecode.com/svn/wiki/figures/fig9_parabolic.png
 
+
 === Solving modes in an image waveguide ===
+This tutorial file is `ex4_modes_with_a_image_waveguide.py`.
 
 Here we use another image load it and solver 4 modes in it. The image does not have rotational symmetry so we
 specify `symmetry=1`. The image is given a specified center as the automatic center calculation doesn't work without rotational symmetry. 
@@ -757,15 +773,15 @@ And they are plotted using the _scatter_ function.
 {{{
 #Plot the point distribution
 subplot(221)
-scatter(x1,y1, 2)
+scatter(x1.ravel(),y1.ravel(), 2)
 axis('tight')
 
 subplot(222)
-scatter(x2,y2, 2)
+scatter(x2.ravel(),y2.ravel(), 2)
 axis('tight')
 }}}
 
-We have a function that is defined in carteisan coordinates. This could be also defined in radial coordinates as well.
+We have a function that is defined in cartesian coordinates. This could be also defined in radial coordinates as well.
 {{{
 f = lambda x,y: y*exp(-2*(x**2 + y**2))
 }}}
