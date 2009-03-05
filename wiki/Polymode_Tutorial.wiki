@@ -317,7 +317,7 @@ There are many other shapes that can be used to create different geometries. Som
  * Waveguide.Circle( material, center=(r,,0,,, ɸ,,0,,), radius=radius, zorder=0, xy=False) 
  * Waveguide.Ellipse( material, center=(r,,0,,, ɸ,,0,,), axes=(a,b), rot=0, sampling=100, zorder=0, xy=False) 
  * Waveguide.Rectangle( material, center=(r,,0,,, ɸ,,0,,), axes=(a,b), rot=0, zorder=0, xy=False)
- * Waveguide.Polygon( material, nodes=[ list of node coords ],  zorder=0, xy=False)
+ * Waveguide.Polygon( material, nodes=`[` _list of node coords_ `]`,  zorder=0, xy=False)
  * Waveguide.Annulus( material,  r=(r,,min,,, r,,max,,, phi=(ɸ,,min,,, ɸ,,max,,), zorder=0)
  * Waveguide.Image( material, image=None, border=0)
 
@@ -667,7 +667,9 @@ Plotter.plot_modes_in_grid(modes, 'sz,pe')
 
 http://polymode.googlecode.com/svn/wiki/figures/fig11_uranusmodes.png
 
-The modes in mode class 0 are linearly polarized however those in mode class 1 have a circular polarization. This is due to the fact that the solver finds both degenerate modes - compare to figure 5 in Uranus and notice that the modes with circular polarization in the above figure correspond to the degenerate mode pairs `HE11(a,b)` and `HE21(a,b)`.
+The modes in mode class 0 are linearly polarized however those in mode class 1 have a circular polarization.
+The modes in class 1 are degenerate modes, however the solver will find a single circularly polarized mode that is a combination of both of them.
+Compare this to figure 5 in Uranus and notice that the modes with circular polarization in the above figure correspond to the degenerate mode pairs `HE11(a,b)` and `HE21(a,b)`.
 
 We'll look at extracting two degenerate linearly polarized modes from a circularly polarized mode in the next tutorial.
 
@@ -721,7 +723,7 @@ There are two types that come with *Polymode*, they are
 
 They are created with the parameters
  * `coordinates.PolarCoord`(rrange=(r,,min,,, r,,min,,), arange=(a,,min,,, a,,max,,), N=_number of points_, border=_border_)
- * `coordinates.CartesianCoord`(X=+/- x,,max,,, Y=+/- y,,max,,,, N=_number of points_)
+ * `coordinates.CartesianCoord`(X=±x,,max,,, Y=±y,,max,,,, N=_number of points_)
 
 The number of points can also be specified for both axes as N=(N,,r,,, N,,a,,) for polar and  N=(N,,x,,, N,,y,,) for cartesian objects. The _border_ option forces the nodes to not go to the full minimum and maximum r. This should usually be set to `border=1` to avoid a zero minimum r.
 
