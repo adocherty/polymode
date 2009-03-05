@@ -13,8 +13,14 @@ Select the light version and _download_. The packages will be downloaded to your
 
 http://polymode.googlecode.com/svn/wiki/figures/gs_selectversion.png
 
+When the installer starts it will ask you to choose optional components. Make sure that you select either *All users* or *Just me* under the "Install for" option. If you select *Just me* then only you will be able to use Python(X,Y). 
+
+http://polymode.googlecode.com/svn/wiki/figures/gs_installfor.png
+
 After the installation is finished Polymode can be installed by running the Polymode installer.
 [http://code.google.com/p/polymode/downloads/list Polymode website]
+
+http://polymode.googlecode.com/svn/wiki/figures/gs_installfor.png
 
 You now have everything you need to start.
 
