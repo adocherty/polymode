@@ -426,7 +426,7 @@ Typing `modes` to get a list of the modes solved we see some modes marked with a
  <VectorMode: m₀=0 λ=1 neff=1.43686 + 1.46e-02i r:4.5e-13 [S]>,
  <VectorMode: m₀=0 λ=1 neff=1.43788 + 6.63e-03i r:4.1e-12 [S]>,
 }}}
-In this case the last two (we only plot the modes in mode class 0).
+In this list the last two (we only show the modes in mode class 0).
 When we plot them we see they're highlighted with a red background.
 
 http://polymode.googlecode.com/svn/wiki/figures/fig_spuriousmodes.png
@@ -929,8 +929,11 @@ m.plot(coord=c2)
 
 This plots the same mode on the polar and cartesian grids that we created in 
 the previous tutorial. All the same options for the `.plot()` method that
-have been available can be used. Try plotting the _x_ and _y_ components of the
-electric and magnetic fields using both coordinates.
+have been available can be used. Notice the small white "hole" in the center
+of the lefthand plot. This is because we removed the origin of the polar coordinate
+with the `border=1` parameter, try it again with `border=0`.
+Try plotting the _x_ and _y_ components of the electric and magnetic fields
+using both coordinates.
 
 http://polymode.googlecode.com/svn/wiki/figures/fig15_coordinate_fields.png
 
@@ -1101,7 +1104,7 @@ modes_novec = solver(0, wl, 1.45, number=2)
 
 Using the pickle module's _dumps_ function we can estimate the file size of the 
 saved data for all three cases.
-{{{http://polymode.googlecode.com/svn/wiki/figures/fig17_degenerate.png
+{{{
 print "Size of uncompressed modes: %dkb" % (len(pickle.dumps(modes))/1024)
 print "Size of compressed modes: %dkb" % (len(pickle.dumps(modes_comp))/1024)
 print "Size of modes without vectors: %dkb" % (len(pickle.dumps(modes_novec))/1024)
