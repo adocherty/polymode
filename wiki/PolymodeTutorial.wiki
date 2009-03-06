@@ -348,7 +348,106 @@ The modes are plotted in a grid as before.
 
 http://polymode.googlecode.com/svn/wiki/figures/fig4_modes.png
 
-=== More Plotting of Modes ===
+=== Square lattice ===
+
+Waveguide can be created programmatically which allows great ease
+and flexibility in created different waveguides. As an example we
+create a square lattice waveguide with a central lattice element removed.
+
+We create this using a `for` loop to allow a variable number of rings of holes
+in the lattice. First we set up the standard parameters and materials. Notice
+the summetry of this waveguide is 4.
+{{{
+symmetry = 4
+Nx = (200,20)
+wl = 1.0
+
+air = Material.Air()
+si = Material.Silica()
+
+wg = Waveguide.Waveguide(material=si, symmetry=symmetry)
+}}}
+
+We now create circles of air as the holes in `Nrings` layers. with a distance apart
+of D=Λ and a diameter d. This gives an air-fill fraction of (π/2√3) (d/Λ)².
+We add the holes using Cartesian coordinates (the xy=1 parameter) in a grid
+for one quarter of the rotationally symmetric waveguide.
+{{{
+Nrings = 2
+D = 4.0
+d = 0.5*D
+for nr in range(1,Nrings+1):
+	for ii in range(Nrings+1):
+		wg.add_shape( Waveguide.Circle(air,center=(nr*D,ii*D),radius=d/2,xy=1) )
+}}}
+
+The waveguide is shown below. The sector we have created is in black and the
+gray holes are created by the automatic rotational symmetry.
+
+http://polymode.googlecode.com/svn/wiki/figures/fig_squarelattice.png
+
+	
+{{{
+solver = NLSolver.DefaultSolver(Nx, wg)
+modes = solver(0, wl, 1.44, number=2)
+modes += solver(1, wl, 1.44, number=2)
+
+Plotter.plot_modes_in_grid(modes)
+}}}
+
+=== Spurious modes ===
+
+Staying with the same file as last time, increase the number of modes to solver for
+to 10 in both mode classes, and do the same for the mode class m0=2.
+
+The solver will try and find all modes but may not be able to do so, especially if there
+are not many modes supported in the structure or their n,,eff,, then the solver may
+not converge to these modes. This is a limitation of the current solver and will
+hopefully be improved soon, meanwhile don't be alarmed if you see
+_Rejecting unconverged mode_ while trying to find modes.
+
+Also even when a mode is found it is possible that it is not a real physical
+mode of the structure but a numerical artifact. These _spurious_ modes
+have the majority of their power trapped between the structure and the
+computational boundary. They are easy to spot and the solver tries to identify them
+automatically.
+
+Typing `modes` to get a list of the modes solved we see some modes marked with an
+`[s]` at the end. These are the ones the solver has picked are spurious.
+{{{
+[<VectorMode: m₀=0 λ=1 neff=1.44006 + 1.63e-04i r:7.1e-13 []>,
+ <VectorMode: m₀=0 λ=1 neff=1.44022 + 1.78e-04i r:1.5e-14 []>,
+ <VectorMode: m₀=0 λ=1 neff=1.44125 + 8.76e-05i r:3.1e-11 []>,
+ <VectorMode: m₀=0 λ=1 neff=1.44128 + 8.17e-05i r:1.6e-14 []>,
+ <VectorMode: m₀=0 λ=1 neff=1.44195 + 5.32e-05i r:1.4e-14 []>,
+ <VectorMode: m₀=0 λ=1 neff=1.44182 + 6.53e-05i r:1.8e-14 []>,
+ <VectorMode: m₀=0 λ=1 neff=1.44288 + 8.26e-06i r:1e-13 []>,
+ <VectorMode: m₀=0 λ=1 neff=1.44289 + 8.15e-06i r:1.1e-14 []>,
+ <VectorMode: m₀=0 λ=1 neff=1.43686 + 1.46e-02i r:4.5e-13 [S]>,
+ <VectorMode: m₀=0 λ=1 neff=1.43788 + 6.63e-03i r:4.1e-12 [S]>,
+}}}
+In this case the last two (we only plot the modes in mode class 0).
+When we plot them we see they're highlighted with a red background.
+
+http://polymode.googlecode.com/svn/wiki/figures/fig_spuriousmodes.png
+
+After manually examining them we can automatically remove the spurious modes
+using the `Modes.filter_suprious_modes()` function. This removes all
+spurious modes marked as such manually or automatically.
+
+{{{
+modes = Modes.filter_suprious_modes(modes)
+}}}
+
+If you don't agree with the automatic labelling of a mode as spurious or non spurious
+you can manually change it by setting the `.is_spurious` property of the mode to
+`True` or `False`.
+For example we can set the 10th mode to be spurious by the command:
+{{{
+modes[10].is_spurious = True
+}}}
+
+=== Plotting modes continued ===
 
 There are many ways to plot the modes found. Using the `Plotter.plot_modes_in_grid` also takes a plottype of the same kind as the individual mode plotting namely `'Sz', 'Hr', 'Ha', 'Er', 'Ea', 'Hz', 'Ez', 'Hx', 'Hy', 'Ex', 'Ey','pe', 'ph'`.
 
@@ -382,7 +481,13 @@ wg.plot(fill=0)				#Plot an outline of the waveguide on top
 
 Here we also plot the modes in caresian coordinates using the `cartesian` flag.
 
-Documentation for general plotting commands can be found at http://matplotlib.sourceforge.net
+You can save a figure using the plot GUI or the `savefig` command
+{{{
+savefig("fig_compressmodes.png")
+}}}
+
+Documentation for general plotting commands can be found at the
+[http://matplotlib.sourceforge.net Matplotlib website].
 
 === More shapes ===
 The example `ex3_more_shapes.py` creates a waveguide with three different shapes and finds the fundamental mode in it.
@@ -701,7 +806,7 @@ solvers = []
 for wl in wlrange:
 	solve = NLSolver.DefaultSolver(Nx, wg)
 	solve.initialize(m0, wl, 1.42, number=1)
-	solvers += [ solve ]
+	solvers.append( solve )
 
 #Use this function to solve multiple solver objects (with different parameters)
 modes = Solver.batch_solve(solvers)
@@ -955,11 +1060,64 @@ http://polymode.googlecode.com/svn/wiki/figures/fig17_degenerate.png
 
 == Tutorial 7 ==
 
- * Solvers
- * Compressing modes
+===  Compressing modes ===
+
+Often when calculating large numbers of modes we don't need to store the full mode
+vectors. We can use the option to compress the mode vectors to a smaller size for
+storage - then they will take up considerably less space when saved to a file.
+
+The compressed modes can be plotted and used for calculation as normal, although
+of course the accuracy of any computations will not be the same as when using the
+full mode vectors.
+
+To demonstrate compressing the modes we use the _pickle_ Python module directly.
+In actual code you won't need this - just use the `load_data()` and `save_data()`
+functions of Polymode.
+{{{
+import pickle
+}}}
+
+First we create the regular solver and find 2 modes
+{{{
+solver = NLSolver.DefaultSolver(Nx, wg)
+modes = solver(0, wl, 1.45, number=2)
+}}}
+
+Now to compress the modes calculated we use `compress_to_size` parameter
+when creating the solver. It takes a _tuple_ containing two values, the number of
+radial and azimuthal nodes to compress to as (N_r, N_ϕ).
+{{{
+solver = NLSolver.DefaultSolver(Nx, wg, compress_to_size = (10,5))
+modes_comp = solver(0, wl, 1.45, number=2)
+}}}
+
+We can also choose to throw away all field information completely, this
+will mean we can't plot the mode at all but is useful if all that is needed is the
+effective index of the mode.
+{{{
+solver = NLSolver.DefaultSolver(Nx, wg, discard_vectors = True)
+modes_novec = solver(0, wl, 1.45, number=2)
+}}}
+
+Using the pickle module's _dumps_ function we can estimate the file size of the 
+saved data for all three cases.
+{{{http://polymode.googlecode.com/svn/wiki/figures/fig17_degenerate.png
+print "Size of uncompressed modes: %dkb" % (len(pickle.dumps(modes))/1024)
+print "Size of compressed modes: %dkb" % (len(pickle.dumps(modes_comp))/1024)
+print "Size of modes without vectors: %dkb" % (len(pickle.dumps(modes_novec))/1024)
+}}}
+
+We plot both modes. Notice there's very little difference even with only 10x5 node points.
+This is because the mode is very smooth - for modes with fine detail more will be lost.
+
+http://polymode.googlecode.com/svn/wiki/figures/fig_compressmodes.png
+ 
+=== Batch solving over a range of n,,effs,, ===
+
+=== Batch solving over a range of wavelengths ===
  
 == Tutorial 8 ==
 
- * Solving parallel jobs with MPI
+=== Solving parallel jobs with MPI ===
  
  
