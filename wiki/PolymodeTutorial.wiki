@@ -1127,9 +1127,9 @@ http://polymode.googlecode.com/svn/wiki/figures/fig17_degenerate.png
 
 ----
 
-== Tutorial 7 ==
+%== Tutorial 7 ==
 
-===  Compressing modes ===
+%===  Compressing modes ===
 
 Often when calculating large numbers of modes we don't need to store the full mode
 vectors. We can use the option to compress the mode vectors to a smaller size for
@@ -1181,13 +1181,13 @@ This is because the mode is very smooth - for modes with fine detail more will b
 
 http://polymode.googlecode.com/svn/wiki/figures/fig_compressmodes.png
  
-=== Batch solving over a range of n,,effs,, ===
+%=== Batch solving over a range of n,,effs,, ===
 
-=== Batch solving over a range of wavelengths ===
+%=== Batch solving over a range of wavelengths ===
  
-== Tutorial 8 ==
+%== Tutorial 8 ==
 
-=== Solving parallel jobs with MPI ===
+%=== Solving parallel jobs with MPI ===
 
  </wiki:comment>
  
