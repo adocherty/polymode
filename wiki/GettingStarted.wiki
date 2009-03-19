@@ -30,17 +30,16 @@ The *IPython* command prompt is used to run all code.
 This is installed with *Python(x,y)*, you can access it through the Windows Start Menu under
 Python (x,y) -> Enhanced Consoles -> IPython(x,y) as shown below:
 
-http://polymode.googlecode.com/svn/wiki/figures/gs_runpythonxy.png
-
-Both an editor *SciTE* and the *IPython* shell can be started using this command window, under the applications menu different applications can be selected and run. The most useful is *SciTE* which allows you to edit python files easily. You can run it selecting the tick button next to the menu.
-
-From the "Interactive consoles" select *IPython(x,y)* and click the leftmost console button, as shown. This will start the IPython shell in a new window.
-
 http://polymode.googlecode.com/svn/wiki/figures/gs_pythonxy.png
 
 You can drag this icon to the main start menu to access it faster:
 
 http://polymode.googlecode.com/svn/wiki/figures/gs_pythonxy_quick.png
+
+<wiki:comment>
+Both an editor *SciTE* and the *IPython* shell can be started using this command window, under the applications menu different applications can be selected and run. The most useful is *SciTE* which allows you to edit python files easily. You can run it selecting the tick button next to the menu.
+From the "Interactive consoles" select *IPython(x,y)* and click the leftmost console button, as shown. This will start the IPython shell in a new window.
+</wiki:comment>
 
 In the IPython window you can change directories to where your code is using the `cd` command, `ls` will give you a list of files in the current directory.
 
