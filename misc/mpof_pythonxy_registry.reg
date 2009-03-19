@@ -1,0 +1,580 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\Environment]
+"PATH"="C:\\Windows\\System32;C:\\Python25;C:\\Python25\\DLLs;C:\\Python25\\Scripts;C:\\Python25\\Lib\\site-packages\\PyQt4"
+[HKEY_CURRENT_USER\Console]
+"ColorTable00"=dword:00000000
+"ColorTable01"=dword:00800000
+"ColorTable02"=dword:00008000
+"ColorTable03"=dword:00808000
+"ColorTable04"=dword:00000080
+"ColorTable05"=dword:00800080
+"ColorTable06"=dword:00008080
+"ColorTable07"=dword:00c0c0c0
+"ColorTable08"=dword:00808080
+"ColorTable09"=dword:00ff0000
+"ColorTable10"=dword:0000ff00
+"ColorTable11"=dword:00ffff00
+"ColorTable12"=dword:000000ff
+"ColorTable13"=dword:00ff00ff
+"ColorTable14"=dword:0000ffff
+"ColorTable15"=dword:00ffffff
+"CursorSize"=dword:00000019
+"FaceName"=""
+"FontFamily"=dword:00000000
+"FontSize"=dword:00000000
+"FontWeight"=dword:00000000
+"FullScreen"=dword:00000000
+"HistoryBufferSize"=dword:00000032
+"InsertMode"=dword:00000001
+"LoadConIme"=dword:00000001
+"NumberOfHistoryBuffers"=dword:00000004
+"PopupColors"=dword:000000f5
+"QuickEdit"=dword:00000001
+"ScreenBufferSize"=dword:012c0050
+"ScreenColors"=dword:0000000f
+"WindowSize"=dword:00190050
+"CurrentPage"=dword:00000000
+
+[HKEY_CURRENT_USER\Console\Console2 command window]
+"QuickEdit"=dword:00000800
+"ScreenBufferSize"=dword:01f40050
+"WindowSize"=dword:002c0050
+"WindowPosition"=dword:009d027a
+"FontSize"=dword:000a0000
+"FontFamily"=dword:00000036
+"FontWeight"=dword:00000190
+"FaceName"="Lucida Console"
+"HistoryNoDup"=dword:00000000
+
+[HKEY_CURRENT_USER\Console\IPython]
+"ScreenColors"=dword:0000000f
+"PopupColors"=dword:000000f5
+"ColorTable00"=dword:00000000
+"ColorTable01"=dword:00800000
+"ColorTable02"=dword:00008000
+"ColorTable03"=dword:00808000
+"ColorTable04"=dword:00000080
+"ColorTable05"=dword:00800080
+"ColorTable06"=dword:00008080
+"ColorTable07"=dword:00c0c0c0
+"ColorTable08"=dword:00808080
+"ColorTable09"=dword:00ff0000
+"ColorTable10"=dword:0000ff00
+"ColorTable11"=dword:00ffff00
+"ColorTable12"=dword:000000ff
+"ColorTable13"=dword:00ff00ff
+"ColorTable14"=dword:0000ffff
+"ColorTable15"=dword:00ffffff
+"InsertMode"=dword:00000001
+"QuickEdit"=dword:00000001
+"FullScreen"=dword:00000000
+"ScreenBufferSize"=dword:012c0064
+"WindowSize"=dword:001e0064
+"FontSize"=dword:000e0000
+"FontFamily"=dword:00000036
+"FontWeight"=dword:00000190
+"FaceName"="Lucida Console"
+"CursorSize"=dword:00000064
+"HistoryBufferSize"=dword:00000032
+"NumberOfHistoryBuffers"=dword:00000004
+"HistoryNoDup"=dword:00000000
+
+[HKEY_CURRENT_USER\Console\IPython (mlab)]
+"ScreenColors"=dword:0000000f
+"PopupColors"=dword:000000f5
+"ColorTable00"=dword:00000000
+"ColorTable01"=dword:00800000
+"ColorTable02"=dword:00008000
+"ColorTable03"=dword:00808000
+"ColorTable04"=dword:00000080
+"ColorTable05"=dword:00800080
+"ColorTable06"=dword:00008080
+"ColorTable07"=dword:00c0c0c0
+"ColorTable08"=dword:00808080
+"ColorTable09"=dword:00ff0000
+"ColorTable10"=dword:0000ff00
+"ColorTable11"=dword:00ffff00
+"ColorTable12"=dword:000000ff
+"ColorTable13"=dword:00ff00ff
+"ColorTable14"=dword:0000ffff
+"ColorTable15"=dword:00ffffff
+"InsertMode"=dword:00000001
+"QuickEdit"=dword:00000001
+"FullScreen"=dword:00000000
+"ScreenBufferSize"=dword:012c0064
+"WindowSize"=dword:001e0064
+"FontSize"=dword:000e0000
+"FontFamily"=dword:00000036
+"FontWeight"=dword:00000190
+"FaceName"="Lucida Console"
+"CursorSize"=dword:00000064
+"HistoryBufferSize"=dword:00000032
+"NumberOfHistoryBuffers"=dword:00000004
+"HistoryNoDup"=dword:00000000
+
+[HKEY_CURRENT_USER\Console\IPython (Qt)]
+"ScreenColors"=dword:0000000f
+"PopupColors"=dword:000000f5
+"ColorTable00"=dword:00000000
+"ColorTable01"=dword:00800000
+"ColorTable02"=dword:00008000
+"ColorTable03"=dword:00808000
+"ColorTable04"=dword:00000080
+"ColorTable05"=dword:00800080
+"ColorTable06"=dword:00008080
+"ColorTable07"=dword:00c0c0c0
+"ColorTable08"=dword:00808080
+"ColorTable09"=dword:00ff0000
+"ColorTable10"=dword:0000ff00
+"ColorTable11"=dword:00ffff00
+"ColorTable12"=dword:000000ff
+"ColorTable13"=dword:00ff00ff
+"ColorTable14"=dword:0000ffff
+"ColorTable15"=dword:00ffffff
+"InsertMode"=dword:00000001
+"QuickEdit"=dword:00000001
+"FullScreen"=dword:00000000
+"ScreenBufferSize"=dword:012c0064
+"WindowSize"=dword:001e0064
+"FontSize"=dword:000e0000
+"FontFamily"=dword:00000036
+"FontWeight"=dword:00000190
+"FaceName"="Lucida Console"
+"CursorSize"=dword:00000064
+"HistoryBufferSize"=dword:00000032
+"NumberOfHistoryBuffers"=dword:00000004
+"HistoryNoDup"=dword:00000000
+
+[HKEY_CURRENT_USER\Console\IPython (sh)]
+"ScreenColors"=dword:0000000f
+"PopupColors"=dword:000000f5
+"ColorTable00"=dword:00000000
+"ColorTable01"=dword:00800000
+"ColorTable02"=dword:00008000
+"ColorTable03"=dword:00808000
+"ColorTable04"=dword:00000080
+"ColorTable05"=dword:00800080
+"ColorTable06"=dword:00008080
+"ColorTable07"=dword:00c0c0c0
+"ColorTable08"=dword:00808080
+"ColorTable09"=dword:00ff0000
+"ColorTable10"=dword:0000ff00
+"ColorTable11"=dword:00ffff00
+"ColorTable12"=dword:000000ff
+"ColorTable13"=dword:00ff00ff
+"ColorTable14"=dword:0000ffff
+"ColorTable15"=dword:00ffffff
+"InsertMode"=dword:00000001
+"QuickEdit"=dword:00000001
+"FullScreen"=dword:00000000
+"ScreenBufferSize"=dword:012c0064
+"WindowSize"=dword:001e0064
+"FontSize"=dword:000e0000
+"FontFamily"=dword:00000036
+"FontWeight"=dword:00000190
+"FaceName"="Lucida Console"
+"CursorSize"=dword:00000064
+"HistoryBufferSize"=dword:00000032
+"NumberOfHistoryBuffers"=dword:00000004
+"HistoryNoDup"=dword:00000000
+
+[HKEY_CURRENT_USER\Console\IPython (wxPython)]
+"ScreenColors"=dword:0000000f
+"PopupColors"=dword:000000f5
+"ColorTable00"=dword:00000000
+"ColorTable01"=dword:00800000
+"ColorTable02"=dword:00008000
+"ColorTable03"=dword:00808000
+"ColorTable04"=dword:00000080
+"ColorTable05"=dword:00800080
+"ColorTable06"=dword:00008080
+"ColorTable07"=dword:00c0c0c0
+"ColorTable08"=dword:00808080
+"ColorTable09"=dword:00ff0000
+"ColorTable10"=dword:0000ff00
+"ColorTable11"=dword:00ffff00
+"ColorTable12"=dword:000000ff
+"ColorTable13"=dword:00ff00ff
+"ColorTable14"=dword:0000ffff
+"ColorTable15"=dword:00ffffff
+"InsertMode"=dword:00000001
+"QuickEdit"=dword:00000001
+"FullScreen"=dword:00000000
+"ScreenBufferSize"=dword:012c0064
+"WindowSize"=dword:001e0064
+"FontSize"=dword:000e0000
+"FontFamily"=dword:00000036
+"FontWeight"=dword:00000190
+"FaceName"="Lucida Console"
+"CursorSize"=dword:00000064
+"HistoryBufferSize"=dword:00000032
+"NumberOfHistoryBuffers"=dword:00000004
+"HistoryNoDup"=dword:00000000
+
+[HKEY_CURRENT_USER\Console\IPython(x,y)]
+"ScreenColors"=dword:0000000f
+"PopupColors"=dword:000000f5
+"ColorTable00"=dword:00000000
+"ColorTable01"=dword:00800000
+"ColorTable02"=dword:00008000
+"ColorTable03"=dword:00808000
+"ColorTable04"=dword:00000080
+"ColorTable05"=dword:00800080
+"ColorTable06"=dword:00008080
+"ColorTable07"=dword:00c0c0c0
+"ColorTable08"=dword:00808080
+"ColorTable09"=dword:00ff0000
+"ColorTable10"=dword:0000ff00
+"ColorTable11"=dword:00ffff00
+"ColorTable12"=dword:000000ff
+"ColorTable13"=dword:00ff00ff
+"ColorTable14"=dword:0000ffff
+"ColorTable15"=dword:00ffffff
+"InsertMode"=dword:00000001
+"QuickEdit"=dword:00000001
+"FullScreen"=dword:00000000
+"ScreenBufferSize"=dword:012c0064
+"WindowSize"=dword:001e0064
+"FontSize"=dword:000e0000
+"FontFamily"=dword:00000036
+"FontWeight"=dword:00000190
+"FaceName"="Lucida Console"
+"CursorSize"=dword:00000064
+"HistoryBufferSize"=dword:00000032
+"NumberOfHistoryBuffers"=dword:00000004
+"HistoryNoDup"=dword:00000000
+
+[HKEY_CURRENT_USER\Console\Python interpreter]
+"ScreenColors"=dword:0000000f
+"PopupColors"=dword:000000f5
+"ColorTable00"=dword:00000000
+"ColorTable01"=dword:00800000
+"ColorTable02"=dword:00008000
+"ColorTable03"=dword:00808000
+"ColorTable04"=dword:00000080
+"ColorTable05"=dword:00800080
+"ColorTable06"=dword:00008080
+"ColorTable07"=dword:00c0c0c0
+"ColorTable08"=dword:00808080
+"ColorTable09"=dword:00ff0000
+"ColorTable10"=dword:0000ff00
+"ColorTable11"=dword:00ffff00
+"ColorTable12"=dword:000000ff
+"ColorTable13"=dword:00ff00ff
+"ColorTable14"=dword:0000ffff
+"ColorTable15"=dword:00ffffff
+"InsertMode"=dword:00000001
+"QuickEdit"=dword:00000001
+"FullScreen"=dword:00000000
+"ScreenBufferSize"=dword:012c0064
+"WindowSize"=dword:001e0064
+"FontSize"=dword:000e0000
+"FontFamily"=dword:00000036
+"FontWeight"=dword:00000190
+"FaceName"="Lucida Console"
+"CursorSize"=dword:00000064
+"HistoryBufferSize"=dword:00000032
+"NumberOfHistoryBuffers"=dword:00000004
+"HistoryNoDup"=dword:00000000
+[HKEY_CURRENT_USER\SOFTWARE\Python]
+
+[HKEY_CURRENT_USER\SOFTWARE\Python\PythonCore]
+
+[HKEY_CURRENT_USER\SOFTWARE\Python\PythonCore\2.5]
+
+[HKEY_CURRENT_USER\SOFTWARE\Python\PythonCore\2.5\Help]
+
+[HKEY_CURRENT_USER\SOFTWARE\Python\PythonCore\2.5\Help\Main Python Documentation]
+@="C:\\Python25\\Doc\\Python25.chm"
+
+[HKEY_CURRENT_USER\SOFTWARE\Python\PythonCore\2.5\InstallPath]
+@="C:\\Python25\\"
+
+[HKEY_CURRENT_USER\SOFTWARE\Python\PythonCore\2.5\InstallPath\InstallGroup]
+@="Python 2.5"
+
+[HKEY_CURRENT_USER\SOFTWARE\Python\PythonCore\2.5\Modules]
+
+[HKEY_CURRENT_USER\SOFTWARE\Python\PythonCore\2.5\PythonPath]
+@="C:\\Python25\\Lib;C:\\Python25\\DLLs;C:\\Python25\\Lib\\lib-tk"
+
+[HKEY_CURRENT_USER\SOFTWARE\Classes\Applications\python.exe]
+
+[HKEY_CURRENT_USER\SOFTWARE\Classes\Applications\python.exe\shell]
+
+[HKEY_CURRENT_USER\SOFTWARE\Classes\Applications\python.exe\shell\open]
+
+[HKEY_CURRENT_USER\SOFTWARE\Classes\Applications\python.exe\shell\open\command]
+@="\"C:\\Python25\\python.exe\" \"%1\" %*"
+
+[HKEY_CURRENT_USER\SOFTWARE\Classes\Applications\python.exe\shell\Run in interactive mode]
+@=""
+
+[HKEY_CURRENT_USER\SOFTWARE\Classes\Applications\python.exe\shell\Run in interactive mode\command]
+@="\"C:\\Python25\\python.exe\" \"-i\" \"%1\" %*"
+
+[HKEY_CURRENT_USER\SOFTWARE\Classes\Applications\pythonw.exe]
+
+[HKEY_CURRENT_USER\SOFTWARE\Classes\Applications\pythonw.exe\shell]
+
+[HKEY_CURRENT_USER\SOFTWARE\Classes\Applications\pythonw.exe\shell\open]
+
+[HKEY_CURRENT_USER\SOFTWARE\Classes\Applications\pythonw.exe\shell\open\command]
+@="\"C:\\Python25\\pythonw.exe\" \"%1\" %*"
+
+[HKEY_CURRENT_USER\SOFTWARE\Classes\Applications\pythonw.exe\shell\Run in interactive mode]
+@=""
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.py]
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.py\OpenWithList]
+"a"="python.exe"
+"MRUList"="ab"
+"b"="SciTE.exe"
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.py\OpenWithProgids]
+"Python.File"=hex(0):
+
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.pyw]
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.pyw\OpenWithList]
+"a"="pythonw.exe"
+"MRUList"="a"
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.pyw\OpenWithProgids]
+"Python.NoConFile"=hex(0):
+
+[HKEY_CURRENT_USER\Software\Python(x,y)]
+@="C:\\Program Files\\pythonxy"
+"Version"="2.1.11"
+"Python"="C:\\Python25"
+"DocPath"="C:\\Program Files\\pythonxy\\doc"
+"Eclipse"="C:\\Program Files\\pythonxy\\eclipse"
+"Workspace"="C:\\Documents and Settings\\All Users\\Documents\\Python"
+"MinGW"="C:\\Program Files\\pythonxy\\mingw"
+"SWIG"="C:\\Program Files\\pythonxy\\swig"
+"Start Menu Folder"="Python(x,y)"
+"Installer Language"="1033"
+[HKEY_CURRENT_USER\Software\Trolltech]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QIconEngineFactoryInterface:]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QIconEngineFactoryInterface:\C:]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QIconEngineFactoryInterface:\C:\Python25]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QIconEngineFactoryInterface:\C:\Python25\Lib]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QIconEngineFactoryInterface:\C:\Python25\Lib\site-packages]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QIconEngineFactoryInterface:\C:\Python25\Lib\site-packages\PyQt4]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QIconEngineFactoryInterface:\C:\Python25\Lib\site-packages\PyQt4\plugins]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QIconEngineFactoryInterface:\C:\Python25\Lib\site-packages\PyQt4\plugins\iconengines]
+"qsvgicon4.dll"=hex(7):32,00,30,00,30,00,38,00,2d,00,30,00,37,00,2d,00,32,00,\
+  39,00,54,00,32,00,32,00,3a,00,32,00,34,00,3a,00,31,00,32,00,00,00,00,00
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QIconEngineFactoryInterfaceV2:]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QIconEngineFactoryInterfaceV2:\C:]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QIconEngineFactoryInterfaceV2:\C:\Python25]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QIconEngineFactoryInterfaceV2:\C:\Python25\Lib]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QIconEngineFactoryInterfaceV2:\C:\Python25\Lib\site-packages]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QIconEngineFactoryInterfaceV2:\C:\Python25\Lib\site-packages\PyQt4]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QIconEngineFactoryInterfaceV2:\C:\Python25\Lib\site-packages\PyQt4\plugins]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QIconEngineFactoryInterfaceV2:\C:\Python25\Lib\site-packages\PyQt4\plugins\iconengines]
+"qsvgicon4.dll"=hex(7):32,00,30,00,30,00,38,00,2d,00,30,00,37,00,2d,00,32,00,\
+  39,00,54,00,32,00,32,00,3a,00,32,00,34,00,3a,00,31,00,32,00,00,00,73,00,76,\
+  00,67,00,00,00,00,00
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QImageIOHandlerFactoryInterface:]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QImageIOHandlerFactoryInterface:\C:]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QImageIOHandlerFactoryInterface:\C:\Python25]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QImageIOHandlerFactoryInterface:\C:\Python25\Lib]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QImageIOHandlerFactoryInterface:\C:\Python25\Lib\site-packages]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QImageIOHandlerFactoryInterface:\C:\Python25\Lib\site-packages\PyQt4]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QImageIOHandlerFactoryInterface:\C:\Python25\Lib\site-packages\PyQt4\plugins]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Factory Cache 4.4\com.trolltech.Qt.QImageIOHandlerFactoryInterface:\C:\Python25\Lib\site-packages\PyQt4\plugins\imageformats]
+"qgif4.dll"=hex(7):32,00,30,00,30,00,38,00,2d,00,30,00,37,00,2d,00,32,00,39,00,\
+  54,00,32,00,32,00,3a,00,32,00,32,00,3a,00,35,00,32,00,00,00,67,00,69,00,66,\
+  00,00,00,00,00
+"qico4.dll"=hex(7):32,00,30,00,30,00,38,00,2d,00,30,00,37,00,2d,00,32,00,39,00,\
+  54,00,32,00,32,00,3a,00,32,00,33,00,3a,00,32,00,36,00,00,00,69,00,63,00,6f,\
+  00,00,00,00,00
+"qjpeg4.dll"=hex(7):32,00,30,00,30,00,38,00,2d,00,30,00,37,00,2d,00,32,00,39,\
+  00,54,00,32,00,32,00,3a,00,32,00,32,00,3a,00,34,00,38,00,00,00,6a,00,70,00,\
+  65,00,67,00,00,00,6a,00,70,00,67,00,00,00,00,00
+"qmng4.dll"=hex(7):32,00,30,00,30,00,38,00,2d,00,30,00,37,00,2d,00,32,00,39,00,\
+  54,00,32,00,32,00,3a,00,32,00,33,00,3a,00,30,00,36,00,00,00,6d,00,6e,00,67,\
+  00,00,00,00,00
+"qsvg4.dll"=hex(7):32,00,30,00,30,00,38,00,2d,00,30,00,37,00,2d,00,32,00,39,00,\
+  54,00,32,00,32,00,3a,00,32,00,33,00,3a,00,31,00,30,00,00,00,73,00,76,00,67,\
+  00,00,00,00,00
+"qtiff4.dll"=hex(7):32,00,30,00,30,00,38,00,2d,00,30,00,37,00,2d,00,32,00,39,\
+  00,54,00,32,00,32,00,3a,00,32,00,33,00,3a,00,32,00,34,00,00,00,74,00,69,00,\
+  66,00,66,00,00,00,74,00,69,00,66,00,00,00,00,00
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Plugin Cache 4.4.false]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Plugin Cache 4.4.false\C:]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Plugin Cache 4.4.false\C:\Python25]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Plugin Cache 4.4.false\C:\Python25\Lib]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Plugin Cache 4.4.false\C:\Python25\Lib\site-packages]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Plugin Cache 4.4.false\C:\Python25\Lib\site-packages\PyQt4]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Plugin Cache 4.4.false\C:\Python25\Lib\site-packages\PyQt4\plugins]
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Plugin Cache 4.4.false\C:\Python25\Lib\site-packages\PyQt4\plugins\iconengines]
+"libqsvgicon4.a"=hex(7):30,00,00,00,31,00,00,00,75,00,6e,00,6b,00,6e,00,6f,00,\
+  77,00,6e,00,00,00,32,00,30,00,30,00,38,00,2d,00,30,00,37,00,2d,00,32,00,39,\
+  00,54,00,32,00,32,00,3a,00,32,00,34,00,3a,00,31,00,32,00,00,00,00,00
+"libqsvgicond4.a"=hex(7):30,00,00,00,31,00,00,00,75,00,6e,00,6b,00,6e,00,6f,00,\
+  77,00,6e,00,00,00,32,00,30,00,30,00,38,00,2d,00,30,00,37,00,2d,00,32,00,39,\
+  00,54,00,32,00,32,00,3a,00,32,00,34,00,3a,00,30,00,38,00,00,00,00,00
+"qsvgicon4.dll"=hex(7):34,00,30,00,34,00,30,00,31,00,00,00,30,00,00,00,57,00,\
+  69,00,6e,00,64,00,6f,00,77,00,73,00,20,00,6d,00,69,00,6e,00,67,00,77,00,20,\
+  00,72,00,65,00,6c,00,65,00,61,00,73,00,65,00,20,00,66,00,75,00,6c,00,6c,00,\
+  2d,00,63,00,6f,00,6e,00,66,00,69,00,67,00,00,00,32,00,30,00,30,00,38,00,2d,\
+  00,30,00,37,00,2d,00,32,00,39,00,54,00,32,00,32,00,3a,00,32,00,34,00,3a,00,\
+  31,00,32,00,00,00,00,00
+"qsvgicond4.dll"=hex(7):34,00,30,00,34,00,30,00,31,00,00,00,31,00,00,00,57,00,\
+  69,00,6e,00,64,00,6f,00,77,00,73,00,20,00,6d,00,69,00,6e,00,67,00,77,00,20,\
+  00,72,00,65,00,6c,00,65,00,61,00,73,00,65,00,20,00,66,00,75,00,6c,00,6c,00,\
+  2d,00,63,00,6f,00,6e,00,66,00,69,00,67,00,00,00,32,00,30,00,30,00,38,00,2d,\
+  00,30,00,37,00,2d,00,32,00,39,00,54,00,32,00,32,00,3a,00,32,00,34,00,3a,00,\
+  30,00,38,00,00,00,00,00
+
+[HKEY_CURRENT_USER\Software\Trolltech\OrganizationDefaults\Qt Plugin Cache 4.4.false\C:\Python25\Lib\site-packages\PyQt4\plugins\imageformats]
+"libqgif4.a"=hex(7):30,00,00,00,31,00,00,00,75,00,6e,00,6b,00,6e,00,6f,00,77,\
+  00,6e,00,00,00,32,00,30,00,30,00,38,00,2d,00,30,00,37,00,2d,00,32,00,39,00,\
+  54,00,32,00,32,00,3a,00,32,00,32,00,3a,00,35,00,32,00,00,00,00,00
+"libqgifd4.a"=hex(7):30,00,00,00,31,00,00,00,75,00,6e,00,6b,00,6e,00,6f,00,77,\
+  00,6e,00,00,00,32,00,30,00,30,00,38,00,2d,00,30,00,37,00,2d,00,32,00,39,00,\
+  54,00,32,00,32,00,3a,00,32,00,32,00,3a,00,35,00,30,00,00,00,00,00
+"libqico4.a"=hex(7):30,00,00,00,31,00,00,00,75,00,6e,00,6b,00,6e,00,6f,00,77,\
+  00,6e,00,00,00,32,00,30,00,30,00,38,00,2d,00,30,00,37,00,2d,00,32,00,39,00,\
+  54,00,32,00,32,00,3a,00,32,00,33,00,3a,00,32,00,36,00,00,00,00,00
+"libqicod4.a"=hex(7):30,00,00,00,31,00,00,00,75,00,6e,00,6b,00,6e,00,6f,00,77,\
+  00,6e,00,00,00,32,00,30,00,30,00,38,00,2d,00,30,00,37,00,2d,00,32,00,39,00,\
+  54,00,32,00,32,00,3a,00,32,00,33,00,3a,00,32,00,36,00,00,00,00,00
+"libqjpeg4.a"=hex(7):30,00,00,00,31,00,00,00,75,00,6e,00,6b,00,6e,00,6f,00,77,\
+  00,6e,00,00,00,32,00,30,00,30,00,38,00,2d,00,30,00,37,00,2d,00,32,00,39,00,\
+  54,00,32,00,32,00,3a,00,32,00,32,00,3a,00,34,00,38,00,00,00,00,00
+"libqjpegd4.a"=hex(7):30,00,00,00,31,00,00,00,75,00,6e,00,6b,00,6e,00,6f,00,77,\
+  00,6e,00,00,00,32,00,30,00,30,00,38,00,2d,00,30,00,37,00,2d,00,32,00,39,00,\
+  54,00,32,00,32,00,3a,00,32,00,32,00,3a,00,34,00,30,00,00,00,00,00
+"libqmng4.a"=hex(7):30,00,00,00,31,00,00,00,75,00,6e,00,6b,00,6e,00,6f,00,77,\
+  00,6e,00,00,00,32,00,30,00,30,00,38,00,2d,00,30,00,37,00,2d,00,32,00,39,00,\
+  54,00,32,00,32,00,3a,00,32,00,33,00,3a,00,30,00,36,00,00,00,00,00
+"libqmngd4.a"=hex(7):30,00,00,00,31,00,00,00,75,00,6e,00,6b,00,6e,00,6f,00,77,\
+  00,6e,00,00,00,32,00,30,00,30,00,38,00,2d,00,30,00,37,00,2d,00,32,00,39,00,\
+  54,00,32,00,32,00,3a,00,32,00,32,00,3a,00,35,00,38,00,00,00,00,00
+"libqsvg4.a"=hex(7):30,00,00,00,31,00,00,00,75,00,6e,00,6b,00,6e,00,6f,00,77,\
+  00,6e,00,00,00,32,00,30,00,30,00,38,00,2d,00,30,00,37,00,2d,00,32,00,39,00,\
+  54,00,32,00,32,00,3a,00,32,00,33,00,3a,00,31,00,30,00,00,00,00,00
+"libqsvgd4.a"=hex(7):30,00,00,00,31,00,00,00,75,00,6e,00,6b,00,6e,00,6f,00,77,\
+  00,6e,00,00,00,32,00,30,00,30,00,38,00,2d,00,30,00,37,00,2d,00,32,00,39,00,\
+  54,00,32,00,32,00,3a,00,32,00,33,00,3a,00,30,00,38,00,00,00,00,00
+"libqtiff4.a"=hex(7):30,00,00,00,31,00,00,00,75,00,6e,00,6b,00,6e,00,6f,00,77,\
+  00,6e,00,00,00,32,00,30,00,30,00,38,00,2d,00,30,00,37,00,2d,00,32,00,39,00,\
+  54,00,32,00,32,00,3a,00,32,00,33,00,3a,00,32,00,34,00,00,00,00,00
+"libqtiffd4.a"=hex(7):30,00,00,00,31,00,00,00,75,00,6e,00,6b,00,6e,00,6f,00,77,\
+  00,6e,00,00,00,32,00,30,00,30,00,38,00,2d,00,30,00,37,00,2d,00,32,00,39,00,\
+  54,00,32,00,32,00,3a,00,32,00,33,00,3a,00,31,00,34,00,00,00,00,00
+"qgif4.dll"=hex(7):34,00,30,00,34,00,30,00,31,00,00,00,30,00,00,00,57,00,69,00,\
+  6e,00,64,00,6f,00,77,00,73,00,20,00,6d,00,69,00,6e,00,67,00,77,00,20,00,72,\
+  00,65,00,6c,00,65,00,61,00,73,00,65,00,20,00,66,00,75,00,6c,00,6c,00,2d,00,\
+  63,00,6f,00,6e,00,66,00,69,00,67,00,00,00,32,00,30,00,30,00,38,00,2d,00,30,\
+  00,37,00,2d,00,32,00,39,00,54,00,32,00,32,00,3a,00,32,00,32,00,3a,00,35,00,\
+  32,00,00,00,00,00
+"qgifd4.dll"=hex(7):34,00,30,00,34,00,30,00,31,00,00,00,31,00,00,00,57,00,69,\
+  00,6e,00,64,00,6f,00,77,00,73,00,20,00,6d,00,69,00,6e,00,67,00,77,00,20,00,\
+  72,00,65,00,6c,00,65,00,61,00,73,00,65,00,20,00,66,00,75,00,6c,00,6c,00,2d,\
+  00,63,00,6f,00,6e,00,66,00,69,00,67,00,00,00,32,00,30,00,30,00,38,00,2d,00,\
+  30,00,37,00,2d,00,32,00,39,00,54,00,32,00,32,00,3a,00,32,00,32,00,3a,00,35,\
+  00,30,00,00,00,00,00
+"qico4.dll"=hex(7):34,00,30,00,34,00,30,00,31,00,00,00,30,00,00,00,57,00,69,00,\
+  6e,00,64,00,6f,00,77,00,73,00,20,00,6d,00,69,00,6e,00,67,00,77,00,20,00,72,\
+  00,65,00,6c,00,65,00,61,00,73,00,65,00,20,00,66,00,75,00,6c,00,6c,00,2d,00,\
+  63,00,6f,00,6e,00,66,00,69,00,67,00,00,00,32,00,30,00,30,00,38,00,2d,00,30,\
+  00,37,00,2d,00,32,00,39,00,54,00,32,00,32,00,3a,00,32,00,33,00,3a,00,32,00,\
+  36,00,00,00,00,00
+"qicod4.dll"=hex(7):34,00,30,00,34,00,30,00,31,00,00,00,31,00,00,00,57,00,69,\
+  00,6e,00,64,00,6f,00,77,00,73,00,20,00,6d,00,69,00,6e,00,67,00,77,00,20,00,\
+  72,00,65,00,6c,00,65,00,61,00,73,00,65,00,20,00,66,00,75,00,6c,00,6c,00,2d,\
+  00,63,00,6f,00,6e,00,66,00,69,00,67,00,00,00,32,00,30,00,30,00,38,00,2d,00,\
+  30,00,37,00,2d,00,32,00,39,00,54,00,32,00,32,00,3a,00,32,00,33,00,3a,00,32,\
+  00,36,00,00,00,00,00
+"qjpeg4.dll"=hex(7):34,00,30,00,34,00,30,00,31,00,00,00,30,00,00,00,57,00,69,\
+  00,6e,00,64,00,6f,00,77,00,73,00,20,00,6d,00,69,00,6e,00,67,00,77,00,20,00,\
+  72,00,65,00,6c,00,65,00,61,00,73,00,65,00,20,00,66,00,75,00,6c,00,6c,00,2d,\
+  00,63,00,6f,00,6e,00,66,00,69,00,67,00,00,00,32,00,30,00,30,00,38,00,2d,00,\
+  30,00,37,00,2d,00,32,00,39,00,54,00,32,00,32,00,3a,00,32,00,32,00,3a,00,34,\
+  00,38,00,00,00,00,00
+"qjpegd4.dll"=hex(7):34,00,30,00,34,00,30,00,31,00,00,00,31,00,00,00,57,00,69,\
+  00,6e,00,64,00,6f,00,77,00,73,00,20,00,6d,00,69,00,6e,00,67,00,77,00,20,00,\
+  72,00,65,00,6c,00,65,00,61,00,73,00,65,00,20,00,66,00,75,00,6c,00,6c,00,2d,\
+  00,63,00,6f,00,6e,00,66,00,69,00,67,00,00,00,32,00,30,00,30,00,38,00,2d,00,\
+  30,00,37,00,2d,00,32,00,39,00,54,00,32,00,32,00,3a,00,32,00,32,00,3a,00,34,\
+  00,30,00,00,00,00,00
+"qmng4.dll"=hex(7):34,00,30,00,34,00,30,00,31,00,00,00,30,00,00,00,57,00,69,00,\
+  6e,00,64,00,6f,00,77,00,73,00,20,00,6d,00,69,00,6e,00,67,00,77,00,20,00,72,\
+  00,65,00,6c,00,65,00,61,00,73,00,65,00,20,00,66,00,75,00,6c,00,6c,00,2d,00,\
+  63,00,6f,00,6e,00,66,00,69,00,67,00,00,00,32,00,30,00,30,00,38,00,2d,00,30,\
+  00,37,00,2d,00,32,00,39,00,54,00,32,00,32,00,3a,00,32,00,33,00,3a,00,30,00,\
+  36,00,00,00,00,00
+"qmngd4.dll"=hex(7):34,00,30,00,34,00,30,00,31,00,00,00,31,00,00,00,57,00,69,\
+  00,6e,00,64,00,6f,00,77,00,73,00,20,00,6d,00,69,00,6e,00,67,00,77,00,20,00,\
+  72,00,65,00,6c,00,65,00,61,00,73,00,65,00,20,00,66,00,75,00,6c,00,6c,00,2d,\
+  00,63,00,6f,00,6e,00,66,00,69,00,67,00,00,00,32,00,30,00,30,00,38,00,2d,00,\
+  30,00,37,00,2d,00,32,00,39,00,54,00,32,00,32,00,3a,00,32,00,32,00,3a,00,35,\
+  00,38,00,00,00,00,00
+"qsvg4.dll"=hex(7):34,00,30,00,34,00,30,00,31,00,00,00,30,00,00,00,57,00,69,00,\
+  6e,00,64,00,6f,00,77,00,73,00,20,00,6d,00,69,00,6e,00,67,00,77,00,20,00,72,\
+  00,65,00,6c,00,65,00,61,00,73,00,65,00,20,00,66,00,75,00,6c,00,6c,00,2d,00,\
+  63,00,6f,00,6e,00,66,00,69,00,67,00,00,00,32,00,30,00,30,00,38,00,2d,00,30,\
+  00,37,00,2d,00,32,00,39,00,54,00,32,00,32,00,3a,00,32,00,33,00,3a,00,31,00,\
+  30,00,00,00,00,00
+"qsvgd4.dll"=hex(7):34,00,30,00,34,00,30,00,31,00,00,00,31,00,00,00,57,00,69,\
+  00,6e,00,64,00,6f,00,77,00,73,00,20,00,6d,00,69,00,6e,00,67,00,77,00,20,00,\
+  72,00,65,00,6c,00,65,00,61,00,73,00,65,00,20,00,66,00,75,00,6c,00,6c,00,2d,\
+  00,63,00,6f,00,6e,00,66,00,69,00,67,00,00,00,32,00,30,00,30,00,38,00,2d,00,\
+  30,00,37,00,2d,00,32,00,39,00,54,00,32,00,32,00,3a,00,32,00,33,00,3a,00,30,\
+  00,38,00,00,00,00,00
+"qtiff4.dll"=hex(7):34,00,30,00,34,00,30,00,31,00,00,00,30,00,00,00,57,00,69,\
+  00,6e,00,64,00,6f,00,77,00,73,00,20,00,6d,00,69,00,6e,00,67,00,77,00,20,00,\
+  72,00,65,00,6c,00,65,00,61,00,73,00,65,00,20,00,66,00,75,00,6c,00,6c,00,2d,\
+  00,63,00,6f,00,6e,00,66,00,69,00,67,00,00,00,32,00,30,00,30,00,38,00,2d,00,\
+  30,00,37,00,2d,00,32,00,39,00,54,00,32,00,32,00,3a,00,32,00,33,00,3a,00,32,\
+  00,34,00,00,00,00,00
+"qtiffd4.dll"=hex(7):34,00,30,00,34,00,30,00,31,00,00,00,31,00,00,00,57,00,69,\
+  00,6e,00,64,00,6f,00,77,00,73,00,20,00,6d,00,69,00,6e,00,67,00,77,00,20,00,\
+  72,00,65,00,6c,00,65,00,61,00,73,00,65,00,20,00,66,00,75,00,6c,00,6c,00,2d,\
+  00,63,00,6f,00,6e,00,66,00,69,00,67,00,00,00,32,00,30,00,30,00,38,00,2d,00,\
+  30,00,37,00,2d,00,32,00,39,00,54,00,32,00,32,00,3a,00,32,00,33,00,3a,00,31,\
+  00,36,00,00,00,00,00
+

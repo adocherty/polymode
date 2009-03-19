@@ -317,6 +317,8 @@ data = load_data(filename)
 
 Try running the next file `ex2_plotting_modes.py` to see some commands in action.
 
+----
+
 == Tutorial 3 ==
 
 === Microstructured fibers ===
@@ -890,6 +892,8 @@ Finally the effective index and loss of the modes versus the wavelength, in this
 http://polymode.googlecode.com/svn/wiki/figures/fig12_uranus_wavelength.png
 
 === Wavelength tracking ===
+
+Coming...
 
 ----
 
