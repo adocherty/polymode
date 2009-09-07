@@ -1,0 +1,42 @@
+#summary Introducing Polymode and how to create and solve for modes in basic structures.
+
+=Introduction to Polymode=
+
+==Materials==
+
+Polymode contains an inbuilt set of commonly used materials.
+
+{{{
+air = Material.Air()
+m1 = Material.Silica()
+m2 = Material.PMMA()
+}}}
+
+More materials can be loaded from [http://swiss.csail.mit.edu/~jaffer/FreeSnell/ Freesnell] [http://www.luxpop.com/ Luxpop] or [http://www.sopra-sa.com/ Sopra] formatted files. It also contains data from the freely available Freesnell and Sopra materials.
+
+Material objects contain all information about the refractive index of the material, and can be queried and plotted.
+
+http://polymode.googlecode.com/svn/wiki/figures/fp_material_plot.png
+
+
+==Waveguide Structure==
+Once the materials have been defined, we can use them to form an arbitrary structure.
+We can place different shapes including circules, elipses, spline curves and polygons.
+
+The waveguide is created defining a subtrate material (which also extends past the computational boundary) and a symmetry.
+{{{
+wg = Waveguide.Waveguide(material=m2, symmetry=6)
+}}}
+	
+For example to create a six hole waveguide we place a single hole, as we have specified the rotational symmetry of the waveguide to be 6 the hole implicitly occurs 6 times. 
+{{{
+s = Waveguide.Circle(air, center=(6.75,0), radius=2.0)
+wg.add_shape(s)
+}}}
+
+We can see this plotting the waveguide:
+{{{
+wg.plot()
+}}}
+
+http://polymode.googlecode.com/svn/wiki/figures/fp_material_plot.png
