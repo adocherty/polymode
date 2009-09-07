@@ -24,7 +24,7 @@ http://polymode.googlecode.com/svn/wiki/figures/gs_installfor.png
 
 You now have everything you need to start.
 
-== Using the Python Environment ==
+== Using the Python(x,y) Environment ==
 
 The *IPython* command prompt is used to run all code.
 This is installed with *Python(x,y)*, you can access it through the Windows Start Menu under
@@ -79,6 +79,14 @@ Some other useful commands are:
 
 Help for all of these commands is available in IPython by typing the command then a "?" and hitting enter
 
+== Registry Entries in MPOF Computers ==
+
+The MPOF computers do not respect the local system registry entries, to correct this download this registry file
+and double click on it. Click "	yes" when asked if you want to add the information to the registry.
+
+[http://polymode.googlecode.com/svn/misc/mpof_pythonxy_registry.reg Download Python(x,y) registry file]
+
+
 == Paths in Windows ==
 
 The *PATH* environment variable needs to be set correctly for *PythonXY* to run properly and find the required
@@ -91,13 +99,6 @@ C:\Python25;C:\Python25\DLLs;C:\Python25\Scripts;C:\Python25\Lib\site-packages\P
 }}}
 
 See the [http://support.microsoft.com/kb/310519 Microsoft support page] for information on how to change the path.
-
-== Registry Entries in MPOF Computers ==
-
-The MPOF computers do not respect the local system registry entries, to correct this download this registry file
-and double click on it. Click "	yes" when asked if you want to add the information to the registry.
-
-[http://polymode.googlecode.com/svn/misc/mpof_pythonxy_registry.reg Download Python(x,y) registry file]
 
 == Installing on Linux/Mac OSX ==
 
@@ -117,5 +118,6 @@ python setup_numpy.py install
 
 This should build and install the package for you, if the prerequisites are also installed.
 
-== Installing on the APAC Altix Cluster computers ==
-Precompiled versions of the prerequisites for running computing jobs on the APAC Alitx cluster computers are included. Copy these files and the install file to the APAC computers and run the "install.sh" file. It will ask you for a directory and install the required files to it. You will need to add the some commands to your profile file to complete the installation, the installer will tell you what to add.
+=== Installing on the APAC Altix Cluster computers ===
+Precompiled versions of the prerequisites for running computing jobs on the APAC Alitx cluster computers are available. Copy these files and the install file to the APAC computers and run the "install.sh" file. It will ask you for a directory and install the required files to it. You will need to add the some commands to your profile file to complete the installation, the installer will tell you what to add.
+
