@@ -2,6 +2,20 @@
 
 =Introduction to Polymode=
 
+Polymode is object oriented, open source and is written in Python with extentions in C++.
+It aims to allow the specification of a fiber geometry with the minimum of commands in the most intuitive and flexible was. The main objects that the user sees are:
+ * Waveguide: The MOF structure is created as a Waveguide object
+     containing
+ * Material: Each material contains the dispersion profile of the
+     material over a specified wavelength range. Polymode contains an internal
+     database of materials and can import definitions from different formats.
+ * Mode: Modes calculated are stored with the field information and
+     effective index allowing easy manipulation and storage.
+ * Solver: Different numerical solvers can be used for each problem to
+     find the modes of the structure
+
+In the following sections we take a quick tour of each of the modules of Polymode.
+
 ==Materials==
 
 Polymode contains an inbuilt set of commonly used materials.
