@@ -1,0 +1,743 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>PolyMode.mathlink.memmap</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="PolyMode-module.html">Package&nbsp;PolyMode</a> ::
+        <a href="PolyMode.mathlink-module.html" onclick="show_private();">Package&nbsp;mathlink</a> ::
+        Class&nbsp;memmap
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="PolyMode.mathlink.memmap-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== TYPE DESCRIPTION ==================== -->
+<h1 class="epydoc">type memmap</h1><p class="nomargin-top"></p>
+<pre class="base-tree">
+object --+    
+         |    
+   <a href="numpy.ndarray-class.html">ndarray</a> --+
+             |
+            <strong class="uidshort">PolyMode.mathlink.memmap</strong>
+</pre>
+
+<hr />
+<pre class="literalblock">
+
+Create a memory-map to an array stored in a *binary* file on disk.
+
+Memory-mapped files are used for accessing small segments of large files
+on disk, without reading the entire file into memory.  Numpy's
+memmap's are array-like objects.  This differs from Python's ``mmap``
+module, which uses file-like objects.
+
+Parameters
+----------
+filename : string or file-like object
+    The file name or file object to be used as the array data
+    buffer.
+dtype : data-type, optional
+    The data-type used to interpret the file contents.
+    Default is `uint8`
+mode : {'r+', 'r', 'w+', 'c'}, optional
+    The file is opened in this mode:
+
+    +------+-------------------------------------------------------------+
+    | 'r'  | Open existing file for reading only.                        |
+    +------+-------------------------------------------------------------+
+    | 'r+' | Open existing file for reading and writing.                 |
+    +------+-------------------------------------------------------------+
+    | 'w+' | Create or overwrite existing file for reading and writing.  |
+    +------+-------------------------------------------------------------+
+    | 'c'  | Copy-on-write: assignments affect data in memory, but       |
+    |      | changes are not saved to disk.  The file on disk is         |
+    |      | read-only.                                                  |
+    +------+-------------------------------------------------------------+
+
+    Default is 'r+'.
+offset : integer, optional
+    In the file, array data starts at this offset.  `offset` should be
+    a multiple of the byte-size of `dtype`.  Requires `shape=None`.
+    The default is 0.
+shape : tuple, optional
+    The desired shape of the array. By default, the returned array will be
+    1-D with the number of elements determined by file size and data-type.
+order : {'C', 'F'}, optional
+    Specify the order of the ndarray memory layout: C (row-major) or
+    Fortran (column-major).  This only has an effect if the shape is
+    greater than 1-D.  The default order is 'C'.
+
+Methods
+-------
+close
+    Close the memmap file.
+flush
+    Flush any changes in memory to file on disk.
+    When you delete a memmap object, flush is called first to write
+    changes to disk before removing the object.
+
+Notes
+-----
+The memmap object can be used anywhere an ndarray is accepted.
+Given a memmap ``fp``, ``isinstance(fp, numpy.ndarray)`` returns
+``True``.
+
+Notes
+-----
+
+Memory-mapped arrays use the the Python memory-map object which
+(prior to Python 2.5) does not allow files to be larger than a
+certain size depending on the platform. This size is always &lt; 2GB
+even on 64-bit systems.
+
+Examples
+--------
+&gt;&gt;&gt; data = np.arange(12, dtype='float32')
+&gt;&gt;&gt; data.resize((3,4))
+
+This example uses a temporary file so that doctest doesn't write
+files to your directory. You would use a 'normal' filename.
+
+&gt;&gt;&gt; from tempfile import mkdtemp
+&gt;&gt;&gt; import os.path as path
+&gt;&gt;&gt; filename = path.join(mkdtemp(), 'newfile.dat')
+
+Create a memmap with dtype and shape that matches our data:
+
+&gt;&gt;&gt; fp = np.memmap(filename, dtype='float32', mode='w+', shape=(3,4))
+&gt;&gt;&gt; fp
+memmap([[ 0.,  0.,  0.,  0.],
+        [ 0.,  0.,  0.,  0.],
+        [ 0.,  0.,  0.,  0.]], dtype=float32)
+
+Write data to memmap array:
+
+&gt;&gt;&gt; fp[:] = data[:]
+&gt;&gt;&gt; fp
+memmap([[  0.,   1.,   2.,   3.],
+        [  4.,   5.,   6.,   7.],
+        [  8.,   9.,  10.,  11.]], dtype=float32)
+
+Deletion flushes memory changes to disk before removing the object:
+
+&gt;&gt;&gt; del fp
+
+Load the memmap and verify data was stored:
+
+&gt;&gt;&gt; newfp = np.memmap(filename, dtype='float32', mode='r', shape=(3,4))
+&gt;&gt;&gt; newfp
+memmap([[  0.,   1.,   2.,   3.],
+        [  4.,   5.,   6.,   7.],
+        [  8.,   9.,  10.,  11.]], dtype=float32)
+
+Read-only memmap:
+
+&gt;&gt;&gt; fpr = np.memmap(filename, dtype='float32', mode='r', shape=(3,4))
+&gt;&gt;&gt; fpr.flags.writeable
+False
+
+Cannot assign to read-only, obviously:
+
+&gt;&gt;&gt; fpr[0, 3] = 56
+Traceback (most recent call last):
+    ...
+RuntimeError: array is not writeable
+
+Copy-on-write memmap:
+
+&gt;&gt;&gt; fpc = np.memmap(filename, dtype='float32', mode='c', shape=(3,4))
+&gt;&gt;&gt; fpc.flags.writeable
+True
+
+It's possible to assign to copy-on-write array, but values are only
+written into the memory copy of the array, and not written to disk:
+
+&gt;&gt;&gt; fpc
+memmap([[  0.,   1.,   2.,   3.],
+        [  4.,   5.,   6.,   7.],
+        [  8.,   9.,  10.,  11.]], dtype=float32)
+&gt;&gt;&gt; fpc[0,:] = 0
+&gt;&gt;&gt; fpc
+memmap([[  0.,   0.,   0.,   0.],
+        [  4.,   5.,   6.,   7.],
+        [  8.,   9.,  10.,  11.]], dtype=float32)
+
+File on disk is unchanged:
+
+&gt;&gt;&gt; fpr
+memmap([[  0.,   1.,   2.,   3.],
+        [  4.,   5.,   6.,   7.],
+        [  8.,   9.,  10.,  11.]], dtype=float32)
+
+Offset into a memmap:
+
+&gt;&gt;&gt; fpo = np.memmap(filename, dtype='float32', mode='r', offset=16)
+&gt;&gt;&gt; fpo
+memmap([  4.,   5.,   6.,   7.,   8.,   9.,  10.,  11.], dtype=float32)
+
+</pre>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.mathlink.memmap-class.html#__array_finalize__" class="summary-sig-name">__array_finalize__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">obj</span>)</span><br />
+      None.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__del__"></a><span class="summary-sig-name">__del__</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.mathlink.memmap-class.html#_close" class="summary-sig-name" onclick="show_private();">_close</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Close the memmap file.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.mathlink.memmap-class.html#close" class="summary-sig-name">close</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Close the memmap file.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="flush"></a><span class="summary-sig-name">flush</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Flush any changes in the array to the file on disk.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="sync"></a><span class="summary-sig-name">sync</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Flush any changes in the array to the file on disk.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="numpy.ndarray-class.html">numpy.ndarray</a></code></b>:
+      <code><a href="numpy.ndarray-class.html#__abs__">__abs__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__add__">__add__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__and__">__and__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__array__">__array__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__array_prepare__">__array_prepare__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__array_wrap__">__array_wrap__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__contains__">__contains__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__copy__">__copy__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__deepcopy__">__deepcopy__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__delitem__">__delitem__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__delslice__">__delslice__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__div__">__div__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__divmod__">__divmod__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__eq__">__eq__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__float__">__float__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__floordiv__">__floordiv__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__ge__">__ge__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__getitem__">__getitem__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__getslice__">__getslice__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__gt__">__gt__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__hex__">__hex__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__iadd__">__iadd__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__iand__">__iand__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__idiv__">__idiv__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__ifloordiv__">__ifloordiv__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__ilshift__">__ilshift__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__imod__">__imod__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__imul__">__imul__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__index__">__index__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__int__">__int__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__invert__">__invert__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__ior__">__ior__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__ipow__">__ipow__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__irshift__">__irshift__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__isub__">__isub__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__iter__">__iter__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__itruediv__">__itruediv__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__ixor__">__ixor__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__le__">__le__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__len__">__len__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__long__">__long__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__lshift__">__lshift__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__lt__">__lt__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__mod__">__mod__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__mul__">__mul__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__ne__">__ne__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__neg__">__neg__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__nonzero__">__nonzero__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__oct__">__oct__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__or__">__or__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__pos__">__pos__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__pow__">__pow__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__radd__">__radd__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rand__">__rand__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rdiv__">__rdiv__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rdivmod__">__rdivmod__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__reduce__">__reduce__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__repr__">__repr__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rfloordiv__">__rfloordiv__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rlshift__">__rlshift__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rmod__">__rmod__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rmul__">__rmul__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__ror__">__ror__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rpow__">__rpow__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rrshift__">__rrshift__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rshift__">__rshift__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rsub__">__rsub__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rtruediv__">__rtruediv__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rxor__">__rxor__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__setitem__">__setitem__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__setslice__">__setslice__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__setstate__">__setstate__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__str__">__str__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__sub__">__sub__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__truediv__">__truediv__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__xor__">__xor__</a></code>,
+      <code><a href="numpy.ndarray-class.html#all">all</a></code>,
+      <code><a href="numpy.ndarray-class.html#any">any</a></code>,
+      <code><a href="numpy.ndarray-class.html#argmax">argmax</a></code>,
+      <code><a href="numpy.ndarray-class.html#argmin">argmin</a></code>,
+      <code><a href="numpy.ndarray-class.html#argsort">argsort</a></code>,
+      <code><a href="numpy.ndarray-class.html#astype">astype</a></code>,
+      <code><a href="numpy.ndarray-class.html#byteswap">byteswap</a></code>,
+      <code><a href="numpy.ndarray-class.html#choose">choose</a></code>,
+      <code><a href="numpy.ndarray-class.html#clip">clip</a></code>,
+      <code><a href="numpy.ndarray-class.html#compress">compress</a></code>,
+      <code><a href="numpy.ndarray-class.html#conj">conj</a></code>,
+      <code><a href="numpy.ndarray-class.html#conjugate">conjugate</a></code>,
+      <code><a href="numpy.ndarray-class.html#copy">copy</a></code>,
+      <code><a href="numpy.ndarray-class.html#cumprod">cumprod</a></code>,
+      <code><a href="numpy.ndarray-class.html#cumsum">cumsum</a></code>,
+      <code><a href="numpy.ndarray-class.html#diagonal">diagonal</a></code>,
+      <code><a href="numpy.ndarray-class.html#dump">dump</a></code>,
+      <code><a href="numpy.ndarray-class.html#dumps">dumps</a></code>,
+      <code><a href="numpy.ndarray-class.html#fill">fill</a></code>,
+      <code><a href="numpy.ndarray-class.html#flatten">flatten</a></code>,
+      <code><a href="numpy.ndarray-class.html#getfield">getfield</a></code>,
+      <code><a href="numpy.ndarray-class.html#item">item</a></code>,
+      <code><a href="numpy.ndarray-class.html#itemset">itemset</a></code>,
+      <code><a href="numpy.ndarray-class.html#max">max</a></code>,
+      <code><a href="numpy.ndarray-class.html#mean">mean</a></code>,
+      <code><a href="numpy.ndarray-class.html#min">min</a></code>,
+      <code><a href="numpy.ndarray-class.html#newbyteorder">newbyteorder</a></code>,
+      <code><a href="numpy.ndarray-class.html#nonzero">nonzero</a></code>,
+      <code><a href="numpy.ndarray-class.html#prod">prod</a></code>,
+      <code><a href="numpy.ndarray-class.html#ptp">ptp</a></code>,
+      <code><a href="numpy.ndarray-class.html#put">put</a></code>,
+      <code><a href="numpy.ndarray-class.html#ravel">ravel</a></code>,
+      <code><a href="numpy.ndarray-class.html#repeat">repeat</a></code>,
+      <code><a href="numpy.ndarray-class.html#reshape">reshape</a></code>,
+      <code><a href="numpy.ndarray-class.html#resize">resize</a></code>,
+      <code><a href="numpy.ndarray-class.html#round">round</a></code>,
+      <code><a href="numpy.ndarray-class.html#searchsorted">searchsorted</a></code>,
+      <code><a href="numpy.ndarray-class.html#setfield">setfield</a></code>,
+      <code><a href="numpy.ndarray-class.html#setflags">setflags</a></code>,
+      <code><a href="numpy.ndarray-class.html#sort">sort</a></code>,
+      <code><a href="numpy.ndarray-class.html#squeeze">squeeze</a></code>,
+      <code><a href="numpy.ndarray-class.html#std">std</a></code>,
+      <code><a href="numpy.ndarray-class.html#sum">sum</a></code>,
+      <code><a href="numpy.ndarray-class.html#swapaxes">swapaxes</a></code>,
+      <code><a href="numpy.ndarray-class.html#take">take</a></code>,
+      <code><a href="numpy.ndarray-class.html#tofile">tofile</a></code>,
+      <code><a href="numpy.ndarray-class.html#tolist">tolist</a></code>,
+      <code><a href="numpy.ndarray-class.html#tostring">tostring</a></code>,
+      <code><a href="numpy.ndarray-class.html#trace">trace</a></code>,
+      <code><a href="numpy.ndarray-class.html#transpose">transpose</a></code>,
+      <code><a href="numpy.ndarray-class.html#var">var</a></code>,
+      <code><a href="numpy.ndarray-class.html#view">view</a></code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== STATIC METHODS ==================== -->
+<a name="section-StaticMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Static Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-StaticMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">a new object with type S, a subtype of T</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.mathlink.memmap-class.html#__new__" class="summary-sig-name">__new__</a>(<span class="summary-sig-arg">subtype</span>,
+        <span class="summary-sig-arg">filename</span>,
+        <span class="summary-sig-arg">dtype</span>=<span class="summary-sig-default">&lt;type 'numpy.uint8'&gt;</span>,
+        <span class="summary-sig-arg">mode</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">r+</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">offset</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">shape</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">order</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">C</code><code class="variable-quote">'</code></span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS VARIABLES ==================== -->
+<a name="section-ClassVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Class Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-ClassVariables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__array_priority__"></a><span class="summary-name">__array_priority__</span> = <code title="-100.0">-100.0</code><br />
+      Array priority.
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Properties</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Properties"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="numpy.ndarray-class.html">numpy.ndarray</a></code></b>:
+      <code><a href="numpy.ndarray-class.html#T">T</a></code>,
+      <code><a href="numpy.ndarray-class.html#__array_interface__">__array_interface__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__array_struct__">__array_struct__</a></code>,
+      <code><a href="numpy.ndarray-class.html#base">base</a></code>,
+      <code><a href="numpy.ndarray-class.html#ctypes">ctypes</a></code>,
+      <code><a href="numpy.ndarray-class.html#data">data</a></code>,
+      <code><a href="numpy.ndarray-class.html#dtype">dtype</a></code>,
+      <code><a href="numpy.ndarray-class.html#flags">flags</a></code>,
+      <code><a href="numpy.ndarray-class.html#flat">flat</a></code>,
+      <code><a href="numpy.ndarray-class.html#imag">imag</a></code>,
+      <code><a href="numpy.ndarray-class.html#itemsize">itemsize</a></code>,
+      <code><a href="numpy.ndarray-class.html#nbytes">nbytes</a></code>,
+      <code><a href="numpy.ndarray-class.html#ndim">ndim</a></code>,
+      <code><a href="numpy.ndarray-class.html#real">real</a></code>,
+      <code><a href="numpy.ndarray-class.html#shape">shape</a></code>,
+      <code><a href="numpy.ndarray-class.html#size">size</a></code>,
+      <code><a href="numpy.ndarray-class.html#strides">strides</a></code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__array_finalize__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__array_finalize__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">obj</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>None.</p>
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="numpy.ndarray-class.html#__array_finalize__">__array_finalize__</a>
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__new__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__new__</span>(<span class="sig-arg">subtype</span>,
+        <span class="sig-arg">filename</span>,
+        <span class="sig-arg">dtype</span>=<span class="sig-default">&lt;type 'numpy.uint8'&gt;</span>,
+        <span class="sig-arg">mode</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">r+</code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">offset</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">shape</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">order</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">C</code><code class="variable-quote">'</code></span>)</span>
+    <br /><em class="fname">Static Method</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Returns: a new object with type S, a subtype of T</dt>
+    <dt>Overrides:
+        numpy.ndarray.__new__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_close"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_close</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Close the memmap file.  Only do this when deleting the object.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="close"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">close</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Close the memmap file. Does nothing.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1
+    on Mon Sep 14 10:21:11 2009
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

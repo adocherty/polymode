@@ -1,0 +1,1074 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>PolyMode.Waveguide.Waveguide</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="PolyMode-module.html">Package&nbsp;PolyMode</a> ::
+        <a href="PolyMode.Waveguide-module.html">Module&nbsp;Waveguide</a> ::
+        Class&nbsp;Waveguide
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class Waveguide</h1><p class="nomargin-top"><span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide">source&nbsp;code</a></span></p>
+<pre class="base-tree">
+object --+
+         |
+        <strong class="uidshort">Waveguide</strong>
+</pre>
+
+<hr />
+<pre class="literalblock">
+
+A waveguide object representing the crossectional fiber structure.
+
+Optional arguments are:
+        rmin:           minimum radius of the computation (default is currently zero)
+        rmax:           maximum radius of the computation (default is automatic)
+
+        material:       a Material object giving the substrate material for the waveguide
+        interior:               interior material (defaults to material)
+        exterior:               exterior material (defaults to material)
+        symmetry:       rotational symmetry of the waveguide
+
+        oversample:     how finely sliced the objects are in the azimuthal direction
+        reflect:                (Currently not used)
+
+</pre>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.Waveguide.Waveguide-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">rmax</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">rmin</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">material</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">interior</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">exterior</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">symmetry</span>=<span class="summary-sig-default">1</span>,
+        <span class="summary-sig-arg">reflect</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">oversample</span>=<span class="summary-sig-default">4</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.Waveguide.Waveguide-class.html#__hash__" class="summary-sig-name">__hash__</a>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.__hash__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.Waveguide.Waveguide-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.__str__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="set_rrange"></a><span class="summary-sig-name">set_rrange</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">rmax</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">rmin</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Set manual maximum radius</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.set_rrange">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_rrange"></a><span class="summary-sig-name">get_rrange</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">boundary_padding</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.get_rrange">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_xyrange"></a><span class="summary-sig-name">get_xyrange</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Return the boundary domain size for cartesian calculations</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.get_xyrange">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="set_xyrange"></a><span class="summary-sig-name">set_xyrange</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">xyrange</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Set manual x and y limits</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.set_xyrange">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="set_rmax"></a><span class="summary-sig-name">set_rmax</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">rmax</span>,
+        <span class="summary-sig-arg">boundary_padding</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.set_rmax">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_rmax"></a><span class="summary-sig-name">get_rmax</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">boundary_padding</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.get_rmax">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="calc_core_size"></a><span class="summary-sig-name">calc_core_size</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Guess approximate core size from shapes in waveguide</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.calc_core_size">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="set_core_size"></a><span class="summary-sig-name">set_core_size</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">rc</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.set_core_size">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_calc_interior_material"></a><span class="summary-sig-name">_calc_interior_material</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Guess the material of the core from all shapes in waveguide</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide._calc_interior_material">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_set_interior_material"></a><span class="summary-sig-name">_set_interior_material</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">mat</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide._set_interior_material">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="extents"></a><span class="summary-sig-name">extents</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">boundary_padding</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">xy</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Return the maximum radius in the numerical solution</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.extents">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_coord"></a><span class="summary-sig-name">get_coord</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">Nshape</span>,
+        <span class="summary-sig-arg">border</span>=<span class="summary-sig-default">0</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.get_coord">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__getstate__"></a><span class="summary-sig-name">__getstate__</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Pickle all needed data, ignore cached data</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.__getstate__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__setstate__"></a><span class="summary-sig-name">__setstate__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">state</span>)</span><br />
+      Restore needed data</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.__setstate__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="add_shape"></a><span class="summary-sig-name">add_shape</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*shapes</span>)</span><br />
+      Add a shape or shapes to the waveguide</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.add_shape">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="add_shapes"></a><span class="summary-sig-name">add_shapes</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*shapes</span>)</span><br />
+      Add a shape or shapes to the waveguide</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.add_shape">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="remove_shape"></a><span class="summary-sig-name">remove_shape</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*shapes</span>)</span><br />
+      Remove a shape or shapes from the waveguide</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.remove_shape">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="calc_paramhash"></a><span class="summary-sig-name">calc_paramhash</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*params</span>)</span><br />
+      Calculate hash for waveguide, including shapes and parameters</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.calc_paramhash">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="clear"></a><span class="summary-sig-name">clear</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.clear">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.Waveguide.Waveguide-class.html#calculate" class="summary-sig-name">calculate</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">coord</span>,
+        <span class="summary-sig-arg">wl</span>,
+        <span class="summary-sig-arg">mask</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">resample</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Calculates the refractive index for the grid of shape Nshape 
+      iterating over all included shapes.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.calculate">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="calculate_radial_layers"></a><span class="summary-sig-name">calculate_radial_layers</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">wl</span>,
+        <span class="summary-sig-arg">mask</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Calculates the refractive indices and radii assuming a azimuthally 
+      independent shapes.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.calculate_radial_layers">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="mask"></a><span class="summary-sig-name">mask</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">Nshape</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">mat</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">coord</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">resample</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">border</span>=<span class="summary-sig-default">0</span>)</span><br />
+      Calculates a material mask returning 1 wherever the WG contains the 
+      given material and 0 otherwise.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.mask">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="exterior_index"></a><span class="summary-sig-name">exterior_index</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">wl</span>)</span><br />
+      The exterior (r&gt;rmax) substrate refractive index</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.exterior_index">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="index0"></a><span class="summary-sig-name">index0</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">wl</span>)</span><br />
+      The exterior (r&gt;rmax) substrate refractive index</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.exterior_index">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="interior_index"></a><span class="summary-sig-name">interior_index</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">wl</span>)</span><br />
+      The interior (r&lt;rmin) substrate refractive index</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.interior_index">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="index_range"></a><span class="summary-sig-name">index_range</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">wl</span>)</span><br />
+      The minimum and maximum refractive index in the wg</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.index_range">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="borderslice"></a><span class="summary-sig-name">borderslice</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">border</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.borderslice">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="index"></a><span class="summary-sig-name">index</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.index">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="index2"></a><span class="summary-sig-name">index2</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">wl</span>,
+        <span class="summary-sig-arg">Nshape</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">coord</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">resample</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">border</span>=<span class="summary-sig-default">0</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.index2">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.Waveguide.Waveguide-class.html#plot_bitmap" class="summary-sig-name">plot_bitmap</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">Nx</span>=<span class="summary-sig-default">(200,21)</span>,
+        <span class="summary-sig-arg">coord</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">average</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">sectors</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">wl</span>=<span class="summary-sig-default">1</span>,
+        <span class="summary-sig-arg">**opts</span>)</span><br />
+      Plots the refractive index of the waveguide and included shapes at 
+      the given wavelength.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.plot_bitmap">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.Waveguide.Waveguide-class.html#plot" class="summary-sig-name">plot</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">rotate</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">substrate</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">fill</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">sectors</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">**user_style</span>)</span><br />
+      Plot the shapes in the waveguide</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.plot">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS VARIABLES ==================== -->
+<a name="section-ClassVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Class Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-ClassVariables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="boundary_padding"></a><span class="summary-name">boundary_padding</span> = <code title="0.05">0.05</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="padding_minimum_nodes"></a><span class="summary-name">padding_minimum_nodes</span> = <code title="5">5</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="quiet"></a><span class="summary-name">quiet</span> = <code title="True">True</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="rmax"></a><span class="summary-name">rmax</span> = <code title="property(get_rmax, set_rmax)">property(get_rmax, set_rmax)</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="core_size"></a><span class="summary-name">core_size</span> = <code title="property(calc_core_size, set_core_size)">property(calc_core_size, set_core_size)</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="PolyMode.Waveguide.Waveguide-class.html#interior_material" class="summary-name">interior_material</a> = <code title="property(_calc_interior_material, _set_interior_material)">property(_calc_interior_material, _set_int<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">rmax</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">rmin</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">material</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">interior</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">exterior</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">symmetry</span>=<span class="sig-default">1</span>,
+        <span class="sig-arg">reflect</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">oversample</span>=<span class="sig-default">4</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.__init__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        object.__init__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__hash__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__hash__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Hashing function)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.__hash__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        object.__hash__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__str__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__str__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Informal representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.__str__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        object.__str__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="calculate"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">calculate</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">coord</span>,
+        <span class="sig-arg">wl</span>,
+        <span class="sig-arg">mask</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">resample</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.calculate">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Calculates the refractive index for the grid of shape Nshape iterating
+  over all included shapes. Returns a combined index object.</p>
+  <p>In most cases use the helper methods: index, index2, dlognr and 
+  dlognaz</p>
+  <p>Nshape: (Nr,Naz) to use wl: wavelength to calculate refractive 
+  indicies at border: n to eliminate n border points at either end mask: 
+  return a mask which is 1 where the material is the same as that give in 
+  the mask</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="plot_bitmap"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">plot_bitmap</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">Nx</span>=<span class="sig-default">(200,21)</span>,
+        <span class="sig-arg">coord</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">average</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">sectors</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">wl</span>=<span class="sig-default">1</span>,
+        <span class="sig-arg">**opts</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.plot_bitmap">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Plots the refractive index of the waveguide and included shapes at the
+  given wavelength. The wavelength defaults to 1.</p>
+  <p>Supply one of: Nx:             number of radial &amp; azimuthal nodes 
+  coord:  a coordinate object on which the refractive index is sampled</p>
+  <p>Optionally: average: azimuthal averaging of refractive index sectors: 
+  number of symmetry sectors to plot wl:             wavelength to evaluate
+  the refractive index</p>
+  <p>Other options: Other Plotting style options can be given style:
+  pcolor, 3d, line and contour cmap:   color map from matplotlib.cm</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="plot"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">plot</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">rotate</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">substrate</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">fill</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">sectors</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">**user_style</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.Waveguide-pysrc.html#Waveguide.plot">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+
+Plot the shapes in the waveguide
+
+Optional parameters:
+ rotate:                rotate plot by specified radians
+ substrate:     plot waveguide boundary
+ sectors:               number of sectors
+ fill:                  Plot the shapes filled or as outline, True or False
+ colour:                Plot all objects with one color
+
+Other arguments:
+Any matplotlib style commands, for example:
+* fc = foreground color
+* ec = edge color
+* lw = linewidth
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== CLASS VARIABLE DETAILS ==================== -->
+<a name="section-ClassVariableDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Class Variable Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-ClassVariableDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="interior_material"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">interior_material</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+property(_calc_interior_material, _set_interior_material)
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1
+    on Mon Sep 14 10:29:15 2009
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

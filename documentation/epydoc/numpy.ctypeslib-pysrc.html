@@ -1,0 +1,801 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>numpy.ctypeslib</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Package&nbsp;numpy ::
+        Module&nbsp;ctypeslib
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="numpy.ctypeslib-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="numpy.ctypeslib-module.html">Module numpy.ctypeslib</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-docstring">============================</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-docstring">``ctypes`` Utility Functions</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-docstring">============================</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring">See Also</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-docstring">---------</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-docstring">load_library : Load a C library.</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-docstring">ndpointer : Array restype/argtype with verification.</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-docstring">as_ctypes : Create a ctypes array from an ndarray.</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-docstring">as_array : Create an ndarray from a ctypes array.</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-docstring">References</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-docstring">----------</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-docstring">.. [1] "SciPy Cookbook: ctypes", http://www.scipy.org/Cookbook/Ctypes</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-docstring">Examples</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-docstring">--------</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-docstring">Load the C library:</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-docstring">&gt;&gt;&gt; _lib = np.ctypeslib.load_library('libmystuff', '.') #DOCTEST: +ignore</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-docstring">Our result type, an ndarray that must be of type double, be 1-dimensional</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-docstring">and is C-contiguous in memory:</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt class="py-docstring">&gt;&gt;&gt; array_1d_double = np.ctypeslib.ndpointer(</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt class="py-docstring">...                          dtype=np.double,</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt class="py-docstring">...                          ndim=1, flags='CONTIGUOUS') #DOCTEST: +ignore</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"><tt class="py-docstring">Our C-function typically takes an array and updates its values</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"><tt class="py-docstring">in-place.  For example::</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"><tt class="py-docstring">    void foo_func(double* x, int length)</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"><tt class="py-docstring">    {</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"><tt class="py-docstring">        int i;</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-docstring">        for (i = 0; i &lt; length; i++) {</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"><tt class="py-docstring">            x[i] = i*i;</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt class="py-docstring">        }</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-docstring">    }</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"><tt class="py-docstring">We wrap it using:</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-docstring">&gt;&gt;&gt; lib.foo_func.restype = None #DOCTEST: +ignore</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"><tt class="py-docstring">&gt;&gt;&gt; lib.foo.argtypes = [array_1d_double, c_int] #DOCTEST: +ignore</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line"><tt class="py-docstring">Then, we're ready to call ``foo_func``:</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"><tt class="py-docstring">&gt;&gt;&gt; out = np.empty(15, dtype=np.double)</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line"><tt class="py-docstring">&gt;&gt;&gt; _lib.foo_func(out, len(out)) #DOCTEST: +ignore</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line"><tt class="py-name">__all__</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-string">'load_library'</tt><tt class="py-op">,</tt> <tt class="py-string">'ndpointer'</tt><tt class="py-op">,</tt> <tt class="py-string">'test'</tt><tt class="py-op">,</tt> <tt class="py-string">'ctypes_load_library'</tt><tt class="py-op">,</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">           <tt class="py-string">'c_intp'</tt><tt class="py-op">,</tt> <tt class="py-string">'as_ctypes'</tt><tt class="py-op">,</tt> <tt class="py-string">'as_array'</tt><tt class="py-op">]</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line"> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">sys</tt><tt class="py-op">,</tt> <tt class="py-name">os</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">numpy</tt> <tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Class numpy.integer=numpy.integer-class.html"><a title="numpy.integer" class="py-name" href="#" onclick="return doclink('link-0', 'integer', 'link-0');">integer</a></tt><tt class="py-op">,</tt> <tt id="link-1" class="py-name" targets="Class numpy.ndarray=numpy.ndarray-class.html"><a title="numpy.ndarray" class="py-name" href="#" onclick="return doclink('link-1', 'ndarray', 'link-1');">ndarray</a></tt><tt class="py-op">,</tt> <tt id="link-2" class="py-name" targets="Class numpy.dtype=numpy.dtype-class.html"><a title="numpy.dtype" class="py-name" href="#" onclick="return doclink('link-2', 'dtype', 'link-2');">dtype</a></tt> <tt class="py-keyword">as</tt> <tt class="py-name">_dtype</tt><tt class="py-op">,</tt> <tt class="py-name">deprecate</tt><tt class="py-op">,</tt> <tt id="link-3" class="py-name" targets="Function PolyMode.mathlink.array()=PolyMode.mathlink-module.html#array,Method PolyMode.mathlink.blockarray.BlockArray.array()=PolyMode.mathlink.blockarray.BlockArray-class.html#array"><a title="PolyMode.mathlink.array
+PolyMode.mathlink.blockarray.BlockArray.array" class="py-name" href="#" onclick="return doclink('link-3', 'array', 'link-3');">array</a></tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">core</tt><tt class="py-op">.</tt><tt class="py-name">multiarray</tt> <tt class="py-keyword">import</tt> <tt class="py-name">_flagdict</tt><tt class="py-op">,</tt> <tt class="py-name">flagsobj</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line"> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line"><tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">    <tt class="py-keyword">import</tt> <tt class="py-name">ctypes</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"><tt class="py-keyword">except</tt> <tt class="py-name">ImportError</tt><tt class="py-op">:</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">    <tt class="py-name">ctypes</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line"> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">ctypes</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="_dummy"></a><div id="_dummy-def"><a name="L65"></a><tt class="py-lineno"> 65</tt> <a class="py-toggle" href="#" id="_dummy-toggle" onclick="return toggle('_dummy');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="numpy.ctypeslib-module.html#_dummy">_dummy</a><tt class="py-op">(</tt><tt class="py-op">*</tt><tt class="py-param">args</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kwds</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_dummy-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_dummy-expanded"><a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">ImportError</tt><tt class="py-op">,</tt> <tt class="py-string">"ctypes is not available."</tt> </tt>
+</div><a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">    <tt class="py-name">ctypes_load_library</tt> <tt class="py-op">=</tt> <tt class="py-name">_dummy</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">    <tt class="py-name">load_library</tt> <tt class="py-op">=</tt> <tt class="py-name">_dummy</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">    <tt class="py-name">as_ctypes</tt> <tt class="py-op">=</tt> <tt class="py-name">_dummy</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">    <tt class="py-name">as_array</tt> <tt class="py-op">=</tt> <tt class="py-name">_dummy</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">numpy</tt> <tt class="py-keyword">import</tt> <tt class="py-name">intp</tt> <tt class="py-keyword">as</tt> <tt class="py-name">c_intp</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">    <tt class="py-name">_ndptr_base</tt> <tt class="py-op">=</tt> <tt class="py-name">object</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line"><tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">    <tt class="py-keyword">import</tt> <tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">core</tt><tt class="py-op">.</tt><tt class="py-name">_internal</tt> <tt class="py-keyword">as</tt> <tt class="py-name">nic</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">    <tt class="py-name">c_intp</tt> <tt class="py-op">=</tt> <tt class="py-name">nic</tt><tt class="py-op">.</tt><tt class="py-name">_getintp_ctype</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">    <tt class="py-keyword">del</tt> <tt class="py-name">nic</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">    <tt class="py-name">_ndptr_base</tt> <tt class="py-op">=</tt> <tt class="py-name">ctypes</tt><tt class="py-op">.</tt><tt class="py-name">c_void_p</tt> </tt>
+<a name="load_library"></a><div id="load_library-def"><a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line"> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">    <tt class="py-comment"># Adapted from Albert Strasheim</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt> <a class="py-toggle" href="#" id="load_library-toggle" onclick="return toggle('load_library');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="numpy.ctypeslib-module.html#load_library">load_library</a><tt class="py-op">(</tt><tt class="py-param">libname</tt><tt class="py-op">,</tt> <tt class="py-param">loader_path</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="load_library-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="load_library-expanded"><a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">ctypes</tt><tt class="py-op">.</tt><tt class="py-name">__version__</tt> <tt class="py-op">&lt;</tt> <tt class="py-string">'1.0.1'</tt><tt class="py-op">:</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">            <tt class="py-keyword">import</tt> <tt class="py-name">warnings</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">            <tt class="py-name">warnings</tt><tt class="py-op">.</tt><tt class="py-name">warn</tt><tt class="py-op">(</tt><tt class="py-string">"All features of ctypes interface may not work "</tt> \ </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">                          <tt class="py-string">"with ctypes &lt; 1.0.1"</tt><tt class="py-op">)</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line"> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">        <tt class="py-name">ext</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Variable PolyMode.ExternalSolvers.JCMWaveSolver.path=PolyMode.ExternalSolvers.JCMWaveSolver-class.html#path"><a title="PolyMode.ExternalSolvers.JCMWaveSolver.path" class="py-name" href="#" onclick="return doclink('link-4', 'path', 'link-4');">path</a></tt><tt class="py-op">.</tt><tt class="py-name">splitext</tt><tt class="py-op">(</tt><tt class="py-name">libname</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line"> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">ext</tt><tt class="py-op">:</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">            <tt class="py-comment"># Try to load library with platform-specific name, otherwise</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">            <tt class="py-comment"># default to libname.[so|pyd].  Sometimes, these files are built</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">            <tt class="py-comment"># erroneously on non-linux platforms.</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">            <tt class="py-name">libname_ext</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-string">'%s.so'</tt> <tt class="py-op">%</tt> <tt class="py-name">libname</tt><tt class="py-op">,</tt> <tt class="py-string">'%s.pyd'</tt> <tt class="py-op">%</tt> <tt class="py-name">libname</tt><tt class="py-op">]</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">platform</tt> <tt class="py-op">==</tt> <tt class="py-string">'win32'</tt><tt class="py-op">:</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">                <tt class="py-name">libname_ext</tt><tt class="py-op">.</tt><tt class="py-name">insert</tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-string">'%s.dll'</tt> <tt class="py-op">%</tt> <tt class="py-name">libname</tt><tt class="py-op">)</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">            <tt class="py-keyword">elif</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">platform</tt> <tt class="py-op">==</tt> <tt class="py-string">'darwin'</tt><tt class="py-op">:</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">                <tt class="py-name">libname_ext</tt><tt class="py-op">.</tt><tt class="py-name">insert</tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-string">'%s.dylib'</tt> <tt class="py-op">%</tt> <tt class="py-name">libname</tt><tt class="py-op">)</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">            <tt class="py-name">libname_ext</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">libname</tt><tt class="py-op">]</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line"> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">        <tt class="py-name">loader_path</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name"><a title="PolyMode.ExternalSolvers.JCMWaveSolver.path" class="py-name" href="#" onclick="return doclink('link-5', 'path', 'link-4');">path</a></tt><tt class="py-op">.</tt><tt class="py-name">abspath</tt><tt class="py-op">(</tt><tt class="py-name">loader_path</tt><tt class="py-op">)</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name"><a title="PolyMode.ExternalSolvers.JCMWaveSolver.path" class="py-name" href="#" onclick="return doclink('link-6', 'path', 'link-4');">path</a></tt><tt class="py-op">.</tt><tt class="py-name">isdir</tt><tt class="py-op">(</tt><tt class="py-name">loader_path</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">            <tt class="py-name">libdir</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name"><a title="PolyMode.ExternalSolvers.JCMWaveSolver.path" class="py-name" href="#" onclick="return doclink('link-7', 'path', 'link-4');">path</a></tt><tt class="py-op">.</tt><tt class="py-name">dirname</tt><tt class="py-op">(</tt><tt class="py-name">loader_path</tt><tt class="py-op">)</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">            <tt class="py-name">libdir</tt> <tt class="py-op">=</tt> <tt class="py-name">loader_path</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line"> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">ln</tt> <tt class="py-keyword">in</tt> <tt class="py-name">libname_ext</tt><tt class="py-op">:</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">            <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">                <tt class="py-name">libpath</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name"><a title="PolyMode.ExternalSolvers.JCMWaveSolver.path" class="py-name" href="#" onclick="return doclink('link-8', 'path', 'link-4');">path</a></tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">libdir</tt><tt class="py-op">,</tt> <tt class="py-name">ln</tt><tt class="py-op">)</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">ctypes</tt><tt class="py-op">.</tt><tt class="py-name">cdll</tt><tt class="py-op">[</tt><tt class="py-name">libpath</tt><tt class="py-op">]</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">            <tt class="py-keyword">except</tt> <tt class="py-name">OSError</tt><tt class="py-op">,</tt> <tt id="link-9" class="py-name" targets="Variable PolyMode.Equation.e=PolyMode.Equation-module.html#e,Variable PolyMode.ExternalSolvers.e=PolyMode.ExternalSolvers-module.html#e,Variable PolyMode.Image.e=PolyMode.Image-module.html#e,Variable PolyMode.KrylovSolver.e=PolyMode.KrylovSolver-module.html#e,Variable PolyMode.LayeredSolver.e=PolyMode.LayeredSolver-module.html#e,Variable PolyMode.MPISolver.e=PolyMode.MPISolver-module.html#e,Variable PolyMode.Modes.e=PolyMode.Modes-module.html#e,Variable PolyMode.NLSolver.e=PolyMode.NLSolver-module.html#e,Variable PolyMode.Optimize.e=PolyMode.Optimize-module.html#e,Variable PolyMode.PMLSolver.e=PolyMode.PMLSolver-module.html#e,Variable PolyMode.Plotter.e=PolyMode.Plotter-module.html#e,Variable PolyMode.Solver.e=PolyMode.Solver-module.html#e,Variable PolyMode.TriDiagonalSolver.e=PolyMode.TriDiagonalSolver-module.html#e,Variable PolyMode.Waveguide.e=PolyMode.Waveguide-module.html#e,Variable PolyMode.difflounge.boundary.e=PolyMode.difflounge.boundary-module.html#e,Variable PolyMode.difflounge.finitedifference.e=PolyMode.difflounge.finitedifference-module.html#e,Variable PolyMode.difflounge.line_sparse.e=PolyMode.difflounge.line_sparse-module.html#e,Variable PolyMode.mathlink.blockarray.e=PolyMode.mathlink.blockarray-module.html#e,Variable PolyMode.mathlink.coordinates.e=PolyMode.mathlink.coordinates-module.html#e,Variable PolyMode.mathlink.e=PolyMode.mathlink-module.html#e,Variable PolyMode.mathlink.eigensolver.e=PolyMode.mathlink.eigensolver-module.html#e,Variable PolyMode.mathlink.householder.e=PolyMode.mathlink.householder-module.html#e,Variable PolyMode.mathlink.physcon.e=PolyMode.mathlink.physcon-module.html#e"><a title="PolyMode.Equation.e
+PolyMode.ExternalSolvers.e
+PolyMode.Image.e
+PolyMode.KrylovSolver.e
+PolyMode.LayeredSolver.e
+PolyMode.MPISolver.e
+PolyMode.Modes.e
+PolyMode.NLSolver.e
+PolyMode.Optimize.e
+PolyMode.PMLSolver.e
+PolyMode.Plotter.e
+PolyMode.Solver.e
+PolyMode.TriDiagonalSolver.e
+PolyMode.Waveguide.e
+PolyMode.difflounge.boundary.e
+PolyMode.difflounge.finitedifference.e
+PolyMode.difflounge.line_sparse.e
+PolyMode.mathlink.blockarray.e
+PolyMode.mathlink.coordinates.e
+PolyMode.mathlink.e
+PolyMode.mathlink.eigensolver.e
+PolyMode.mathlink.householder.e
+PolyMode.mathlink.physcon.e" class="py-name" href="#" onclick="return doclink('link-9', 'e', 'link-9');">e</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">                <tt class="py-keyword">pass</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line"> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt id="link-10" class="py-name"><a title="PolyMode.Equation.e
+PolyMode.ExternalSolvers.e
+PolyMode.Image.e
+PolyMode.KrylovSolver.e
+PolyMode.LayeredSolver.e
+PolyMode.MPISolver.e
+PolyMode.Modes.e
+PolyMode.NLSolver.e
+PolyMode.Optimize.e
+PolyMode.PMLSolver.e
+PolyMode.Plotter.e
+PolyMode.Solver.e
+PolyMode.TriDiagonalSolver.e
+PolyMode.Waveguide.e
+PolyMode.difflounge.boundary.e
+PolyMode.difflounge.finitedifference.e
+PolyMode.difflounge.line_sparse.e
+PolyMode.mathlink.blockarray.e
+PolyMode.mathlink.coordinates.e
+PolyMode.mathlink.e
+PolyMode.mathlink.eigensolver.e
+PolyMode.mathlink.householder.e
+PolyMode.mathlink.physcon.e" class="py-name" href="#" onclick="return doclink('link-10', 'e', 'link-9');">e</a></tt> </tt>
+</div><a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line"> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">    <tt class="py-name">ctypes_load_library</tt> <tt class="py-op">=</tt> <tt class="py-name">deprecate</tt><tt class="py-op">(</tt><tt class="py-name">load_library</tt><tt class="py-op">,</tt> <tt class="py-string">'ctypes_load_library'</tt><tt class="py-op">,</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">                                    <tt class="py-string">'load_library'</tt><tt class="py-op">)</tt> </tt>
+<a name="_num_fromflags"></a><div id="_num_fromflags-def"><a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line"> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt> <a class="py-toggle" href="#" id="_num_fromflags-toggle" onclick="return toggle('_num_fromflags');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="numpy.ctypeslib-module.html#_num_fromflags">_num_fromflags</a><tt class="py-op">(</tt><tt class="py-param">flaglist</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_num_fromflags-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_num_fromflags-expanded"><a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">    <tt class="py-name">num</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">val</tt> <tt class="py-keyword">in</tt> <tt class="py-name">flaglist</tt><tt class="py-op">:</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line">        <tt class="py-name">num</tt> <tt class="py-op">+=</tt> <tt class="py-name">_flagdict</tt><tt class="py-op">[</tt><tt class="py-name">val</tt><tt class="py-op">]</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">num</tt> </tt>
+</div><a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line"> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line"><tt class="py-name">_flagnames</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-string">'C_CONTIGUOUS'</tt><tt class="py-op">,</tt> <tt class="py-string">'F_CONTIGUOUS'</tt><tt class="py-op">,</tt> <tt class="py-string">'ALIGNED'</tt><tt class="py-op">,</tt> <tt class="py-string">'WRITEABLE'</tt><tt class="py-op">,</tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">              <tt class="py-string">'OWNDATA'</tt><tt class="py-op">,</tt> <tt class="py-string">'UPDATEIFCOPY'</tt><tt class="py-op">]</tt> </tt>
+<a name="_flags_fromnum"></a><div id="_flags_fromnum-def"><a name="L126"></a><tt class="py-lineno">126</tt> <a class="py-toggle" href="#" id="_flags_fromnum-toggle" onclick="return toggle('_flags_fromnum');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="numpy.ctypeslib-module.html#_flags_fromnum">_flags_fromnum</a><tt class="py-op">(</tt><tt class="py-param">num</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_flags_fromnum-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_flags_fromnum-expanded"><a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line">    <tt class="py-name">res</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">key</tt> <tt class="py-keyword">in</tt> <tt class="py-name">_flagnames</tt><tt class="py-op">:</tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">        <tt id="link-11" class="py-name" targets="Function PolyMode.mathlink.physcon.value()=PolyMode.mathlink.physcon-module.html#value"><a title="PolyMode.mathlink.physcon.value" class="py-name" href="#" onclick="return doclink('link-11', 'value', 'link-11');">value</a></tt> <tt class="py-op">=</tt> <tt class="py-name">_flagdict</tt><tt class="py-op">[</tt><tt class="py-name">key</tt><tt class="py-op">]</tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-op">(</tt><tt class="py-name">num</tt> <tt class="py-op">&amp;</tt> <tt id="link-12" class="py-name"><a title="PolyMode.mathlink.physcon.value" class="py-name" href="#" onclick="return doclink('link-12', 'value', 'link-11');">value</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">            <tt class="py-name">res</tt><tt class="py-op">.</tt><tt class="py-name">append</tt><tt class="py-op">(</tt><tt class="py-name">key</tt><tt class="py-op">)</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">res</tt> </tt>
+</div><a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line"> </tt>
+<a name="_ndptr"></a><div id="_ndptr-def"><a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line"> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt> <a class="py-toggle" href="#" id="_ndptr-toggle" onclick="return toggle('_ndptr');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="numpy.ctypeslib._ndptr-class.html">_ndptr</a><tt class="py-op">(</tt><tt class="py-base-class">_ndptr_base</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_ndptr-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_ndptr-expanded"><a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line"> </tt>
+<a name="_ndptr._check_retval_"></a><div id="_ndptr._check_retval_-def"><a name="L137"></a><tt class="py-lineno">137</tt> <a class="py-toggle" href="#" id="_ndptr._check_retval_-toggle" onclick="return toggle('_ndptr._check_retval_');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="numpy.ctypeslib._ndptr-class.html#_check_retval_">_check_retval_</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_ndptr._check_retval_-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_ndptr._check_retval_-expanded"><a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line">        <tt class="py-docstring">"""This method is called when this class is used as the .restype</tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line"><tt class="py-docstring">        asttribute for a shared-library function.   It constructs a numpy</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line"><tt class="py-docstring">        array from a void pointer."""</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-13" class="py-name"><a title="PolyMode.mathlink.array
+PolyMode.mathlink.blockarray.BlockArray.array" class="py-name" href="#" onclick="return doclink('link-13', 'array', 'link-3');">array</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line"> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">property</tt> </tt>
+<a name="_ndptr.__array_interface__"></a><div id="_ndptr.__array_interface__-def"><a name="L144"></a><tt class="py-lineno">144</tt> <a class="py-toggle" href="#" id="_ndptr.__array_interface__-toggle" onclick="return toggle('_ndptr.__array_interface__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="numpy.ctypeslib._ndptr-class.html#__array_interface__">__array_interface__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_ndptr.__array_interface__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_ndptr.__array_interface__-expanded"><a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-op">{</tt><tt class="py-string">'descr'</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_dtype_</tt><tt class="py-op">.</tt><tt id="link-14" class="py-name" targets="Function PolyMode.mathlink.physcon.descr()=PolyMode.mathlink.physcon-module.html#descr"><a title="PolyMode.mathlink.physcon.descr" class="py-name" href="#" onclick="return doclink('link-14', 'descr', 'link-14');">descr</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">                <tt class="py-string">'__ref'</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">,</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line">                <tt class="py-string">'strides'</tt><tt class="py-op">:</tt> <tt class="py-name">None</tt><tt class="py-op">,</tt> </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">                <tt class="py-string">'shape'</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_shape_</tt><tt class="py-op">,</tt> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">                <tt class="py-string">'version'</tt><tt class="py-op">:</tt> <tt class="py-number">3</tt><tt class="py-op">,</tt> </tt>
+<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line">                <tt class="py-string">'typestr'</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_dtype_</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name"><a title="PolyMode.mathlink.physcon.descr" class="py-name" href="#" onclick="return doclink('link-15', 'descr', 'link-14');">descr</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line">                <tt class="py-string">'data'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name"><a title="PolyMode.mathlink.physcon.value" class="py-name" href="#" onclick="return doclink('link-16', 'value', 'link-11');">value</a></tt><tt class="py-op">,</tt> <tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line">                <tt class="py-op">}</tt> </tt>
+</div><a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line">     </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">classmethod</tt> </tt>
+<a name="_ndptr.from_param"></a><div id="_ndptr.from_param-def"><a name="L155"></a><tt class="py-lineno">155</tt> <a class="py-toggle" href="#" id="_ndptr.from_param-toggle" onclick="return toggle('_ndptr.from_param');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="numpy.ctypeslib._ndptr-class.html#from_param">from_param</a><tt class="py-op">(</tt><tt class="py-param">cls</tt><tt class="py-op">,</tt> <tt class="py-param">obj</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_ndptr.from_param-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_ndptr.from_param-expanded"><a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">obj</tt><tt class="py-op">,</tt> <tt id="link-17" class="py-name"><a title="numpy.ndarray" class="py-name" href="#" onclick="return doclink('link-17', 'ndarray', 'link-1');">ndarray</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">TypeError</tt><tt class="py-op">,</tt> <tt class="py-string">"argument must be an ndarray"</tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">cls</tt><tt class="py-op">.</tt><tt class="py-name">_dtype_</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt> \ </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line">               <tt class="py-keyword">and</tt> <tt class="py-name">obj</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name"><a title="numpy.dtype" class="py-name" href="#" onclick="return doclink('link-18', 'dtype', 'link-2');">dtype</a></tt> <tt class="py-op">!=</tt> <tt class="py-name">cls</tt><tt class="py-op">.</tt><tt class="py-name">_dtype_</tt><tt class="py-op">:</tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">TypeError</tt><tt class="py-op">,</tt> <tt class="py-string">"array must have data type %s"</tt> <tt class="py-op">%</tt> <tt class="py-name">cls</tt><tt class="py-op">.</tt><tt class="py-name">_dtype_</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">cls</tt><tt class="py-op">.</tt><tt class="py-name">_ndim_</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt> \ </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line">               <tt class="py-keyword">and</tt> <tt class="py-name">obj</tt><tt class="py-op">.</tt><tt class="py-name">ndim</tt> <tt class="py-op">!=</tt> <tt class="py-name">cls</tt><tt class="py-op">.</tt><tt class="py-name">_ndim_</tt><tt class="py-op">:</tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">TypeError</tt><tt class="py-op">,</tt> <tt class="py-string">"array must have %d dimension(s)"</tt> <tt class="py-op">%</tt> <tt class="py-name">cls</tt><tt class="py-op">.</tt><tt class="py-name">_ndim_</tt> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">cls</tt><tt class="py-op">.</tt><tt class="py-name">_shape_</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt> \ </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line">               <tt class="py-keyword">and</tt> <tt class="py-name">obj</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name" targets="Variable PolyMode.LayeredSolver.Layer.shape=PolyMode.LayeredSolver.Layer-class.html#shape,Variable PolyMode.Modes.VectorMode.shape=PolyMode.Modes.VectorMode-class.html#shape"><a title="PolyMode.LayeredSolver.Layer.shape
+PolyMode.Modes.VectorMode.shape" class="py-name" href="#" onclick="return doclink('link-19', 'shape', 'link-19');">shape</a></tt> <tt class="py-op">!=</tt> <tt class="py-name">cls</tt><tt class="py-op">.</tt><tt class="py-name">_shape_</tt><tt class="py-op">:</tt> </tt>
+<a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">TypeError</tt><tt class="py-op">,</tt> <tt class="py-string">"array must have shape %s"</tt> <tt class="py-op">%</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">cls</tt><tt class="py-op">.</tt><tt class="py-name">_shape_</tt><tt class="py-op">)</tt> </tt>
+<a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">cls</tt><tt class="py-op">.</tt><tt class="py-name">_flags_</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt> \ </tt>
+<a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line">               <tt class="py-keyword">and</tt> <tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">obj</tt><tt class="py-op">.</tt><tt class="py-name">flags</tt><tt class="py-op">.</tt><tt class="py-name">num</tt> <tt class="py-op">&amp;</tt> <tt class="py-name">cls</tt><tt class="py-op">.</tt><tt class="py-name">_flags_</tt><tt class="py-op">)</tt> <tt class="py-op">!=</tt> <tt class="py-name">cls</tt><tt class="py-op">.</tt><tt class="py-name">_flags_</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">TypeError</tt><tt class="py-op">,</tt> <tt class="py-string">"array must have flags %s"</tt> <tt class="py-op">%</tt> \ </tt>
+<a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line">                  <tt class="py-name">_flags_fromnum</tt><tt class="py-op">(</tt><tt class="py-name">cls</tt><tt class="py-op">.</tt><tt class="py-name">_flags_</tt><tt class="py-op">)</tt> </tt>
+<a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">obj</tt><tt class="py-op">.</tt><tt class="py-name">ctypes</tt> </tt>
+</div></div><a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line"> </tt>
+<a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line"> </tt>
+<a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line"><tt class="py-comment"># Factory for an array-checking class with from_param defined for</tt> </tt>
+<a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line"><tt class="py-comment">#  use with ctypes argtypes mechanism</tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line"><tt class="py-name">_pointer_type_cache</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="ndpointer"></a><div id="ndpointer-def"><a name="L177"></a><tt class="py-lineno">177</tt> <a class="py-toggle" href="#" id="ndpointer-toggle" onclick="return toggle('ndpointer');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="numpy.ctypeslib-module.html#ndpointer">ndpointer</a><tt class="py-op">(</tt><tt class="py-param">dtype</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">ndim</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">shape</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">flags</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ndpointer-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="ndpointer-expanded"><a name="L178"></a><tt class="py-lineno">178</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line"><tt class="py-docstring">    Array-checking restype/argtypes.</tt> </tt>
+<a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line"><tt class="py-docstring">    An ndpointer instance is used to describe an ndarray in restypes</tt> </tt>
+<a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line"><tt class="py-docstring">    and argtypes specifications.  This approach is more flexible than</tt> </tt>
+<a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line"><tt class="py-docstring">    using, for example, ``POINTER(c_double)``, since several restrictions</tt> </tt>
+<a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line"><tt class="py-docstring">    can be specified, which are verified upon calling the ctypes function.</tt> </tt>
+<a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line"><tt class="py-docstring">    These include data type, number of dimensions, shape and flags.  If a</tt> </tt>
+<a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line"><tt class="py-docstring">    given array does not satisfy the specified restrictions,</tt> </tt>
+<a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line"><tt class="py-docstring">    a ``TypeError`` is raised.</tt> </tt>
+<a name="L188"></a><tt class="py-lineno">188</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line"><tt class="py-docstring">    Parameters</tt> </tt>
+<a name="L190"></a><tt class="py-lineno">190</tt>  <tt class="py-line"><tt class="py-docstring">    ----------</tt> </tt>
+<a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line"><tt class="py-docstring">    dtype : data-type, optional</tt> </tt>
+<a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line"><tt class="py-docstring">        Array data-type.</tt> </tt>
+<a name="L193"></a><tt class="py-lineno">193</tt>  <tt class="py-line"><tt class="py-docstring">    ndim : int, optional</tt> </tt>
+<a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line"><tt class="py-docstring">        Number of array dimensions.</tt> </tt>
+<a name="L195"></a><tt class="py-lineno">195</tt>  <tt class="py-line"><tt class="py-docstring">    shape : tuple of ints, optional</tt> </tt>
+<a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line"><tt class="py-docstring">        Array shape.</tt> </tt>
+<a name="L197"></a><tt class="py-lineno">197</tt>  <tt class="py-line"><tt class="py-docstring">    flags : string or tuple of strings</tt> </tt>
+<a name="L198"></a><tt class="py-lineno">198</tt>  <tt class="py-line"><tt class="py-docstring">        Array flags; may be one or more of:</tt> </tt>
+<a name="L199"></a><tt class="py-lineno">199</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L200"></a><tt class="py-lineno">200</tt>  <tt class="py-line"><tt class="py-docstring">          - C_CONTIGUOUS / C / CONTIGUOUS</tt> </tt>
+<a name="L201"></a><tt class="py-lineno">201</tt>  <tt class="py-line"><tt class="py-docstring">          - F_CONTIGUOUS / F / FORTRAN</tt> </tt>
+<a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line"><tt class="py-docstring">          - OWNDATA / O</tt> </tt>
+<a name="L203"></a><tt class="py-lineno">203</tt>  <tt class="py-line"><tt class="py-docstring">          - WRITEABLE / W</tt> </tt>
+<a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line"><tt class="py-docstring">          - ALIGNED / A</tt> </tt>
+<a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line"><tt class="py-docstring">          - UPDATEIFCOPY / U</tt> </tt>
+<a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L207"></a><tt class="py-lineno">207</tt>  <tt class="py-line"><tt class="py-docstring">    Examples</tt> </tt>
+<a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line"><tt class="py-docstring">    --------</tt> </tt>
+<a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; clib.somefunc.argtypes = [np.ctypeslib.ndpointer(dtype=float64,</tt> </tt>
+<a name="L210"></a><tt class="py-lineno">210</tt>  <tt class="py-line"><tt class="py-docstring">    ...                                                  ndim=1,</tt> </tt>
+<a name="L211"></a><tt class="py-lineno">211</tt>  <tt class="py-line"><tt class="py-docstring">    ...                                                  flags='C_CONTIGUOUS')]</tt> </tt>
+<a name="L212"></a><tt class="py-lineno">212</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; clib.somefunc(np.array([1, 2, 3], dtype=np.float64))</tt> </tt>
+<a name="L213"></a><tt class="py-lineno">213</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L214"></a><tt class="py-lineno">214</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L215"></a><tt class="py-lineno">215</tt>  <tt class="py-line"> </tt>
+<a name="L216"></a><tt class="py-lineno">216</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-20" class="py-name"><a title="numpy.dtype" class="py-name" href="#" onclick="return doclink('link-20', 'dtype', 'link-2');">dtype</a></tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L217"></a><tt class="py-lineno">217</tt>  <tt class="py-line">        <tt id="link-21" class="py-name"><a title="numpy.dtype" class="py-name" href="#" onclick="return doclink('link-21', 'dtype', 'link-2');">dtype</a></tt> <tt class="py-op">=</tt> <tt class="py-name">_dtype</tt><tt class="py-op">(</tt><tt id="link-22" class="py-name"><a title="numpy.dtype" class="py-name" href="#" onclick="return doclink('link-22', 'dtype', 'link-2');">dtype</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line">    <tt class="py-name">num</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L219"></a><tt class="py-lineno">219</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">flags</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L220"></a><tt class="py-lineno">220</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">flags</tt><tt class="py-op">,</tt> <tt class="py-name">str</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L221"></a><tt class="py-lineno">221</tt>  <tt class="py-line">            <tt class="py-name">flags</tt> <tt class="py-op">=</tt> <tt class="py-name">flags</tt><tt class="py-op">.</tt><tt class="py-name">split</tt><tt class="py-op">(</tt><tt class="py-string">','</tt><tt class="py-op">)</tt> </tt>
+<a name="L222"></a><tt class="py-lineno">222</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">flags</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">int</tt><tt class="py-op">,</tt> <tt id="link-23" class="py-name"><a title="numpy.integer" class="py-name" href="#" onclick="return doclink('link-23', 'integer', 'link-0');">integer</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L223"></a><tt class="py-lineno">223</tt>  <tt class="py-line">            <tt class="py-name">num</tt> <tt class="py-op">=</tt> <tt class="py-name">flags</tt> </tt>
+<a name="L224"></a><tt class="py-lineno">224</tt>  <tt class="py-line">            <tt class="py-name">flags</tt> <tt class="py-op">=</tt> <tt class="py-name">_flags_fromnum</tt><tt class="py-op">(</tt><tt class="py-name">num</tt><tt class="py-op">)</tt> </tt>
+<a name="L225"></a><tt class="py-lineno">225</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">flags</tt><tt class="py-op">,</tt> <tt class="py-name">flagsobj</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L226"></a><tt class="py-lineno">226</tt>  <tt class="py-line">            <tt class="py-name">num</tt> <tt class="py-op">=</tt> <tt class="py-name">flags</tt><tt class="py-op">.</tt><tt class="py-name">num</tt> </tt>
+<a name="L227"></a><tt class="py-lineno">227</tt>  <tt class="py-line">            <tt class="py-name">flags</tt> <tt class="py-op">=</tt> <tt class="py-name">_flags_fromnum</tt><tt class="py-op">(</tt><tt class="py-name">num</tt><tt class="py-op">)</tt> </tt>
+<a name="L228"></a><tt class="py-lineno">228</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">num</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L229"></a><tt class="py-lineno">229</tt>  <tt class="py-line">            <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L230"></a><tt class="py-lineno">230</tt>  <tt class="py-line">                <tt class="py-name">flags</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt id="link-24" class="py-name" targets="Variable PolyMode.difflounge.test.x=PolyMode.difflounge.test-module.html#x,Variable PolyMode.difflounge.test_fd.x=PolyMode.difflounge.test_fd-module.html#x,Variable PolyMode.mathlink.ublas_block_lu.test_block_lu.x=PolyMode.mathlink.ublas_block_lu.test_block_lu-module.html#x"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-24', 'x', 'link-24');">x</a></tt><tt class="py-op">.</tt><tt class="py-name">strip</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">upper</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt id="link-25" class="py-name"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-25', 'x', 'link-24');">x</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">flags</tt><tt class="py-op">]</tt> </tt>
+<a name="L231"></a><tt class="py-lineno">231</tt>  <tt class="py-line">            <tt class="py-keyword">except</tt><tt class="py-op">:</tt> </tt>
+<a name="L232"></a><tt class="py-lineno">232</tt>  <tt class="py-line">                <tt class="py-keyword">raise</tt> <tt class="py-name">TypeError</tt><tt class="py-op">,</tt> <tt class="py-string">"invalid flags specification"</tt> </tt>
+<a name="L233"></a><tt class="py-lineno">233</tt>  <tt class="py-line">            <tt class="py-name">num</tt> <tt class="py-op">=</tt> <tt class="py-name">_num_fromflags</tt><tt class="py-op">(</tt><tt class="py-name">flags</tt><tt class="py-op">)</tt> </tt>
+<a name="L234"></a><tt class="py-lineno">234</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L235"></a><tt class="py-lineno">235</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">_pointer_type_cache</tt><tt class="py-op">[</tt><tt class="py-op">(</tt><tt id="link-26" class="py-name"><a title="numpy.dtype" class="py-name" href="#" onclick="return doclink('link-26', 'dtype', 'link-2');">dtype</a></tt><tt class="py-op">,</tt> <tt class="py-name">ndim</tt><tt class="py-op">,</tt> <tt id="link-27" class="py-name"><a title="PolyMode.LayeredSolver.Layer.shape
+PolyMode.Modes.VectorMode.shape" class="py-name" href="#" onclick="return doclink('link-27', 'shape', 'link-19');">shape</a></tt><tt class="py-op">,</tt> <tt class="py-name">num</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L236"></a><tt class="py-lineno">236</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt> <tt class="py-name">KeyError</tt><tt class="py-op">:</tt> </tt>
+<a name="L237"></a><tt class="py-lineno">237</tt>  <tt class="py-line">        <tt class="py-keyword">pass</tt> </tt>
+<a name="L238"></a><tt class="py-lineno">238</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-28" class="py-name"><a title="numpy.dtype" class="py-name" href="#" onclick="return doclink('link-28', 'dtype', 'link-2');">dtype</a></tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L239"></a><tt class="py-lineno">239</tt>  <tt class="py-line">        <tt id="link-29" class="py-name" targets="Variable PolyMode.Material.Air.name=PolyMode.Material.Air-class.html#name,Variable PolyMode.Material.Aluminium.name=PolyMode.Material.Aluminium-class.html#name,Variable PolyMode.Material.BK7.name=PolyMode.Material.BK7-class.html#name,Variable PolyMode.Material.Chromium.name=PolyMode.Material.Chromium-class.html#name,Variable PolyMode.Material.Copper.name=PolyMode.Material.Copper-class.html#name,Variable PolyMode.Material.Germania.name=PolyMode.Material.Germania-class.html#name,Variable PolyMode.Material.Germanium.name=PolyMode.Material.Germanium-class.html#name,Variable PolyMode.Material.Gold.name=PolyMode.Material.Gold-class.html#name,Variable PolyMode.Material.HDPE.name=PolyMode.Material.HDPE-class.html#name,Variable PolyMode.Material.Iron.name=PolyMode.Material.Iron-class.html#name,Variable PolyMode.Material.Lithium.name=PolyMode.Material.Lithium-class.html#name,Variable PolyMode.Material.Nickel.name=PolyMode.Material.Nickel-class.html#name,Variable PolyMode.Material.PMMA.name=PolyMode.Material.PMMA-class.html#name,Variable PolyMode.Material.Quartz.name=PolyMode.Material.Quartz-class.html#name,Variable PolyMode.Material.Sapphire.name=PolyMode.Material.Sapphire-class.html#name,Variable PolyMode.Material.SiO2Fl.name=PolyMode.Material.SiO2Fl-class.html#name,Variable PolyMode.Material.SiO2GeO2.name=PolyMode.Material.SiO2GeO2-class.html#name,Variable PolyMode.Material.Silica.name=PolyMode.Material.Silica-class.html#name,Variable PolyMode.Material.Silicon.name=PolyMode.Material.Silicon-class.html#name,Variable PolyMode.Material.Silver.name=PolyMode.Material.Silver-class.html#name,Variable PolyMode.Material.Tungsten.name=PolyMode.Material.Tungsten-class.html#name,Variable PolyMode.Material.Vanadium.name=PolyMode.Material.Vanadium-class.html#name,Variable PolyMode.Material.Water.name=PolyMode.Material.Water-class.html#name,Variable PolyMode.Material.Water_IR.name=PolyMode.Material.Water_IR-class.html#name,Variable PolyMode.Material.Zirconium.name=PolyMode.Material.Zirconium-class.html#name,Variable PolyMode.Material.name=PolyMode.Material-module.html#name,Variable PolyMode.Waveguide.Annulus.name=PolyMode.Waveguide.Annulus-class.html#name,Variable PolyMode.Waveguide.ChannelAnnulus.name=PolyMode.Waveguide.ChannelAnnulus-class.html#name,Variable PolyMode.Waveguide.Circle.name=PolyMode.Waveguide.Circle-class.html#name,Variable PolyMode.Waveguide.Curve.name=PolyMode.Waveguide.Curve-class.html#name,Variable PolyMode.Waveguide.Ellipse.name=PolyMode.Waveguide.Ellipse-class.html#name,Variable PolyMode.Waveguide.Image.name=PolyMode.Waveguide.Image-class.html#name,Variable PolyMode.Waveguide.Polygon.name=PolyMode.Waveguide.Polygon-class.html#name,Variable PolyMode.Waveguide.Rectangle.name=PolyMode.Waveguide.Rectangle-class.html#name,Variable PolyMode.Waveguide.RegularPolygon.name=PolyMode.Waveguide.RegularPolygon-class.html#name"><a title="PolyMode.Material.Air.name
+PolyMode.Material.Aluminium.name
+PolyMode.Material.BK7.name
+PolyMode.Material.Chromium.name
+PolyMode.Material.Copper.name
+PolyMode.Material.Germania.name
+PolyMode.Material.Germanium.name
+PolyMode.Material.Gold.name
+PolyMode.Material.HDPE.name
+PolyMode.Material.Iron.name
+PolyMode.Material.Lithium.name
+PolyMode.Material.Nickel.name
+PolyMode.Material.PMMA.name
+PolyMode.Material.Quartz.name
+PolyMode.Material.Sapphire.name
+PolyMode.Material.SiO2Fl.name
+PolyMode.Material.SiO2GeO2.name
+PolyMode.Material.Silica.name
+PolyMode.Material.Silicon.name
+PolyMode.Material.Silver.name
+PolyMode.Material.Tungsten.name
+PolyMode.Material.Vanadium.name
+PolyMode.Material.Water.name
+PolyMode.Material.Water_IR.name
+PolyMode.Material.Zirconium.name
+PolyMode.Material.name
+PolyMode.Waveguide.Annulus.name
+PolyMode.Waveguide.ChannelAnnulus.name
+PolyMode.Waveguide.Circle.name
+PolyMode.Waveguide.Curve.name
+PolyMode.Waveguide.Ellipse.name
+PolyMode.Waveguide.Image.name
+PolyMode.Waveguide.Polygon.name
+PolyMode.Waveguide.Rectangle.name
+PolyMode.Waveguide.RegularPolygon.name" class="py-name" href="#" onclick="return doclink('link-29', 'name', 'link-29');">name</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'any'</tt> </tt>
+<a name="L240"></a><tt class="py-lineno">240</tt>  <tt class="py-line">    <tt class="py-keyword">elif</tt> <tt id="link-30" class="py-name"><a title="numpy.dtype" class="py-name" href="#" onclick="return doclink('link-30', 'dtype', 'link-2');">dtype</a></tt><tt class="py-op">.</tt><tt class="py-name">names</tt><tt class="py-op">:</tt> </tt>
+<a name="L241"></a><tt class="py-lineno">241</tt>  <tt class="py-line">        <tt id="link-31" class="py-name"><a title="PolyMode.Material.Air.name
+PolyMode.Material.Aluminium.name
+PolyMode.Material.BK7.name
+PolyMode.Material.Chromium.name
+PolyMode.Material.Copper.name
+PolyMode.Material.Germania.name
+PolyMode.Material.Germanium.name
+PolyMode.Material.Gold.name
+PolyMode.Material.HDPE.name
+PolyMode.Material.Iron.name
+PolyMode.Material.Lithium.name
+PolyMode.Material.Nickel.name
+PolyMode.Material.PMMA.name
+PolyMode.Material.Quartz.name
+PolyMode.Material.Sapphire.name
+PolyMode.Material.SiO2Fl.name
+PolyMode.Material.SiO2GeO2.name
+PolyMode.Material.Silica.name
+PolyMode.Material.Silicon.name
+PolyMode.Material.Silver.name
+PolyMode.Material.Tungsten.name
+PolyMode.Material.Vanadium.name
+PolyMode.Material.Water.name
+PolyMode.Material.Water_IR.name
+PolyMode.Material.Zirconium.name
+PolyMode.Material.name
+PolyMode.Waveguide.Annulus.name
+PolyMode.Waveguide.ChannelAnnulus.name
+PolyMode.Waveguide.Circle.name
+PolyMode.Waveguide.Curve.name
+PolyMode.Waveguide.Ellipse.name
+PolyMode.Waveguide.Image.name
+PolyMode.Waveguide.Polygon.name
+PolyMode.Waveguide.Rectangle.name
+PolyMode.Waveguide.RegularPolygon.name" class="py-name" href="#" onclick="return doclink('link-31', 'name', 'link-29');">name</a></tt> <tt class="py-op">=</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">id</tt><tt class="py-op">(</tt><tt id="link-32" class="py-name"><a title="numpy.dtype" class="py-name" href="#" onclick="return doclink('link-32', 'dtype', 'link-2');">dtype</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L242"></a><tt class="py-lineno">242</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L243"></a><tt class="py-lineno">243</tt>  <tt class="py-line">        <tt id="link-33" class="py-name"><a title="PolyMode.Material.Air.name
+PolyMode.Material.Aluminium.name
+PolyMode.Material.BK7.name
+PolyMode.Material.Chromium.name
+PolyMode.Material.Copper.name
+PolyMode.Material.Germania.name
+PolyMode.Material.Germanium.name
+PolyMode.Material.Gold.name
+PolyMode.Material.HDPE.name
+PolyMode.Material.Iron.name
+PolyMode.Material.Lithium.name
+PolyMode.Material.Nickel.name
+PolyMode.Material.PMMA.name
+PolyMode.Material.Quartz.name
+PolyMode.Material.Sapphire.name
+PolyMode.Material.SiO2Fl.name
+PolyMode.Material.SiO2GeO2.name
+PolyMode.Material.Silica.name
+PolyMode.Material.Silicon.name
+PolyMode.Material.Silver.name
+PolyMode.Material.Tungsten.name
+PolyMode.Material.Vanadium.name
+PolyMode.Material.Water.name
+PolyMode.Material.Water_IR.name
+PolyMode.Material.Zirconium.name
+PolyMode.Material.name
+PolyMode.Waveguide.Annulus.name
+PolyMode.Waveguide.ChannelAnnulus.name
+PolyMode.Waveguide.Circle.name
+PolyMode.Waveguide.Curve.name
+PolyMode.Waveguide.Ellipse.name
+PolyMode.Waveguide.Image.name
+PolyMode.Waveguide.Polygon.name
+PolyMode.Waveguide.Rectangle.name
+PolyMode.Waveguide.RegularPolygon.name" class="py-name" href="#" onclick="return doclink('link-33', 'name', 'link-29');">name</a></tt> <tt class="py-op">=</tt> <tt id="link-34" class="py-name"><a title="numpy.dtype" class="py-name" href="#" onclick="return doclink('link-34', 'dtype', 'link-2');">dtype</a></tt><tt class="py-op">.</tt><tt class="py-name">str</tt> </tt>
+<a name="L244"></a><tt class="py-lineno">244</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">ndim</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L245"></a><tt class="py-lineno">245</tt>  <tt class="py-line">        <tt id="link-35" class="py-name"><a title="PolyMode.Material.Air.name
+PolyMode.Material.Aluminium.name
+PolyMode.Material.BK7.name
+PolyMode.Material.Chromium.name
+PolyMode.Material.Copper.name
+PolyMode.Material.Germania.name
+PolyMode.Material.Germanium.name
+PolyMode.Material.Gold.name
+PolyMode.Material.HDPE.name
+PolyMode.Material.Iron.name
+PolyMode.Material.Lithium.name
+PolyMode.Material.Nickel.name
+PolyMode.Material.PMMA.name
+PolyMode.Material.Quartz.name
+PolyMode.Material.Sapphire.name
+PolyMode.Material.SiO2Fl.name
+PolyMode.Material.SiO2GeO2.name
+PolyMode.Material.Silica.name
+PolyMode.Material.Silicon.name
+PolyMode.Material.Silver.name
+PolyMode.Material.Tungsten.name
+PolyMode.Material.Vanadium.name
+PolyMode.Material.Water.name
+PolyMode.Material.Water_IR.name
+PolyMode.Material.Zirconium.name
+PolyMode.Material.name
+PolyMode.Waveguide.Annulus.name
+PolyMode.Waveguide.ChannelAnnulus.name
+PolyMode.Waveguide.Circle.name
+PolyMode.Waveguide.Curve.name
+PolyMode.Waveguide.Ellipse.name
+PolyMode.Waveguide.Image.name
+PolyMode.Waveguide.Polygon.name
+PolyMode.Waveguide.Rectangle.name
+PolyMode.Waveguide.RegularPolygon.name" class="py-name" href="#" onclick="return doclink('link-35', 'name', 'link-29');">name</a></tt> <tt class="py-op">+=</tt> <tt class="py-string">"_%dd"</tt> <tt class="py-op">%</tt> <tt class="py-name">ndim</tt> </tt>
+<a name="L246"></a><tt class="py-lineno">246</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-36" class="py-name"><a title="PolyMode.LayeredSolver.Layer.shape
+PolyMode.Modes.VectorMode.shape" class="py-name" href="#" onclick="return doclink('link-36', 'shape', 'link-19');">shape</a></tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L247"></a><tt class="py-lineno">247</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L248"></a><tt class="py-lineno">248</tt>  <tt class="py-line">            <tt class="py-name">strshape</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-37" class="py-name"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-37', 'x', 'link-24');">x</a></tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt id="link-38" class="py-name"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-38', 'x', 'link-24');">x</a></tt> <tt class="py-keyword">in</tt> <tt id="link-39" class="py-name"><a title="PolyMode.LayeredSolver.Layer.shape
+PolyMode.Modes.VectorMode.shape" class="py-name" href="#" onclick="return doclink('link-39', 'shape', 'link-19');">shape</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L249"></a><tt class="py-lineno">249</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">TypeError</tt><tt class="py-op">:</tt> </tt>
+<a name="L250"></a><tt class="py-lineno">250</tt>  <tt class="py-line">            <tt class="py-name">strshape</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-40" class="py-name"><a title="PolyMode.LayeredSolver.Layer.shape
+PolyMode.Modes.VectorMode.shape" class="py-name" href="#" onclick="return doclink('link-40', 'shape', 'link-19');">shape</a></tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L251"></a><tt class="py-lineno">251</tt>  <tt class="py-line">            <tt id="link-41" class="py-name"><a title="PolyMode.LayeredSolver.Layer.shape
+PolyMode.Modes.VectorMode.shape" class="py-name" href="#" onclick="return doclink('link-41', 'shape', 'link-19');">shape</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt id="link-42" class="py-name"><a title="PolyMode.LayeredSolver.Layer.shape
+PolyMode.Modes.VectorMode.shape" class="py-name" href="#" onclick="return doclink('link-42', 'shape', 'link-19');">shape</a></tt><tt class="py-op">,</tt><tt class="py-op">)</tt> </tt>
+<a name="L252"></a><tt class="py-lineno">252</tt>  <tt class="py-line">        <tt id="link-43" class="py-name"><a title="PolyMode.LayeredSolver.Layer.shape
+PolyMode.Modes.VectorMode.shape" class="py-name" href="#" onclick="return doclink('link-43', 'shape', 'link-19');">shape</a></tt> <tt class="py-op">=</tt> <tt class="py-name">tuple</tt><tt class="py-op">(</tt><tt id="link-44" class="py-name"><a title="PolyMode.LayeredSolver.Layer.shape
+PolyMode.Modes.VectorMode.shape" class="py-name" href="#" onclick="return doclink('link-44', 'shape', 'link-19');">shape</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L253"></a><tt class="py-lineno">253</tt>  <tt class="py-line">        <tt id="link-45" class="py-name"><a title="PolyMode.Material.Air.name
+PolyMode.Material.Aluminium.name
+PolyMode.Material.BK7.name
+PolyMode.Material.Chromium.name
+PolyMode.Material.Copper.name
+PolyMode.Material.Germania.name
+PolyMode.Material.Germanium.name
+PolyMode.Material.Gold.name
+PolyMode.Material.HDPE.name
+PolyMode.Material.Iron.name
+PolyMode.Material.Lithium.name
+PolyMode.Material.Nickel.name
+PolyMode.Material.PMMA.name
+PolyMode.Material.Quartz.name
+PolyMode.Material.Sapphire.name
+PolyMode.Material.SiO2Fl.name
+PolyMode.Material.SiO2GeO2.name
+PolyMode.Material.Silica.name
+PolyMode.Material.Silicon.name
+PolyMode.Material.Silver.name
+PolyMode.Material.Tungsten.name
+PolyMode.Material.Vanadium.name
+PolyMode.Material.Water.name
+PolyMode.Material.Water_IR.name
+PolyMode.Material.Zirconium.name
+PolyMode.Material.name
+PolyMode.Waveguide.Annulus.name
+PolyMode.Waveguide.ChannelAnnulus.name
+PolyMode.Waveguide.Circle.name
+PolyMode.Waveguide.Curve.name
+PolyMode.Waveguide.Ellipse.name
+PolyMode.Waveguide.Image.name
+PolyMode.Waveguide.Polygon.name
+PolyMode.Waveguide.Rectangle.name
+PolyMode.Waveguide.RegularPolygon.name" class="py-name" href="#" onclick="return doclink('link-45', 'name', 'link-29');">name</a></tt> <tt class="py-op">+=</tt> <tt class="py-string">"_"</tt><tt class="py-op">+</tt><tt class="py-string">"x"</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">strshape</tt><tt class="py-op">)</tt> </tt>
+<a name="L254"></a><tt class="py-lineno">254</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">flags</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L255"></a><tt class="py-lineno">255</tt>  <tt class="py-line">        <tt id="link-46" class="py-name"><a title="PolyMode.Material.Air.name
+PolyMode.Material.Aluminium.name
+PolyMode.Material.BK7.name
+PolyMode.Material.Chromium.name
+PolyMode.Material.Copper.name
+PolyMode.Material.Germania.name
+PolyMode.Material.Germanium.name
+PolyMode.Material.Gold.name
+PolyMode.Material.HDPE.name
+PolyMode.Material.Iron.name
+PolyMode.Material.Lithium.name
+PolyMode.Material.Nickel.name
+PolyMode.Material.PMMA.name
+PolyMode.Material.Quartz.name
+PolyMode.Material.Sapphire.name
+PolyMode.Material.SiO2Fl.name
+PolyMode.Material.SiO2GeO2.name
+PolyMode.Material.Silica.name
+PolyMode.Material.Silicon.name
+PolyMode.Material.Silver.name
+PolyMode.Material.Tungsten.name
+PolyMode.Material.Vanadium.name
+PolyMode.Material.Water.name
+PolyMode.Material.Water_IR.name
+PolyMode.Material.Zirconium.name
+PolyMode.Material.name
+PolyMode.Waveguide.Annulus.name
+PolyMode.Waveguide.ChannelAnnulus.name
+PolyMode.Waveguide.Circle.name
+PolyMode.Waveguide.Curve.name
+PolyMode.Waveguide.Ellipse.name
+PolyMode.Waveguide.Image.name
+PolyMode.Waveguide.Polygon.name
+PolyMode.Waveguide.Rectangle.name
+PolyMode.Waveguide.RegularPolygon.name" class="py-name" href="#" onclick="return doclink('link-46', 'name', 'link-29');">name</a></tt> <tt class="py-op">+=</tt> <tt class="py-string">"_"</tt><tt class="py-op">+</tt><tt class="py-string">"_"</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">flags</tt><tt class="py-op">)</tt> </tt>
+<a name="L256"></a><tt class="py-lineno">256</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L257"></a><tt class="py-lineno">257</tt>  <tt class="py-line">        <tt class="py-name">flags</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L258"></a><tt class="py-lineno">258</tt>  <tt class="py-line">    <tt class="py-name">klass</tt> <tt class="py-op">=</tt> <tt class="py-name">type</tt><tt class="py-op">(</tt><tt class="py-string">"ndpointer_%s"</tt><tt class="py-op">%</tt><tt id="link-47" class="py-name"><a title="PolyMode.Material.Air.name
+PolyMode.Material.Aluminium.name
+PolyMode.Material.BK7.name
+PolyMode.Material.Chromium.name
+PolyMode.Material.Copper.name
+PolyMode.Material.Germania.name
+PolyMode.Material.Germanium.name
+PolyMode.Material.Gold.name
+PolyMode.Material.HDPE.name
+PolyMode.Material.Iron.name
+PolyMode.Material.Lithium.name
+PolyMode.Material.Nickel.name
+PolyMode.Material.PMMA.name
+PolyMode.Material.Quartz.name
+PolyMode.Material.Sapphire.name
+PolyMode.Material.SiO2Fl.name
+PolyMode.Material.SiO2GeO2.name
+PolyMode.Material.Silica.name
+PolyMode.Material.Silicon.name
+PolyMode.Material.Silver.name
+PolyMode.Material.Tungsten.name
+PolyMode.Material.Vanadium.name
+PolyMode.Material.Water.name
+PolyMode.Material.Water_IR.name
+PolyMode.Material.Zirconium.name
+PolyMode.Material.name
+PolyMode.Waveguide.Annulus.name
+PolyMode.Waveguide.ChannelAnnulus.name
+PolyMode.Waveguide.Circle.name
+PolyMode.Waveguide.Curve.name
+PolyMode.Waveguide.Ellipse.name
+PolyMode.Waveguide.Image.name
+PolyMode.Waveguide.Polygon.name
+PolyMode.Waveguide.Rectangle.name
+PolyMode.Waveguide.RegularPolygon.name" class="py-name" href="#" onclick="return doclink('link-47', 'name', 'link-29');">name</a></tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">_ndptr</tt><tt class="py-op">,</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L259"></a><tt class="py-lineno">259</tt>  <tt class="py-line">                 <tt class="py-op">{</tt><tt class="py-string">"_dtype_"</tt><tt class="py-op">:</tt> <tt id="link-48" class="py-name"><a title="numpy.dtype" class="py-name" href="#" onclick="return doclink('link-48', 'dtype', 'link-2');">dtype</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L260"></a><tt class="py-lineno">260</tt>  <tt class="py-line">                  <tt class="py-string">"_shape_"</tt> <tt class="py-op">:</tt> <tt id="link-49" class="py-name"><a title="PolyMode.LayeredSolver.Layer.shape
+PolyMode.Modes.VectorMode.shape" class="py-name" href="#" onclick="return doclink('link-49', 'shape', 'link-19');">shape</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L261"></a><tt class="py-lineno">261</tt>  <tt class="py-line">                  <tt class="py-string">"_ndim_"</tt> <tt class="py-op">:</tt> <tt class="py-name">ndim</tt><tt class="py-op">,</tt> </tt>
+<a name="L262"></a><tt class="py-lineno">262</tt>  <tt class="py-line">                  <tt class="py-string">"_flags_"</tt> <tt class="py-op">:</tt> <tt class="py-name">num</tt><tt class="py-op">}</tt><tt class="py-op">)</tt> </tt>
+<a name="L263"></a><tt class="py-lineno">263</tt>  <tt class="py-line">    <tt class="py-name">_pointer_type_cache</tt><tt class="py-op">[</tt><tt id="link-50" class="py-name"><a title="numpy.dtype" class="py-name" href="#" onclick="return doclink('link-50', 'dtype', 'link-2');">dtype</a></tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">klass</tt> </tt>
+<a name="L264"></a><tt class="py-lineno">264</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">klass</tt> </tt>
+</div><a name="L265"></a><tt class="py-lineno">265</tt>  <tt class="py-line"> </tt>
+<a name="L266"></a><tt class="py-lineno">266</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">ctypes</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L267"></a><tt class="py-lineno">267</tt>  <tt class="py-line">    <tt class="py-name">ct</tt> <tt class="py-op">=</tt> <tt class="py-name">ctypes</tt> </tt>
+<a name="L268"></a><tt class="py-lineno">268</tt>  <tt class="py-line">    <tt class="py-comment">################################################################</tt> </tt>
+<a name="L269"></a><tt class="py-lineno">269</tt>  <tt class="py-line">    <tt class="py-comment"># simple types</tt> </tt>
+<a name="L270"></a><tt class="py-lineno">270</tt>  <tt class="py-line"> </tt>
+<a name="L271"></a><tt class="py-lineno">271</tt>  <tt class="py-line">    <tt class="py-comment"># maps the numpy typecodes like '&lt;f8' to simple ctypes types like</tt> </tt>
+<a name="L272"></a><tt class="py-lineno">272</tt>  <tt class="py-line">    <tt class="py-comment"># c_double. Filled in by prep_simple.</tt> </tt>
+<a name="L273"></a><tt class="py-lineno">273</tt>  <tt class="py-line">    <tt class="py-name">_typecodes</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="prep_simple"></a><div id="prep_simple-def"><a name="L274"></a><tt class="py-lineno">274</tt>  <tt class="py-line"> </tt>
+<a name="L275"></a><tt class="py-lineno">275</tt> <a class="py-toggle" href="#" id="prep_simple-toggle" onclick="return toggle('prep_simple');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="numpy.ctypeslib-module.html#prep_simple">prep_simple</a><tt class="py-op">(</tt><tt class="py-param">simple_type</tt><tt class="py-op">,</tt> <tt class="py-param">typestr</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="prep_simple-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="prep_simple-expanded"><a name="L276"></a><tt class="py-lineno">276</tt>  <tt class="py-line">        <tt class="py-docstring">"""Given a ctypes simple type, construct and attach an</tt> </tt>
+<a name="L277"></a><tt class="py-lineno">277</tt>  <tt class="py-line"><tt class="py-docstring">        __array_interface__ property to it if it does not yet have one.</tt> </tt>
+<a name="L278"></a><tt class="py-lineno">278</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L279"></a><tt class="py-lineno">279</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> <tt class="py-name">simple_type</tt><tt class="py-op">.</tt><tt class="py-name">__array_interface__</tt> </tt>
+<a name="L280"></a><tt class="py-lineno">280</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">AttributeError</tt><tt class="py-op">:</tt> <tt class="py-keyword">pass</tt> </tt>
+<a name="L281"></a><tt class="py-lineno">281</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> <tt class="py-keyword">return</tt> </tt>
+<a name="L282"></a><tt class="py-lineno">282</tt>  <tt class="py-line"> </tt>
+<a name="L283"></a><tt class="py-lineno">283</tt>  <tt class="py-line">        <tt class="py-name">_typecodes</tt><tt class="py-op">[</tt><tt class="py-name">typestr</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">simple_type</tt> </tt>
+<a name="L284"></a><tt class="py-lineno">284</tt>  <tt class="py-line"> </tt>
+<a name="L285"></a><tt class="py-lineno">285</tt>  <tt class="py-line">        <tt class="py-keyword">def</tt> <tt class="py-def-name">__array_interface__</tt><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L286"></a><tt class="py-lineno">286</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-op">{</tt><tt class="py-string">'descr'</tt><tt class="py-op">:</tt> <tt class="py-op">[</tt><tt class="py-op">(</tt><tt class="py-string">''</tt><tt class="py-op">,</tt> <tt class="py-name">typestr</tt><tt class="py-op">)</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L287"></a><tt class="py-lineno">287</tt>  <tt class="py-line">                    <tt class="py-string">'__ref'</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">,</tt> </tt>
+<a name="L288"></a><tt class="py-lineno">288</tt>  <tt class="py-line">                    <tt class="py-string">'strides'</tt><tt class="py-op">:</tt> <tt class="py-name">None</tt><tt class="py-op">,</tt> </tt>
+<a name="L289"></a><tt class="py-lineno">289</tt>  <tt class="py-line">                    <tt class="py-string">'shape'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L290"></a><tt class="py-lineno">290</tt>  <tt class="py-line">                    <tt class="py-string">'version'</tt><tt class="py-op">:</tt> <tt class="py-number">3</tt><tt class="py-op">,</tt> </tt>
+<a name="L291"></a><tt class="py-lineno">291</tt>  <tt class="py-line">                    <tt class="py-string">'typestr'</tt><tt class="py-op">:</tt> <tt class="py-name">typestr</tt><tt class="py-op">,</tt> </tt>
+<a name="L292"></a><tt class="py-lineno">292</tt>  <tt class="py-line">                    <tt class="py-string">'data'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-name">ct</tt><tt class="py-op">.</tt><tt class="py-name">addressof</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L293"></a><tt class="py-lineno">293</tt>  <tt class="py-line">                    <tt class="py-op">}</tt> </tt>
+</div><a name="L294"></a><tt class="py-lineno">294</tt>  <tt class="py-line"> </tt>
+<a name="L295"></a><tt class="py-lineno">295</tt>  <tt class="py-line">        <tt class="py-name">simple_type</tt><tt class="py-op">.</tt><tt class="py-name">__array_interface__</tt> <tt class="py-op">=</tt> <tt class="py-name">property</tt><tt class="py-op">(</tt><tt class="py-name">__array_interface__</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L296"></a><tt class="py-lineno">296</tt>  <tt class="py-line"> </tt>
+<a name="L297"></a><tt class="py-lineno">297</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">byteorder</tt> <tt class="py-op">==</tt> <tt class="py-string">"little"</tt><tt class="py-op">:</tt> </tt>
+<a name="L298"></a><tt class="py-lineno">298</tt>  <tt class="py-line">        <tt class="py-name">TYPESTR</tt> <tt class="py-op">=</tt> <tt class="py-string">"&lt;%c%d"</tt> </tt>
+<a name="L299"></a><tt class="py-lineno">299</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L300"></a><tt class="py-lineno">300</tt>  <tt class="py-line">        <tt class="py-name">TYPESTR</tt> <tt class="py-op">=</tt> <tt class="py-string">"&gt;%c%d"</tt> </tt>
+<a name="L301"></a><tt class="py-lineno">301</tt>  <tt class="py-line"> </tt>
+<a name="L302"></a><tt class="py-lineno">302</tt>  <tt class="py-line">    <tt class="py-name">simple_types</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt> </tt>
+<a name="L303"></a><tt class="py-lineno">303</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">ct</tt><tt class="py-op">.</tt><tt class="py-name">c_byte</tt><tt class="py-op">,</tt> <tt class="py-name">ct</tt><tt class="py-op">.</tt><tt class="py-name">c_short</tt><tt class="py-op">,</tt> <tt class="py-name">ct</tt><tt class="py-op">.</tt><tt class="py-name">c_int</tt><tt class="py-op">,</tt> <tt class="py-name">ct</tt><tt class="py-op">.</tt><tt class="py-name">c_long</tt><tt class="py-op">,</tt> <tt class="py-name">ct</tt><tt class="py-op">.</tt><tt class="py-name">c_longlong</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">"i"</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L304"></a><tt class="py-lineno">304</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">ct</tt><tt class="py-op">.</tt><tt class="py-name">c_ubyte</tt><tt class="py-op">,</tt> <tt class="py-name">ct</tt><tt class="py-op">.</tt><tt class="py-name">c_ushort</tt><tt class="py-op">,</tt> <tt class="py-name">ct</tt><tt class="py-op">.</tt><tt class="py-name">c_uint</tt><tt class="py-op">,</tt> <tt class="py-name">ct</tt><tt class="py-op">.</tt><tt class="py-name">c_ulong</tt><tt class="py-op">,</tt> <tt class="py-name">ct</tt><tt class="py-op">.</tt><tt class="py-name">c_ulonglong</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">"u"</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L305"></a><tt class="py-lineno">305</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">ct</tt><tt class="py-op">.</tt><tt class="py-name">c_float</tt><tt class="py-op">,</tt> <tt class="py-name">ct</tt><tt class="py-op">.</tt><tt class="py-name">c_double</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">"f"</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L306"></a><tt class="py-lineno">306</tt>  <tt class="py-line">    <tt class="py-op">]</tt> </tt>
+<a name="L307"></a><tt class="py-lineno">307</tt>  <tt class="py-line"> </tt>
+<a name="L308"></a><tt class="py-lineno">308</tt>  <tt class="py-line">    <tt class="py-comment"># Prep that numerical ctypes types:</tt> </tt>
+<a name="L309"></a><tt class="py-lineno">309</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">types</tt><tt class="py-op">,</tt> <tt class="py-name">code</tt> <tt class="py-keyword">in</tt> <tt class="py-name">simple_types</tt><tt class="py-op">:</tt> </tt>
+<a name="L310"></a><tt class="py-lineno">310</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">tp</tt> <tt class="py-keyword">in</tt> <tt class="py-name">types</tt><tt class="py-op">:</tt> </tt>
+<a name="L311"></a><tt class="py-lineno">311</tt>  <tt class="py-line">            <tt class="py-name">prep_simple</tt><tt class="py-op">(</tt><tt class="py-name">tp</tt><tt class="py-op">,</tt> <tt class="py-name">TYPESTR</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">code</tt><tt class="py-op">,</tt> <tt class="py-name">ct</tt><tt class="py-op">.</tt><tt class="py-name">sizeof</tt><tt class="py-op">(</tt><tt class="py-name">tp</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L312"></a><tt class="py-lineno">312</tt>  <tt class="py-line"> </tt>
+<a name="L313"></a><tt class="py-lineno">313</tt>  <tt class="py-line">    <tt class="py-comment">################################################################</tt> </tt>
+<a name="L314"></a><tt class="py-lineno">314</tt>  <tt class="py-line">    <tt class="py-comment"># array types</tt> </tt>
+<a name="L315"></a><tt class="py-lineno">315</tt>  <tt class="py-line"> </tt>
+<a name="L316"></a><tt class="py-lineno">316</tt>  <tt class="py-line">    <tt class="py-name">_ARRAY_TYPE</tt> <tt class="py-op">=</tt> <tt class="py-name">type</tt><tt class="py-op">(</tt><tt class="py-name">ct</tt><tt class="py-op">.</tt><tt class="py-name">c_int</tt> <tt class="py-op">*</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="prep_array"></a><div id="prep_array-def"><a name="L317"></a><tt class="py-lineno">317</tt>  <tt class="py-line"> </tt>
+<a name="L318"></a><tt class="py-lineno">318</tt> <a class="py-toggle" href="#" id="prep_array-toggle" onclick="return toggle('prep_array');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="numpy.ctypeslib-module.html#prep_array">prep_array</a><tt class="py-op">(</tt><tt class="py-param">array_type</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="prep_array-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="prep_array-expanded"><a name="L319"></a><tt class="py-lineno">319</tt>  <tt class="py-line">        <tt class="py-docstring">"""Given a ctypes array type, construct and attach an</tt> </tt>
+<a name="L320"></a><tt class="py-lineno">320</tt>  <tt class="py-line"><tt class="py-docstring">        __array_interface__ property to it if it does not yet have one.</tt> </tt>
+<a name="L321"></a><tt class="py-lineno">321</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L322"></a><tt class="py-lineno">322</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> <tt class="py-name">array_type</tt><tt class="py-op">.</tt><tt class="py-name">__array_interface__</tt> </tt>
+<a name="L323"></a><tt class="py-lineno">323</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">AttributeError</tt><tt class="py-op">:</tt> <tt class="py-keyword">pass</tt> </tt>
+<a name="L324"></a><tt class="py-lineno">324</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> <tt class="py-keyword">return</tt> </tt>
+<a name="L325"></a><tt class="py-lineno">325</tt>  <tt class="py-line"> </tt>
+<a name="L326"></a><tt class="py-lineno">326</tt>  <tt class="py-line">        <tt id="link-51" class="py-name"><a title="PolyMode.LayeredSolver.Layer.shape
+PolyMode.Modes.VectorMode.shape" class="py-name" href="#" onclick="return doclink('link-51', 'shape', 'link-19');">shape</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L327"></a><tt class="py-lineno">327</tt>  <tt class="py-line">        <tt class="py-name">ob</tt> <tt class="py-op">=</tt> <tt class="py-name">array_type</tt> </tt>
+<a name="L328"></a><tt class="py-lineno">328</tt>  <tt class="py-line">        <tt class="py-keyword">while</tt> <tt class="py-name">type</tt><tt class="py-op">(</tt><tt class="py-name">ob</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-name">_ARRAY_TYPE</tt><tt class="py-op">:</tt> </tt>
+<a name="L329"></a><tt class="py-lineno">329</tt>  <tt class="py-line">            <tt id="link-52" class="py-name"><a title="PolyMode.LayeredSolver.Layer.shape
+PolyMode.Modes.VectorMode.shape" class="py-name" href="#" onclick="return doclink('link-52', 'shape', 'link-19');">shape</a></tt><tt class="py-op">.</tt><tt class="py-name">append</tt><tt class="py-op">(</tt><tt class="py-name">ob</tt><tt class="py-op">.</tt><tt class="py-name">_length_</tt><tt class="py-op">)</tt> </tt>
+<a name="L330"></a><tt class="py-lineno">330</tt>  <tt class="py-line">            <tt class="py-name">ob</tt> <tt class="py-op">=</tt> <tt class="py-name">ob</tt><tt class="py-op">.</tt><tt class="py-name">_type_</tt> </tt>
+<a name="L331"></a><tt class="py-lineno">331</tt>  <tt class="py-line">        <tt id="link-53" class="py-name"><a title="PolyMode.LayeredSolver.Layer.shape
+PolyMode.Modes.VectorMode.shape" class="py-name" href="#" onclick="return doclink('link-53', 'shape', 'link-19');">shape</a></tt> <tt class="py-op">=</tt> <tt class="py-name">tuple</tt><tt class="py-op">(</tt><tt id="link-54" class="py-name"><a title="PolyMode.LayeredSolver.Layer.shape
+PolyMode.Modes.VectorMode.shape" class="py-name" href="#" onclick="return doclink('link-54', 'shape', 'link-19');">shape</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L332"></a><tt class="py-lineno">332</tt>  <tt class="py-line">        <tt class="py-name">ai</tt> <tt class="py-op">=</tt> <tt class="py-name">ob</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">__array_interface__</tt> </tt>
+<a name="L333"></a><tt class="py-lineno">333</tt>  <tt class="py-line">        <tt id="link-55" class="py-name"><a title="PolyMode.mathlink.physcon.descr" class="py-name" href="#" onclick="return doclink('link-55', 'descr', 'link-14');">descr</a></tt> <tt class="py-op">=</tt> <tt class="py-name">ai</tt><tt class="py-op">[</tt><tt class="py-string">'descr'</tt><tt class="py-op">]</tt> </tt>
+<a name="L334"></a><tt class="py-lineno">334</tt>  <tt class="py-line">        <tt class="py-name">typestr</tt> <tt class="py-op">=</tt> <tt class="py-name">ai</tt><tt class="py-op">[</tt><tt class="py-string">'typestr'</tt><tt class="py-op">]</tt> </tt>
+<a name="L335"></a><tt class="py-lineno">335</tt>  <tt class="py-line"> </tt>
+<a name="L336"></a><tt class="py-lineno">336</tt>  <tt class="py-line">        <tt class="py-keyword">def</tt> <tt class="py-def-name">__array_interface__</tt><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L337"></a><tt class="py-lineno">337</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-op">{</tt><tt class="py-string">'descr'</tt><tt class="py-op">:</tt> <tt id="link-56" class="py-name"><a title="PolyMode.mathlink.physcon.descr" class="py-name" href="#" onclick="return doclink('link-56', 'descr', 'link-14');">descr</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L338"></a><tt class="py-lineno">338</tt>  <tt class="py-line">                    <tt class="py-string">'__ref'</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">,</tt> </tt>
+<a name="L339"></a><tt class="py-lineno">339</tt>  <tt class="py-line">                    <tt class="py-string">'strides'</tt><tt class="py-op">:</tt> <tt class="py-name">None</tt><tt class="py-op">,</tt> </tt>
+<a name="L340"></a><tt class="py-lineno">340</tt>  <tt class="py-line">                    <tt class="py-string">'shape'</tt><tt class="py-op">:</tt> <tt id="link-57" class="py-name"><a title="PolyMode.LayeredSolver.Layer.shape
+PolyMode.Modes.VectorMode.shape" class="py-name" href="#" onclick="return doclink('link-57', 'shape', 'link-19');">shape</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L341"></a><tt class="py-lineno">341</tt>  <tt class="py-line">                    <tt class="py-string">'version'</tt><tt class="py-op">:</tt> <tt class="py-number">3</tt><tt class="py-op">,</tt> </tt>
+<a name="L342"></a><tt class="py-lineno">342</tt>  <tt class="py-line">                    <tt class="py-string">'typestr'</tt><tt class="py-op">:</tt> <tt class="py-name">typestr</tt><tt class="py-op">,</tt> </tt>
+<a name="L343"></a><tt class="py-lineno">343</tt>  <tt class="py-line">                    <tt class="py-string">'data'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-name">ct</tt><tt class="py-op">.</tt><tt class="py-name">addressof</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L344"></a><tt class="py-lineno">344</tt>  <tt class="py-line">                    <tt class="py-op">}</tt> </tt>
+</div><a name="L345"></a><tt class="py-lineno">345</tt>  <tt class="py-line"> </tt>
+<a name="L346"></a><tt class="py-lineno">346</tt>  <tt class="py-line">        <tt class="py-name">array_type</tt><tt class="py-op">.</tt><tt class="py-name">__array_interface__</tt> <tt class="py-op">=</tt> <tt class="py-name">property</tt><tt class="py-op">(</tt><tt class="py-name">__array_interface__</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L347"></a><tt class="py-lineno">347</tt>  <tt class="py-line"> </tt>
+<a name="as_array"></a><div id="as_array-def"><a name="L348"></a><tt class="py-lineno">348</tt>  <tt class="py-line">    <tt class="py-comment">################################################################</tt> </tt>
+<a name="L349"></a><tt class="py-lineno">349</tt>  <tt class="py-line">    <tt class="py-comment"># public functions</tt> </tt>
+<a name="L350"></a><tt class="py-lineno">350</tt>  <tt class="py-line"> </tt>
+<a name="L351"></a><tt class="py-lineno">351</tt> <a class="py-toggle" href="#" id="as_array-toggle" onclick="return toggle('as_array');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="numpy.ctypeslib-module.html#as_array">as_array</a><tt class="py-op">(</tt><tt class="py-param">obj</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="as_array-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="as_array-expanded"><a name="L352"></a><tt class="py-lineno">352</tt>  <tt class="py-line">        <tt class="py-docstring">"""Create a numpy array from a ctypes array.  The numpy array</tt> </tt>
+<a name="L353"></a><tt class="py-lineno">353</tt>  <tt class="py-line"><tt class="py-docstring">        shares the memory with the ctypes object."""</tt> </tt>
+<a name="L354"></a><tt class="py-lineno">354</tt>  <tt class="py-line">        <tt class="py-name">tp</tt> <tt class="py-op">=</tt> <tt class="py-name">type</tt><tt class="py-op">(</tt><tt class="py-name">obj</tt><tt class="py-op">)</tt> </tt>
+<a name="L355"></a><tt class="py-lineno">355</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> <tt class="py-name">tp</tt><tt class="py-op">.</tt><tt class="py-name">__array_interface__</tt> </tt>
+<a name="L356"></a><tt class="py-lineno">356</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">AttributeError</tt><tt class="py-op">:</tt> <tt class="py-name">prep_array</tt><tt class="py-op">(</tt><tt class="py-name">tp</tt><tt class="py-op">)</tt> </tt>
+<a name="L357"></a><tt class="py-lineno">357</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-58" class="py-name"><a title="PolyMode.mathlink.array
+PolyMode.mathlink.blockarray.BlockArray.array" class="py-name" href="#" onclick="return doclink('link-58', 'array', 'link-3');">array</a></tt><tt class="py-op">(</tt><tt class="py-name">obj</tt><tt class="py-op">,</tt> <tt id="link-59" class="py-name" targets="Method PolyMode.LayeredSolver.Layer.copy()=PolyMode.LayeredSolver.Layer-class.html#copy,Method PolyMode.Modes.Mode.copy()=PolyMode.Modes.Mode-class.html#copy,Method PolyMode.Modes.VectorMode.copy()=PolyMode.Modes.VectorMode-class.html#copy,Method PolyMode.Waveguide.Circle.copy()=PolyMode.Waveguide.Circle-class.html#copy,Method PolyMode.Waveguide.Polygon.copy()=PolyMode.Waveguide.Polygon-class.html#copy,Method PolyMode.Waveguide.WgShape.copy()=PolyMode.Waveguide.WgShape-class.html#copy,Method PolyMode.mathlink.coordinates.Coord.copy()=PolyMode.mathlink.coordinates.Coord-class.html#copy"><a title="PolyMode.LayeredSolver.Layer.copy
+PolyMode.Modes.Mode.copy
+PolyMode.Modes.VectorMode.copy
+PolyMode.Waveguide.Circle.copy
+PolyMode.Waveguide.Polygon.copy
+PolyMode.Waveguide.WgShape.copy
+PolyMode.mathlink.coordinates.Coord.copy" class="py-name" href="#" onclick="return doclink('link-59', 'copy', 'link-59');">copy</a></tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L358"></a><tt class="py-lineno">358</tt>  <tt class="py-line"> </tt>
+<a name="as_ctypes"></a><div id="as_ctypes-def"><a name="L359"></a><tt class="py-lineno">359</tt> <a class="py-toggle" href="#" id="as_ctypes-toggle" onclick="return toggle('as_ctypes');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="numpy.ctypeslib-module.html#as_ctypes">as_ctypes</a><tt class="py-op">(</tt><tt class="py-param">obj</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="as_ctypes-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="as_ctypes-expanded"><a name="L360"></a><tt class="py-lineno">360</tt>  <tt class="py-line">        <tt class="py-docstring">"""Create and return a ctypes object from a numpy array.  Actually</tt> </tt>
+<a name="L361"></a><tt class="py-lineno">361</tt>  <tt class="py-line"><tt class="py-docstring">        anything that exposes the __array_interface__ is accepted."""</tt> </tt>
+<a name="L362"></a><tt class="py-lineno">362</tt>  <tt class="py-line">        <tt class="py-name">ai</tt> <tt class="py-op">=</tt> <tt class="py-name">obj</tt><tt class="py-op">.</tt><tt class="py-name">__array_interface__</tt> </tt>
+<a name="L363"></a><tt class="py-lineno">363</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">ai</tt><tt class="py-op">[</tt><tt class="py-string">"strides"</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L364"></a><tt class="py-lineno">364</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">TypeError</tt><tt class="py-op">(</tt><tt class="py-string">"strided arrays not supported"</tt><tt class="py-op">)</tt> </tt>
+<a name="L365"></a><tt class="py-lineno">365</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">ai</tt><tt class="py-op">[</tt><tt class="py-string">"version"</tt><tt class="py-op">]</tt> <tt class="py-op">!=</tt> <tt class="py-number">3</tt><tt class="py-op">:</tt> </tt>
+<a name="L366"></a><tt class="py-lineno">366</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">TypeError</tt><tt class="py-op">(</tt><tt class="py-string">"only __array_interface__ version 3 supported"</tt><tt class="py-op">)</tt> </tt>
+<a name="L367"></a><tt class="py-lineno">367</tt>  <tt class="py-line">        <tt class="py-name">addr</tt><tt class="py-op">,</tt> <tt class="py-name">readonly</tt> <tt class="py-op">=</tt> <tt class="py-name">ai</tt><tt class="py-op">[</tt><tt class="py-string">"data"</tt><tt class="py-op">]</tt> </tt>
+<a name="L368"></a><tt class="py-lineno">368</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">readonly</tt><tt class="py-op">:</tt> </tt>
+<a name="L369"></a><tt class="py-lineno">369</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">TypeError</tt><tt class="py-op">(</tt><tt class="py-string">"readonly arrays unsupported"</tt><tt class="py-op">)</tt> </tt>
+<a name="L370"></a><tt class="py-lineno">370</tt>  <tt class="py-line">        <tt class="py-name">tp</tt> <tt class="py-op">=</tt> <tt class="py-name">_typecodes</tt><tt class="py-op">[</tt><tt class="py-name">ai</tt><tt class="py-op">[</tt><tt class="py-string">"typestr"</tt><tt class="py-op">]</tt><tt class="py-op">]</tt> </tt>
+<a name="L371"></a><tt class="py-lineno">371</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">dim</tt> <tt class="py-keyword">in</tt> <tt class="py-name">ai</tt><tt class="py-op">[</tt><tt class="py-string">"shape"</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-op">:</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L372"></a><tt class="py-lineno">372</tt>  <tt class="py-line">            <tt class="py-name">tp</tt> <tt class="py-op">=</tt> <tt class="py-name">tp</tt> <tt class="py-op">*</tt> <tt class="py-name">dim</tt> </tt>
+<a name="L373"></a><tt class="py-lineno">373</tt>  <tt class="py-line">        <tt class="py-name">result</tt> <tt class="py-op">=</tt> <tt class="py-name">tp</tt><tt class="py-op">.</tt><tt class="py-name">from_address</tt><tt class="py-op">(</tt><tt class="py-name">addr</tt><tt class="py-op">)</tt> </tt>
+<a name="L374"></a><tt class="py-lineno">374</tt>  <tt class="py-line">        <tt class="py-name">result</tt><tt class="py-op">.</tt><tt class="py-name">__keep</tt> <tt class="py-op">=</tt> <tt class="py-name">ai</tt> </tt>
+<a name="L375"></a><tt class="py-lineno">375</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">result</tt> </tt>
+</div><a name="L376"></a><tt class="py-lineno">376</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1
+    on Mon Sep 14 10:21:12 2009
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

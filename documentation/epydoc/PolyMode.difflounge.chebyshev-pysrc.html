@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>PolyMode.difflounge.chebyshev</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="PolyMode-module.html">Package&nbsp;PolyMode</a> ::
+        <a href="PolyMode.difflounge-module.html">Package&nbsp;difflounge</a> ::
+        Module&nbsp;chebyshev
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="PolyMode.difflounge.chebyshev-module.html">Module PolyMode.difflounge.chebyshev</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment">#chebsuite.py</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># Changelog:</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment">#  6/5/07: Used algorithm by Weideman</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-comment"># Todo:</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-comment">#  </tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">__future__</tt> <tt class="py-keyword">import</tt> <tt class="py-name">division</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">numpy</tt> <tt class="py-keyword">import</tt> <tt class="py-name">size</tt><tt class="py-op">,</tt> <tt class="py-name">r_</tt><tt class="py-op">,</tt> <tt class="py-name">zeros</tt><tt class="py-op">,</tt> <tt class="py-name">empty</tt><tt class="py-op">,</tt> <tt class="py-name">eye</tt><tt class="py-op">,</tt> <tt class="py-name">diag</tt><tt class="py-op">,</tt> <tt class="py-name">pi</tt><tt class="py-op">,</tt> <tt class="py-name">tan</tt><tt class="py-op">,</tt> <tt class="py-name">arange</tt><tt class="py-op">,</tt> <tt class="py-name">real</tt><tt class="py-op">,</tt> <tt class="py-name">imag</tt><tt class="py-op">,</tt> \ </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line">                                <tt class="py-name">sin</tt><tt class="py-op">,</tt> <tt class="py-name">cos</tt><tt class="py-op">,</tt> <tt class="py-name">mod</tt><tt class="py-op">,</tt> <tt class="py-name">ndarray</tt><tt class="py-op">,</tt> <tt class="py-name">mat</tt><tt class="py-op">,</tt> <tt class="py-name">newaxis</tt><tt class="py-op">,</tt> <tt class="py-name">sum</tt><tt class="py-op">,</tt> <tt class="py-name">absolute</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">fft</tt> <tt class="py-keyword">import</tt> <tt class="py-name">fft</tt><tt class="py-op">,</tt><tt class="py-name">ifft</tt><tt class="py-op">,</tt><tt class="py-name">fftshift</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"> </tt>
+<a name="ChebyshevBase"></a><div id="ChebyshevBase-def"><a name="L16"></a><tt class="py-lineno"> 16</tt> <a class="py-toggle" href="#" id="ChebyshevBase-toggle" onclick="return toggle('ChebyshevBase');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="PolyMode.difflounge.chebyshev.ChebyshevBase-class.html">ChebyshevBase</a><tt class="py-op">:</tt> </tt>
+</div><div id="ChebyshevBase-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="ChebyshevBase-expanded"><a name="ChebyshevBase.xnodes"></a><div id="ChebyshevBase.xnodes-def"><a name="L17"></a><tt class="py-lineno"> 17</tt> <a class="py-toggle" href="#" id="ChebyshevBase.xnodes-toggle" onclick="return toggle('ChebyshevBase.xnodes');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.difflounge.chebyshev.ChebyshevBase-class.html#xnodes">xnodes</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ChebyshevBase.xnodes-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="ChebyshevBase.xnodes-expanded"><a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line">                <tt class="py-name">indices</tt> <tt class="py-op">=</tt> <tt class="py-name">arange</tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">N</tt><tt class="py-op">)</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line">                <tt id="link-0" class="py-name" targets="Variable PolyMode.difflounge.test.x=PolyMode.difflounge.test-module.html#x,Variable PolyMode.difflounge.test_fd.x=PolyMode.difflounge.test_fd-module.html#x,Variable PolyMode.mathlink.ublas_block_lu.test_block_lu.x=PolyMode.mathlink.ublas_block_lu.test_block_lu-module.html#x"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-0', 'x', 'link-0');">x</a></tt> <tt class="py-op">=</tt> <tt class="py-name">cos</tt><tt class="py-op">(</tt><tt class="py-name">pi</tt><tt class="py-op">*</tt><tt class="py-name">indices</tt><tt class="py-op">/</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">N</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Variable PolyMode.Material.BK7.L=PolyMode.Material.BK7-class.html#L,Variable PolyMode.Material.Germania.L=PolyMode.Material.Germania-class.html#L,Variable PolyMode.Material.Sapphire.L=PolyMode.Material.Sapphire-class.html#L,Variable PolyMode.Material.SiO2Fl.L=PolyMode.Material.SiO2Fl-class.html#L,Variable PolyMode.Material.SiO2GeO2.L=PolyMode.Material.SiO2GeO2-class.html#L,Variable PolyMode.Material.Silica.L=PolyMode.Material.Silica-class.html#L"><a title="PolyMode.Material.BK7.L
+PolyMode.Material.Germania.L
+PolyMode.Material.Sapphire.L
+PolyMode.Material.SiO2Fl.L
+PolyMode.Material.SiO2GeO2.L
+PolyMode.Material.Silica.L" class="py-name" href="#" onclick="return doclink('link-1', 'L', 'link-1');">L</a></tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt id="link-2" class="py-name"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-2', 'x', 'link-0');">x</a></tt> </tt>
+</div><a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line">         </tt>
+<a name="ChebyshevBase.cheb_fft_d"></a><div id="ChebyshevBase.cheb_fft_d-def"><a name="L22"></a><tt class="py-lineno"> 22</tt> <a class="py-toggle" href="#" id="ChebyshevBase.cheb_fft_d-toggle" onclick="return toggle('ChebyshevBase.cheb_fft_d');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.difflounge.chebyshev.ChebyshevBase-class.html#cheb_fft_d">cheb_fft_d</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">corr_x</tt><tt class="py-op">,</tt><tt class="py-param">y</tt><tt class="py-op">,</tt><tt class="py-param">n</tt><tt class="py-op">=</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ChebyshevBase.cheb_fft_d-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="ChebyshevBase.cheb_fft_d-expanded"><a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line">                <tt class="py-name">N</tt><tt class="py-op">=</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt id="link-3" class="py-name" targets="Variable PolyMode.difflounge.test.y=PolyMode.difflounge.test-module.html#y,Variable PolyMode.difflounge.test_fd.y=PolyMode.difflounge.test_fd-module.html#y"><a title="PolyMode.difflounge.test.y
+PolyMode.difflounge.test_fd.y" class="py-name" href="#" onclick="return doclink('link-3', 'y', 'link-3');">y</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line">                <tt class="py-name">theta</tt> <tt class="py-op">=</tt> <tt class="py-name">r_</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">:</tt><tt class="py-name">N</tt><tt class="py-op">-</tt><tt class="py-number">2</tt><tt class="py-op">,</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-op">-</tt><tt class="py-name">N</tt><tt class="py-op">+</tt><tt class="py-number">1</tt><tt class="py-op">:</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line">                <tt class="py-comment">#fft of y</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line">                <tt class="py-name">yhat</tt> <tt class="py-op">=</tt> <tt class="py-name">fft</tt><tt class="py-op">(</tt><tt class="py-name">r_</tt><tt class="py-op">[</tt><tt id="link-4" class="py-name"><a title="PolyMode.difflounge.test.y
+PolyMode.difflounge.test_fd.y" class="py-name" href="#" onclick="return doclink('link-4', 'y', 'link-3');">y</a></tt><tt class="py-op">,</tt><tt class="py-name">flipud</tt><tt class="py-op">(</tt><tt id="link-5" class="py-name"><a title="PolyMode.difflounge.test.y
+PolyMode.difflounge.test_fd.y" class="py-name" href="#" onclick="return doclink('link-5', 'y', 'link-3');">y</a></tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">:</tt><tt class="py-name">N</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line">                <tt class="py-name">yp</tt> <tt class="py-op">=</tt> <tt class="py-op">-</tt><tt class="py-name">ifft</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-number">1j</tt><tt class="py-op">*</tt><tt class="py-name">theta</tt><tt class="py-op">)</tt><tt class="py-op">**</tt><tt class="py-name">n</tt> <tt class="py-op">*</tt> <tt class="py-name">yhat</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">:</tt><tt class="py-name">N</tt><tt class="py-op">]</tt><tt class="py-op">*</tt><tt class="py-name">corr_x</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line">                <tt class="py-comment">#endpoints:</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">                <tt class="py-name">yp</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">sum</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">theta</tt><tt class="py-op">**</tt><tt class="py-number">2</tt><tt class="py-op">*</tt><tt class="py-name">yhat</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">:</tt><tt class="py-name">N</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">/</tt><tt class="py-op">(</tt><tt class="py-name">N</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">+</tt><tt class="py-number">0.5</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">N</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-name">yhat</tt><tt class="py-op">[</tt><tt class="py-name">N</tt><tt class="py-op">]</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line">                <tt class="py-name">yp</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-op">-</tt><tt class="py-name">sum</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">**</tt><tt class="py-name">theta</tt><tt class="py-op">*</tt><tt class="py-name">theta</tt><tt class="py-op">**</tt><tt class="py-number">2</tt><tt class="py-op">*</tt><tt class="py-name">yhat</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">:</tt><tt class="py-name">N</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">/</tt><tt class="py-op">(</tt><tt class="py-name">N</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">+</tt><tt class="py-number">0.5</tt><tt class="py-op">*</tt><tt class="py-name">N</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">**</tt><tt class="py-op">(</tt><tt class="py-name">N</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-name">yhat</tt><tt class="py-op">[</tt><tt class="py-name">N</tt><tt class="py-op">]</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">yp</tt> <tt class="py-comment">#/self.L</tt> </tt>
+</div><a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"> </tt>
+<a name="ChebyshevBase.diff_1"></a><div id="ChebyshevBase.diff_1-def"><a name="L36"></a><tt class="py-lineno"> 36</tt> <a class="py-toggle" href="#" id="ChebyshevBase.diff_1-toggle" onclick="return toggle('ChebyshevBase.diff_1');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.difflounge.chebyshev.ChebyshevBase-class.html#diff_1">diff_1</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">x</tt><tt class="py-op">,</tt><tt class="py-param">y</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ChebyshevBase.diff_1-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="ChebyshevBase.diff_1-expanded"><a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line">                <tt class="py-name">yp</tt> <tt class="py-op">=</tt> <tt id="link-6" class="py-name" targets="Method PolyMode.difflounge.chebyshev.ChebyshevBase.cheb_fft_d()=PolyMode.difflounge.chebyshev.ChebyshevBase-class.html#cheb_fft_d"><a title="PolyMode.difflounge.chebyshev.ChebyshevBase.cheb_fft_d" class="py-name" href="#" onclick="return doclink('link-6', 'cheb_fft_d', 'link-6');">cheb_fft_d</a></tt><tt class="py-op">(</tt><tt class="py-number">1.</tt><tt class="py-op">/</tt><tt class="py-name">sqrt</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">-</tt><tt id="link-7" class="py-name"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-7', 'x', 'link-0');">x</a></tt><tt class="py-op">*</tt><tt id="link-8" class="py-name"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-8', 'x', 'link-0');">x</a></tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt id="link-9" class="py-name"><a title="PolyMode.difflounge.test.y
+PolyMode.difflounge.test_fd.y" class="py-name" href="#" onclick="return doclink('link-9', 'y', 'link-3');">y</a></tt><tt class="py-op">,</tt><tt class="py-name">n</tt><tt class="py-op">=</tt><tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">yp</tt>       <tt class="py-comment">#/self.L</tt> </tt>
+</div><a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"> </tt>
+<a name="ChebyshevBase.diff_2"></a><div id="ChebyshevBase.diff_2-def"><a name="L40"></a><tt class="py-lineno"> 40</tt> <a class="py-toggle" href="#" id="ChebyshevBase.diff_2-toggle" onclick="return toggle('ChebyshevBase.diff_2');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.difflounge.chebyshev.ChebyshevBase-class.html#diff_2">diff_2</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">x</tt><tt class="py-op">,</tt><tt class="py-param">y</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ChebyshevBase.diff_2-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="ChebyshevBase.diff_2-expanded"><a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">                <tt class="py-name">yp</tt> <tt class="py-op">=</tt> <tt class="py-op">-</tt><tt id="link-10" class="py-name"><a title="PolyMode.difflounge.chebyshev.ChebyshevBase.cheb_fft_d" class="py-name" href="#" onclick="return doclink('link-10', 'cheb_fft_d', 'link-6');">cheb_fft_d</a></tt><tt class="py-op">(</tt><tt class="py-number">1.</tt><tt class="py-op">/</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">-</tt><tt id="link-11" class="py-name"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-11', 'x', 'link-0');">x</a></tt><tt class="py-op">*</tt><tt id="link-12" class="py-name"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-12', 'x', 'link-0');">x</a></tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt id="link-13" class="py-name"><a title="PolyMode.difflounge.test.y
+PolyMode.difflounge.test_fd.y" class="py-name" href="#" onclick="return doclink('link-13', 'y', 'link-3');">y</a></tt><tt class="py-op">,</tt><tt class="py-name">n</tt><tt class="py-op">=</tt><tt class="py-number">2</tt><tt class="py-op">)</tt> \ </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line">                        <tt class="py-op">+</tt> <tt id="link-14" class="py-name"><a title="PolyMode.difflounge.chebyshev.ChebyshevBase.cheb_fft_d" class="py-name" href="#" onclick="return doclink('link-14', 'cheb_fft_d', 'link-6');">cheb_fft_d</a></tt><tt class="py-op">(</tt><tt id="link-15" class="py-name"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-15', 'x', 'link-0');">x</a></tt><tt class="py-op">/</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">-</tt><tt id="link-16" class="py-name"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-16', 'x', 'link-0');">x</a></tt><tt class="py-op">*</tt><tt id="link-17" class="py-name"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-17', 'x', 'link-0');">x</a></tt><tt class="py-op">)</tt><tt class="py-op">**</tt><tt class="py-number">1.5</tt><tt class="py-op">,</tt><tt id="link-18" class="py-name"><a title="PolyMode.difflounge.test.y
+PolyMode.difflounge.test_fd.y" class="py-name" href="#" onclick="return doclink('link-18', 'y', 'link-3');">y</a></tt><tt class="py-op">,</tt><tt class="py-name">n</tt><tt class="py-op">=</tt><tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">yp</tt>       <tt class="py-comment">#/self.L</tt> </tt>
+</div></div><a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line"> </tt>
+<a name="ChebyshevDense"></a><div id="ChebyshevDense-def"><a name="L46"></a><tt class="py-lineno"> 46</tt> <a class="py-toggle" href="#" id="ChebyshevDense-toggle" onclick="return toggle('ChebyshevDense');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="PolyMode.difflounge.chebyshev.ChebyshevDense-class.html">ChebyshevDense</a><tt class="py-op">(</tt><tt class="py-base-class">ChebyshevBase</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ChebyshevDense-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="ChebyshevDense-expanded"><a name="ChebyshevDense.__init__"></a><div id="ChebyshevDense.__init__-def"><a name="L47"></a><tt class="py-lineno"> 47</tt> <a class="py-toggle" href="#" id="ChebyshevDense.__init__-toggle" onclick="return toggle('ChebyshevDense.__init__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.difflounge.chebyshev.ChebyshevDense-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">N</tt><tt class="py-op">,</tt> <tt class="py-param">L</tt><tt class="py-op">=</tt><tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-param">dtype</tt><tt class="py-op">=</tt><tt class="py-name">float</tt><tt class="py-op">,</tt> <tt class="py-param">leftn</tt><tt class="py-op">=</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-param">rightn</tt><tt class="py-op">=</tt><tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ChebyshevDense.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="ChebyshevDense.__init__-expanded"><a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">N</tt> <tt class="py-op">=</tt> <tt class="py-name">N</tt>                      <tt class="py-comment">#Number of nodes</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name"><a title="PolyMode.Material.BK7.L
+PolyMode.Material.Germania.L
+PolyMode.Material.Sapphire.L
+PolyMode.Material.SiO2Fl.L
+PolyMode.Material.SiO2GeO2.L
+PolyMode.Material.Silica.L" class="py-name" href="#" onclick="return doclink('link-19', 'L', 'link-1');">L</a></tt> <tt class="py-op">=</tt> <tt id="link-20" class="py-name"><a title="PolyMode.Material.BK7.L
+PolyMode.Material.Germania.L
+PolyMode.Material.Sapphire.L
+PolyMode.Material.SiO2Fl.L
+PolyMode.Material.SiO2GeO2.L
+PolyMode.Material.Silica.L" class="py-name" href="#" onclick="return doclink('link-20', 'L', 'link-1');">L</a></tt>                      <tt class="py-comment">#Rescale to [-L,L]</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">dtype</tt> <tt class="py-op">=</tt> <tt class="py-name">dtype</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">leftn</tt> <tt class="py-op">=</tt> <tt class="py-name">leftn</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">rightn</tt> <tt class="py-op">=</tt> <tt class="py-name">rightn</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line"> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+</div><a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">                 </tt>
+<a name="ChebyshevDense.diff_matrix"></a><div id="ChebyshevDense.diff_matrix-def"><a name="L56"></a><tt class="py-lineno"> 56</tt> <a class="py-toggle" href="#" id="ChebyshevDense.diff_matrix-toggle" onclick="return toggle('ChebyshevDense.diff_matrix');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.difflounge.chebyshev.ChebyshevDense-class.html#diff_matrix">diff_matrix</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">dn</tt><tt class="py-op">=</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ChebyshevDense.diff_matrix-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="ChebyshevDense.diff_matrix-expanded"><a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">.</tt><tt class="py-name">has_key</tt><tt class="py-op">(</tt><tt class="py-string">'N'</tt><tt class="py-op">)</tt> <tt class="py-keyword">or</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">N</tt> <tt class="py-op">&lt;&gt;</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-string">'N'</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-string">'N'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">N</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-string">'maxdn'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-string">'maxdn'</tt><tt class="py-op">]</tt> <tt class="py-op">&lt;</tt> <tt class="py-name">dn</tt><tt class="py-op">:</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-21" class="py-name" targets="Method PolyMode.difflounge.chebyshev.ChebyshevDense.__construct__()=PolyMode.difflounge.chebyshev.ChebyshevDense-class.html#__construct__"><a title="PolyMode.difflounge.chebyshev.ChebyshevDense.__construct__" class="py-name" href="#" onclick="return doclink('link-21', '__construct__', 'link-21');">__construct__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">N</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-string">'maxdn'</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">dn</tt><tt class="py-op">)</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-string">'maxdn'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">dn</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-name">dn</tt><tt class="py-op">]</tt><tt class="py-op">/</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name"><a title="PolyMode.Material.BK7.L
+PolyMode.Material.Germania.L
+PolyMode.Material.Sapphire.L
+PolyMode.Material.SiO2Fl.L
+PolyMode.Material.SiO2GeO2.L
+PolyMode.Material.Silica.L" class="py-name" href="#" onclick="return doclink('link-22', 'L', 'link-1');">L</a></tt> </tt>
+</div><a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line"> </tt>
+<a name="ChebyshevDense.__construct__"></a><div id="ChebyshevDense.__construct__-def"><a name="L67"></a><tt class="py-lineno"> 67</tt> <a class="py-toggle" href="#" id="ChebyshevDense.__construct__-toggle" onclick="return toggle('ChebyshevDense.__construct__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.difflounge.chebyshev.ChebyshevDense-class.html#__construct__">__construct__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">N</tt><tt class="py-op">,</tt> <tt class="py-param">dn_from</tt><tt class="py-op">,</tt> <tt class="py-param">dn_to</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ChebyshevDense.__construct__-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="ChebyshevDense.__construct__-expanded"><a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">                <tt class="py-name">indices</tt> <tt class="py-op">=</tt> <tt class="py-name">arange</tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-name">N</tt><tt class="py-op">)</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">                <tt class="py-name">theta</tt> <tt class="py-op">=</tt> <tt class="py-name">pi</tt><tt class="py-op">*</tt><tt class="py-name">indices</tt><tt class="py-op">/</tt><tt class="py-op">(</tt><tt class="py-name">N</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">                 </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">                <tt class="py-comment">#xi-xj calculated with trig identity</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">                <tt class="py-name">Dx</tt> <tt class="py-op">=</tt> <tt class="py-number">2</tt><tt class="py-op">*</tt><tt class="py-name">sin</tt><tt class="py-op">(</tt><tt class="py-number">0.5</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">theta</tt><tt class="py-op">+</tt><tt class="py-name">theta</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-op">,</tt><tt class="py-name">newaxis</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-op">*</tt> <tt class="py-name">sin</tt><tt class="py-op">(</tt><tt class="py-number">0.5</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">theta</tt><tt class="py-op">-</tt><tt class="py-name">theta</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-op">,</tt><tt class="py-name">newaxis</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">                <tt class="py-name">Dx</tt><tt class="py-op">[</tt><tt class="py-name">indices</tt><tt class="py-op">,</tt> <tt class="py-name">indices</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">                <tt class="py-name">IDx</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt><tt class="py-op">/</tt><tt class="py-name">Dx</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">                <tt class="py-name">IDx</tt><tt class="py-op">[</tt><tt class="py-name">indices</tt><tt class="py-op">,</tt> <tt class="py-name">indices</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">                 </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">                <tt class="py-comment">#Off-diagonal coefficient cij = (-1)**(i+j)</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">                <tt class="py-comment">#i=0 or i=N-1 gives cij = 2*(-1)**(i+j)</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">                <tt id="link-23" class="py-name" targets="Variable PolyMode.mathlink.physcon.c=PolyMode.mathlink.physcon-module.html#c"><a title="PolyMode.mathlink.physcon.c" class="py-name" href="#" onclick="return doclink('link-23', 'c', 'link-23');">c</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-op">-</tt><tt class="py-number">1.</tt><tt class="py-op">)</tt><tt class="py-op">**</tt><tt class="py-name">indices</tt><tt class="py-op">;</tt> <tt id="link-24" class="py-name"><a title="PolyMode.mathlink.physcon.c" class="py-name" href="#" onclick="return doclink('link-24', 'c', 'link-23');">c</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">*=</tt><tt class="py-number">2</tt><tt class="py-op">;</tt> <tt id="link-25" class="py-name"><a title="PolyMode.mathlink.physcon.c" class="py-name" href="#" onclick="return doclink('link-25', 'c', 'link-23');">c</a></tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">*=</tt><tt class="py-number">2</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line"> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">                <tt class="py-comment">#Storage</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">dn_from</tt><tt class="py-op">==</tt><tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">eye</tt><tt class="py-op">(</tt><tt class="py-name">N</tt><tt class="py-op">)</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">                 </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt class="py-name">ii</tt> <tt class="py-keyword">in</tt> <tt class="py-name">xrange</tt><tt class="py-op">(</tt><tt class="py-name">dn_from</tt><tt class="py-op">,</tt> <tt class="py-name">dn_to</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">                        <tt id="link-26" class="py-name" targets="Variable PolyMode.Material.SiO2Fl.D=PolyMode.Material.SiO2Fl-class.html#D,Variable PolyMode.Material.SiO2GeO2.D=PolyMode.Material.SiO2GeO2-class.html#D"><a title="PolyMode.Material.SiO2Fl.D
+PolyMode.Material.SiO2GeO2.D" class="py-name" href="#" onclick="return doclink('link-26', 'D', 'link-26');">D</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-name">ii</tt><tt class="py-op">]</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line"> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">                        <tt class="py-comment">#Off-diagonal matrix</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">                        <tt class="py-name">Dnew</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">ii</tt><tt class="py-op">+</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt id="link-27" class="py-name"><a title="PolyMode.mathlink.physcon.c" class="py-name" href="#" onclick="return doclink('link-27', 'c', 'link-23');">c</a></tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-op">,</tt><tt class="py-name">newaxis</tt><tt class="py-op">]</tt><tt class="py-op">*</tt><tt id="link-28" class="py-name"><a title="PolyMode.Material.SiO2Fl.D
+PolyMode.Material.SiO2GeO2.D" class="py-name" href="#" onclick="return doclink('link-28', 'D', 'link-26');">D</a></tt><tt class="py-op">.</tt><tt class="py-name">diagonal</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-op">,</tt><tt class="py-name">newaxis</tt><tt class="py-op">]</tt><tt class="py-op">/</tt><tt id="link-29" class="py-name"><a title="PolyMode.mathlink.physcon.c" class="py-name" href="#" onclick="return doclink('link-29', 'c', 'link-23');">c</a></tt> <tt class="py-op">-</tt> <tt id="link-30" class="py-name"><a title="PolyMode.Material.SiO2Fl.D
+PolyMode.Material.SiO2GeO2.D" class="py-name" href="#" onclick="return doclink('link-30', 'D', 'link-26');">D</a></tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-name">IDx</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line"> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">                        <tt class="py-comment">#Correct diagonal</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">                        <tt class="py-name">Dnew</tt><tt class="py-op">[</tt><tt class="py-name">indices</tt><tt class="py-op">,</tt> <tt class="py-name">indices</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-op">-</tt><tt class="py-name">sum</tt><tt class="py-op">(</tt><tt class="py-name">Dnew</tt><tt class="py-op">,</tt> <tt class="py-name">axis</tt><tt class="py-op">=</tt><tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">                         </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">                        <tt class="py-name">Dnew</tt><tt class="py-op">[</tt><tt class="py-name">absolute</tt><tt class="py-op">(</tt><tt class="py-name">Dnew</tt><tt class="py-op">)</tt><tt class="py-op">&lt;</tt><tt class="py-number">1e-12</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">                         </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-name">ii</tt><tt class="py-op">+</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">Dnew</tt> </tt>
+</div></div><a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line"> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">"__main__"</tt><tt class="py-op">:</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">        <tt class="py-keyword">import</tt> <tt id="link-31" class="py-name" targets="Module PolyMode.mathlink.timer=PolyMode.mathlink.timer-module.html,Class PolyMode.mathlink.timer.timer=PolyMode.mathlink.timer.timer-class.html"><a title="PolyMode.mathlink.timer
+PolyMode.mathlink.timer.timer" class="py-name" href="#" onclick="return doclink('link-31', 'timer', 'link-31');">timer</a></tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line"> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">        <tt class="py-comment">## Test and time!</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">        <tt id="link-32" class="py-name" targets="Variable PolyMode.difflounge.test.tick=PolyMode.difflounge.test-module.html#tick,Variable PolyMode.difflounge.test_fd.tick=PolyMode.difflounge.test_fd-module.html#tick"><a title="PolyMode.difflounge.test.tick
+PolyMode.difflounge.test_fd.tick" class="py-name" href="#" onclick="return doclink('link-32', 'tick', 'link-32');">tick</a></tt> <tt class="py-op">=</tt> <tt id="link-33" class="py-name"><a title="PolyMode.mathlink.timer
+PolyMode.mathlink.timer.timer" class="py-name" href="#" onclick="return doclink('link-33', 'timer', 'link-31');">timer</a></tt><tt class="py-op">.</tt><tt id="link-34" class="py-name"><a title="PolyMode.mathlink.timer
+PolyMode.mathlink.timer.timer" class="py-name" href="#" onclick="return doclink('link-34', 'timer', 'link-31');">timer</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line"> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">        <tt class="py-name">N</tt><tt class="py-op">=</tt><tt class="py-number">500</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">        <tt class="py-name">cd</tt><tt class="py-op">=</tt><tt id="link-35" class="py-name" targets="Class PolyMode.difflounge.chebyshev.ChebyshevDense=PolyMode.difflounge.chebyshev.ChebyshevDense-class.html"><a title="PolyMode.difflounge.chebyshev.ChebyshevDense" class="py-name" href="#" onclick="return doclink('link-35', 'ChebyshevDense', 'link-35');">ChebyshevDense</a></tt><tt class="py-op">(</tt><tt class="py-name">N</tt><tt class="py-op">)</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line"> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">        <tt id="link-36" class="py-name"><a title="PolyMode.difflounge.test.tick
+PolyMode.difflounge.test_fd.tick" class="py-name" href="#" onclick="return doclink('link-36', 'tick', 'link-32');">tick</a></tt><tt class="py-op">.</tt><tt id="link-37" class="py-name" targets="Method PolyMode.mathlink.timer.timer.start()=PolyMode.mathlink.timer.timer-class.html#start"><a title="PolyMode.mathlink.timer.timer.start" class="py-name" href="#" onclick="return doclink('link-37', 'start', 'link-37');">start</a></tt><tt class="py-op">(</tt><tt class="py-string">"New Method"</tt><tt class="py-op">)</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">        <tt class="py-name">cd</tt><tt class="py-op">.</tt><tt id="link-38" class="py-name" targets="Method PolyMode.difflounge.chebyshev.ChebyshevDense.diff_matrix()=PolyMode.difflounge.chebyshev.ChebyshevDense-class.html#diff_matrix,Method PolyMode.difflounge.fourier.FourierDense.diff_matrix()=PolyMode.difflounge.fourier.FourierDense-class.html#diff_matrix"><a title="PolyMode.difflounge.chebyshev.ChebyshevDense.diff_matrix
+PolyMode.difflounge.fourier.FourierDense.diff_matrix" class="py-name" href="#" onclick="return doclink('link-38', 'diff_matrix', 'link-38');">diff_matrix</a></tt><tt class="py-op">(</tt><tt class="py-number">5</tt><tt class="py-op">)</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">        <tt id="link-39" class="py-name"><a title="PolyMode.difflounge.test.tick
+PolyMode.difflounge.test_fd.tick" class="py-name" href="#" onclick="return doclink('link-39', 'tick', 'link-32');">tick</a></tt><tt class="py-op">.</tt><tt id="link-40" class="py-name" targets="Method PolyMode.mathlink.timer.timer.stop()=PolyMode.mathlink.timer.timer-class.html#stop"><a title="PolyMode.mathlink.timer.timer.stop" class="py-name" href="#" onclick="return doclink('link-40', 'stop', 'link-40');">stop</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line"> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">        <tt id="link-41" class="py-name"><a title="PolyMode.difflounge.test.tick
+PolyMode.difflounge.test_fd.tick" class="py-name" href="#" onclick="return doclink('link-41', 'tick', 'link-32');">tick</a></tt><tt class="py-op">.</tt><tt class="py-name">print_list</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1
+    on Mon Sep 14 10:29:19 2009
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

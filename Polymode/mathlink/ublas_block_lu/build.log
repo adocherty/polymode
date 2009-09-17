@@ -1,0 +1,14 @@
+Compiling for LINUX 
+
+Compiling for host traona 
+Python Location: /home/andrewd/usr/include/python2.6 
+Using Boost includes: /home/andrewd/usr/include/boost-1_39/ Using Boost includes: . 
+Using Boost includes: /usr/include 
+Using Numpy includes: /home/andrewd/usr/lib/python2.6/site-packages/numpy/core/include 
+
+
+...patience...
+...found 1034 target(s)...
+...updating 3 target(s)...
+C++ ublocklu.o 
+...interrupted

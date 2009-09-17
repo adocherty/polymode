@@ -1,0 +1,1957 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>numpy.core.defmatrix.matrix</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        numpy ::
+        core ::
+        defmatrix ::
+        matrix ::
+        Class&nbsp;matrix
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="numpy.core.defmatrix.matrix-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== TYPE DESCRIPTION ==================== -->
+<h1 class="epydoc">type matrix</h1><p class="nomargin-top"></p>
+<pre class="base-tree">
+object --+    
+         |    
+   <a href="numpy.ndarray-class.html">ndarray</a> --+
+             |
+            <strong class="uidshort">matrix</strong>
+</pre>
+
+<hr />
+<pre class="literalblock">
+
+matrix(data, dtype=None, copy=True)
+
+Returns a matrix from an array-like object, or from a string
+of data.  A matrix is a specialized 2-d array that retains
+its 2-d nature through operations.  It has certain special
+operators, such as ``*`` (matrix multiplication) and
+``**`` (matrix power).
+
+Parameters
+----------
+data : array_like or string
+   If data is a string, the string is interpreted as a matrix
+   with commas or spaces separating columns, and semicolons
+   separating rows.
+dtype : data-type
+   Data-type of the output matrix.
+copy : bool
+   If data is already an ndarray, then this flag determines whether
+   the data is copied, or whether a view is constructed.
+
+See Also
+--------
+array
+
+Examples
+--------
+&gt;&gt;&gt; a = np.matrix('1 2; 3 4')
+&gt;&gt;&gt; print a
+[[1 2]
+ [3 4]]
+
+&gt;&gt;&gt; np.matrix([[1, 2], [3, 4]])
+matrix([[1, 2],
+        [3, 4]])
+
+</pre>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#__array_finalize__" class="summary-sig-name">__array_finalize__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">obj</span>)</span><br />
+      None.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#__getitem__" class="summary-sig-name">__getitem__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">index</span>)</span><br />
+      x[y]</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#__imul__" class="summary-sig-name">__imul__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">other</span>)</span><br />
+      x*y</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#__ipow__" class="summary-sig-name">__ipow__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">other</span>)</span><br />
+      x**y</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#__mul__" class="summary-sig-name">__mul__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">other</span>)</span><br />
+      x*y</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#__pow__" class="summary-sig-name">__pow__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">other</span>)</span><br />
+      pow(x, y[, z])</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#__repr__" class="summary-sig-name">__repr__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      repr(x)</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#__rmul__" class="summary-sig-name">__rmul__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">other</span>)</span><br />
+      y*x</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#__rpow__" class="summary-sig-name">__rpow__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">other</span>)</span><br />
+      pow(x, y[, z])</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      str(x)</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_align"></a><span class="summary-sig-name">_align</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">axis</span>)</span><br />
+      A convenience function for operations that need to preserve axis 
+      orientation.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#all" class="summary-sig-name">all</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">axis</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">out</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Returns True if all elements evaluate to True.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#any" class="summary-sig-name">any</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">axis</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">out</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Test whether any array element along a given axis evaluates to True.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#argmax" class="summary-sig-name">argmax</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">axis</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">out</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Return indices of the maximum values along the given axis of `a`.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#argmin" class="summary-sig-name">argmin</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">axis</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">out</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Return indices of the minimum values along the given axis of `a`.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="getA"></a><span class="summary-sig-name">getA</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="getA1"></a><span class="summary-sig-name">getA1</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="getH"></a><span class="summary-sig-name">getH</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="getI"></a><span class="summary-sig-name">getI</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#getT" class="summary-sig-name">getT</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      m.T</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#max" class="summary-sig-name">max</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">axis</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">out</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Return the maximum along a given axis.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#mean" class="summary-sig-name">mean</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">axis</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">dtype</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">out</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Compute the mean along the specified axis.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#min" class="summary-sig-name">min</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">axis</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">out</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Return the minimum along a given axis.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#prod" class="summary-sig-name">prod</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">axis</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">dtype</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">out</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Return the product of the array elements over the given axis</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#ptp" class="summary-sig-name">ptp</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">axis</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">out</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Peak to peak (maximum - minimum) value along a given axis.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#std" class="summary-sig-name">std</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">axis</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">dtype</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">out</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">ddof</span>=<span class="summary-sig-default">0</span>)</span><br />
+      Compute the standard deviation along the specified axis.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#sum" class="summary-sig-name">sum</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">axis</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">dtype</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">out</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Sum the matrix over the given axis.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#tolist" class="summary-sig-name">tolist</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Return the array as a possibly nested list.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#var" class="summary-sig-name">var</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">axis</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">dtype</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">out</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">ddof</span>=<span class="summary-sig-default">0</span>)</span><br />
+      Compute the variance along the specified axis.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="numpy.ndarray-class.html">ndarray</a></code></b>:
+      <code><a href="numpy.ndarray-class.html#__abs__">__abs__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__add__">__add__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__and__">__and__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__array__">__array__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__array_prepare__">__array_prepare__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__array_wrap__">__array_wrap__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__contains__">__contains__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__copy__">__copy__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__deepcopy__">__deepcopy__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__delitem__">__delitem__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__delslice__">__delslice__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__div__">__div__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__divmod__">__divmod__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__eq__">__eq__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__float__">__float__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__floordiv__">__floordiv__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__ge__">__ge__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__getslice__">__getslice__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__gt__">__gt__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__hex__">__hex__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__iadd__">__iadd__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__iand__">__iand__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__idiv__">__idiv__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__ifloordiv__">__ifloordiv__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__ilshift__">__ilshift__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__imod__">__imod__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__index__">__index__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__int__">__int__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__invert__">__invert__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__ior__">__ior__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__irshift__">__irshift__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__isub__">__isub__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__iter__">__iter__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__itruediv__">__itruediv__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__ixor__">__ixor__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__le__">__le__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__len__">__len__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__long__">__long__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__lshift__">__lshift__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__lt__">__lt__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__mod__">__mod__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__ne__">__ne__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__neg__">__neg__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__nonzero__">__nonzero__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__oct__">__oct__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__or__">__or__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__pos__">__pos__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__radd__">__radd__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rand__">__rand__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rdiv__">__rdiv__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rdivmod__">__rdivmod__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__reduce__">__reduce__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rfloordiv__">__rfloordiv__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rlshift__">__rlshift__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rmod__">__rmod__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__ror__">__ror__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rrshift__">__rrshift__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rshift__">__rshift__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rsub__">__rsub__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rtruediv__">__rtruediv__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__rxor__">__rxor__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__setitem__">__setitem__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__setslice__">__setslice__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__setstate__">__setstate__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__sub__">__sub__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__truediv__">__truediv__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__xor__">__xor__</a></code>,
+      <code><a href="numpy.ndarray-class.html#argsort">argsort</a></code>,
+      <code><a href="numpy.ndarray-class.html#astype">astype</a></code>,
+      <code><a href="numpy.ndarray-class.html#byteswap">byteswap</a></code>,
+      <code><a href="numpy.ndarray-class.html#choose">choose</a></code>,
+      <code><a href="numpy.ndarray-class.html#clip">clip</a></code>,
+      <code><a href="numpy.ndarray-class.html#compress">compress</a></code>,
+      <code><a href="numpy.ndarray-class.html#conj">conj</a></code>,
+      <code><a href="numpy.ndarray-class.html#conjugate">conjugate</a></code>,
+      <code><a href="numpy.ndarray-class.html#copy">copy</a></code>,
+      <code><a href="numpy.ndarray-class.html#cumprod">cumprod</a></code>,
+      <code><a href="numpy.ndarray-class.html#cumsum">cumsum</a></code>,
+      <code><a href="numpy.ndarray-class.html#diagonal">diagonal</a></code>,
+      <code><a href="numpy.ndarray-class.html#dump">dump</a></code>,
+      <code><a href="numpy.ndarray-class.html#dumps">dumps</a></code>,
+      <code><a href="numpy.ndarray-class.html#fill">fill</a></code>,
+      <code><a href="numpy.ndarray-class.html#flatten">flatten</a></code>,
+      <code><a href="numpy.ndarray-class.html#getfield">getfield</a></code>,
+      <code><a href="numpy.ndarray-class.html#item">item</a></code>,
+      <code><a href="numpy.ndarray-class.html#itemset">itemset</a></code>,
+      <code><a href="numpy.ndarray-class.html#newbyteorder">newbyteorder</a></code>,
+      <code><a href="numpy.ndarray-class.html#nonzero">nonzero</a></code>,
+      <code><a href="numpy.ndarray-class.html#put">put</a></code>,
+      <code><a href="numpy.ndarray-class.html#ravel">ravel</a></code>,
+      <code><a href="numpy.ndarray-class.html#repeat">repeat</a></code>,
+      <code><a href="numpy.ndarray-class.html#reshape">reshape</a></code>,
+      <code><a href="numpy.ndarray-class.html#resize">resize</a></code>,
+      <code><a href="numpy.ndarray-class.html#round">round</a></code>,
+      <code><a href="numpy.ndarray-class.html#searchsorted">searchsorted</a></code>,
+      <code><a href="numpy.ndarray-class.html#setfield">setfield</a></code>,
+      <code><a href="numpy.ndarray-class.html#setflags">setflags</a></code>,
+      <code><a href="numpy.ndarray-class.html#sort">sort</a></code>,
+      <code><a href="numpy.ndarray-class.html#squeeze">squeeze</a></code>,
+      <code><a href="numpy.ndarray-class.html#swapaxes">swapaxes</a></code>,
+      <code><a href="numpy.ndarray-class.html#take">take</a></code>,
+      <code><a href="numpy.ndarray-class.html#tofile">tofile</a></code>,
+      <code><a href="numpy.ndarray-class.html#tostring">tostring</a></code>,
+      <code><a href="numpy.ndarray-class.html#trace">trace</a></code>,
+      <code><a href="numpy.ndarray-class.html#transpose">transpose</a></code>,
+      <code><a href="numpy.ndarray-class.html#view">view</a></code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== STATIC METHODS ==================== -->
+<a name="section-StaticMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Static Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-StaticMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">a new object with type S, a subtype of T</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="numpy.core.defmatrix.matrix-class.html#__new__" class="summary-sig-name">__new__</a>(<span class="summary-sig-arg">subtype</span>,
+        <span class="summary-sig-arg">data</span>,
+        <span class="summary-sig-arg">dtype</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">copy</span>=<span class="summary-sig-default">True</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS VARIABLES ==================== -->
+<a name="section-ClassVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Class Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-ClassVariables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__array_priority__"></a><span class="summary-name">__array_priority__</span> = <code title="10.0">10.0</code><br />
+      Array priority.
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Properties</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Properties"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="numpy.core.defmatrix.matrix-class.html#A" class="summary-name">A</a><br />
+      base array
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="numpy.core.defmatrix.matrix-class.html#A1" class="summary-name">A1</a><br />
+      1-d base array
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="numpy.core.defmatrix.matrix-class.html#H" class="summary-name">H</a><br />
+      hermitian (conjugate) transpose
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="numpy.core.defmatrix.matrix-class.html#I" class="summary-name">I</a><br />
+      inverse
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="numpy.core.defmatrix.matrix-class.html#T" class="summary-name">T</a><br />
+      transpose
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="numpy.ndarray-class.html">ndarray</a></code></b>:
+      <code><a href="numpy.ndarray-class.html#__array_interface__">__array_interface__</a></code>,
+      <code><a href="numpy.ndarray-class.html#__array_struct__">__array_struct__</a></code>,
+      <code><a href="numpy.ndarray-class.html#base">base</a></code>,
+      <code><a href="numpy.ndarray-class.html#ctypes">ctypes</a></code>,
+      <code><a href="numpy.ndarray-class.html#data">data</a></code>,
+      <code><a href="numpy.ndarray-class.html#dtype">dtype</a></code>,
+      <code><a href="numpy.ndarray-class.html#flags">flags</a></code>,
+      <code><a href="numpy.ndarray-class.html#flat">flat</a></code>,
+      <code><a href="numpy.ndarray-class.html#imag">imag</a></code>,
+      <code><a href="numpy.ndarray-class.html#itemsize">itemsize</a></code>,
+      <code><a href="numpy.ndarray-class.html#nbytes">nbytes</a></code>,
+      <code><a href="numpy.ndarray-class.html#ndim">ndim</a></code>,
+      <code><a href="numpy.ndarray-class.html#real">real</a></code>,
+      <code><a href="numpy.ndarray-class.html#shape">shape</a></code>,
+      <code><a href="numpy.ndarray-class.html#size">size</a></code>,
+      <code><a href="numpy.ndarray-class.html#strides">strides</a></code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__array_finalize__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__array_finalize__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">obj</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>None.</p>
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="numpy.ndarray-class.html#__array_finalize__">__array_finalize__</a>
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__getitem__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__getitem__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">index</span>)</span>
+    <br /><em class="fname">(Indexing operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>x[y]</p>
+  <dl class="fields">
+    <dt>Overrides:
+        ndarray.__getitem__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__imul__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__imul__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">other</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>x*y</p>
+  <dl class="fields">
+    <dt>Overrides:
+        ndarray.__imul__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__ipow__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__ipow__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">other</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>x**y</p>
+  <dl class="fields">
+    <dt>Overrides:
+        ndarray.__ipow__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__mul__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__mul__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">other</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>x*y</p>
+  <dl class="fields">
+    <dt>Overrides:
+        ndarray.__mul__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__new__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__new__</span>(<span class="sig-arg">subtype</span>,
+        <span class="sig-arg">data</span>,
+        <span class="sig-arg">dtype</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">copy</span>=<span class="sig-default">True</span>)</span>
+    <br /><em class="fname">Static Method</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Returns: a new object with type S, a subtype of T</dt>
+    <dt>Overrides:
+        ndarray.__new__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__pow__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__pow__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">other</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>pow(x, y[, z])</p>
+  <dl class="fields">
+    <dt>Overrides:
+        ndarray.__pow__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__repr__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__repr__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>repr(x)</p>
+  <dl class="fields">
+    <dt>Overrides:
+        ndarray.__repr__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__rmul__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__rmul__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">other</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>y*x</p>
+  <dl class="fields">
+    <dt>Overrides:
+        ndarray.__rmul__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__rpow__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__rpow__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">other</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>pow(x, y[, z])</p>
+  <dl class="fields">
+    <dt>Overrides:
+        ndarray.__rpow__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__str__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__str__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Informal representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>str(x)</p>
+  <dl class="fields">
+    <dt>Overrides:
+        ndarray.__str__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="all"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">all</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">axis</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">out</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Returns True if all elements evaluate to True.
+
+Refer to `numpy.all` for full documentation.
+
+See Also
+--------
+numpy.all : equivalent function
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        ndarray.all
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="any"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">any</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">axis</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">out</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+
+Test whether any array element along a given axis evaluates to True.
+
+Refer to `numpy.any` for full documentation.
+
+Parameters
+----------
+axis: int, optional
+    Axis along which logical OR is performed
+out: ndarray, optional
+    Output to existing array instead of creating new one, must have
+    same shape as expected output
+
+Returns
+-------
+    any : bool, ndarray
+        Returns a single bool if `axis` is ``None``; otherwise,
+        returns `ndarray`
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        ndarray.any
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="argmax"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">argmax</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">axis</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">out</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Return indices of the maximum values along the given axis of `a`.
+
+Parameters
+----------
+axis : int, optional
+    Axis along which to operate.  By default flattened input is used.
+out : ndarray, optional
+    Alternative output array in which to place the result.  Must
+    be of the same shape and buffer length as the expected output.
+
+Returns
+-------
+index_array : ndarray
+    An array of indices or single index value, or a reference to `out`
+    if it was specified.
+
+Examples
+--------
+&gt;&gt;&gt; a = np.arange(6).reshape(2,3)
+&gt;&gt;&gt; a.argmax()
+5
+&gt;&gt;&gt; a.argmax(0)
+array([1, 1, 1])
+&gt;&gt;&gt; a.argmax(1)
+array([2, 2])
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        ndarray.argmax
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="argmin"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">argmin</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">axis</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">out</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return indices of the minimum values along the given axis of `a`.</p>
+  <p>Refer to `numpy.ndarray.argmax` for detailed documentation.</p>
+  <dl class="fields">
+    <dt>Overrides:
+        ndarray.argmin
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="getT"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">getT</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+
+m.T
+
+Returns the transpose of m.
+
+Examples
+--------
+&gt;&gt;&gt; m = np.matrix('[1, 2; 3, 4]')
+&gt;&gt;&gt; m
+matrix([[1, 2],
+        [3, 4]])
+&gt;&gt;&gt; m.T
+matrix([[1, 3],
+        [2, 4]])
+
+See Also
+--------
+transpose
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="max"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">max</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">axis</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">out</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Return the maximum along a given axis.
+
+Refer to `numpy.amax` for full documentation.
+
+See Also
+--------
+numpy.amax : equivalent function
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        ndarray.max
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="mean"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">mean</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">axis</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">dtype</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">out</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Compute the mean along the specified axis.
+
+Returns the average of the array elements.  The average is taken over
+the flattened array by default, otherwise over the specified axis.
+
+Parameters
+----------
+axis : integer
+    Axis along which the means are computed. The default is
+    to compute the standard deviation of the flattened array.
+
+dtype : type
+    Type to use in computing the means. For arrays of integer type
+    the default is float32, for arrays of float types it is the
+    same as the array type.
+
+out : ndarray
+    Alternative output array in which to place the result. It must
+    have the same shape as the expected output but the type will be
+    cast if necessary.
+
+Returns
+-------
+mean : The return type varies, see above.
+    A new array holding the result is returned unless out is
+    specified, in which case a reference to out is returned.
+
+SeeAlso
+-------
+var : variance
+std : standard deviation
+
+Notes
+-----
+The mean is the sum of the elements along the axis divided by the
+number of elements.
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        ndarray.mean
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="min"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">min</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">axis</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">out</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Return the minimum along a given axis.
+
+Refer to `numpy.amin` for full documentation.
+
+See Also
+--------
+numpy.amin : equivalent function
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        ndarray.min
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="prod"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">prod</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">axis</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">dtype</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">out</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Return the product of the array elements over the given axis
+
+Refer to `numpy.prod` for full documentation.
+
+See Also
+--------
+numpy.prod : equivalent function
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        ndarray.prod
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="ptp"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">ptp</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">axis</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">out</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Peak to peak (maximum - minimum) value along a given axis.
+
+Refer to `numpy.ptp` for full documentation.
+
+See Also
+--------
+numpy.ptp : equivalent function
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        ndarray.ptp
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="std"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">std</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">axis</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">dtype</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">out</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">ddof</span>=<span class="sig-default">0</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Compute the standard deviation along the specified axis.
+
+Returns the standard deviation of the array elements, a measure of the
+spread of a distribution. The standard deviation is computed for the
+flattened array by default, otherwise over the specified axis.
+
+Parameters
+----------
+axis : integer
+    Axis along which the standard deviation is computed. The
+    default is to compute the standard deviation of the flattened
+    array.
+dtype : type
+    Type to use in computing the standard deviation. For arrays of
+    integer type the default is float32, for arrays of float types
+    it is the same as the array type.
+out : ndarray
+    Alternative output array in which to place the result. It must
+    have the same shape as the expected output but the type will be
+    cast if necessary.
+ddof : {0, integer}
+    Means Delta Degrees of Freedom.  The divisor used in calculations
+    is N-ddof.
+
+Returns
+-------
+standard deviation : The return type varies, see above.
+    A new array holding the result is returned unless out is
+    specified, in which case a reference to out is returned.
+
+SeeAlso
+-------
+var : variance
+mean : average
+
+Notes
+-----
+The standard deviation is the square root of the
+average of the squared deviations from the mean, i.e. var =
+sqrt(mean(abs(x - x.mean())**2)).  The computed standard
+deviation is computed by dividing by the number of elements,
+N-ddof. The option ddof defaults to zero, that is, a biased
+estimate. Note that for complex numbers std takes the absolute
+value before squaring, so that the result is always real
+and nonnegative.
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        ndarray.std
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="sum"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">sum</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">axis</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">dtype</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">out</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Sum the matrix over the given axis.  If the axis is None, sum over all
+  dimensions.  This preserves the orientation of the result as a row or 
+  column.</p>
+  <dl class="fields">
+    <dt>Overrides:
+        ndarray.sum
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="tolist"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">tolist</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Return the array as a possibly nested list.
+
+Return a copy of the array data as a (nested) Python list.
+Data items are converted to the nearest compatible Python type.
+
+Parameters
+----------
+none
+
+Returns
+-------
+y : list
+    The possibly nested list of array elements.
+
+Notes
+-----
+The array may be recreated, ``a = np.array(a.tolist())``.
+
+Examples
+--------
+&gt;&gt;&gt; a = np.array([1, 2])
+&gt;&gt;&gt; a.tolist()
+[1, 2]
+&gt;&gt;&gt; a = np.array([[1, 2], [3, 4]])
+&gt;&gt;&gt; list(a)
+[array([1, 2]), array([3, 4])]
+&gt;&gt;&gt; a.tolist()
+[[1, 2], [3, 4]]
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        ndarray.tolist
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="var"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">var</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">axis</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">dtype</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">out</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">ddof</span>=<span class="sig-default">0</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Compute the variance along the specified axis.
+
+Returns the variance of the array elements, a measure of the spread of
+a distribution.  The variance is computed for the flattened array by
+default, otherwise over the specified axis.
+
+Parameters
+----------
+axis : integer
+    Axis along which the variance is computed. The default is to
+    compute the variance of the flattened array.
+dtype : data-type
+    Type to use in computing the variance. For arrays of integer
+    type the default is float32, for arrays of float types it is
+    the same as the array type.
+out : ndarray
+    Alternative output array in which to place the result. It must
+    have the same shape as the expected output but the type will be
+    cast if necessary.
+ddof : {0, integer}
+    Means Delta Degrees of Freedom.  The divisor used in calculations
+    is N-ddof.
+
+Returns
+-------
+variance : depends, see above
+    A new array holding the result is returned unless out is
+    specified, in which case a reference to out is returned.
+
+SeeAlso
+-------
+std : standard deviation
+mean : average
+
+Notes
+-----
+
+The variance is the average of the squared deviations from the
+mean, i.e.  var = mean(abs(x - x.mean())**2).  The mean is
+computed by dividing by N-ddof, where N is the number of elements.
+The argument ddof defaults to zero; for an unbiased estimate
+supply ddof=1. Note that for complex numbers the absolute value
+is taken before squaring, so that the result is always real
+and nonnegative.
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        ndarray.var
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== PROPERTY DETAILS ==================== -->
+<a name="section-PropertyDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Property Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-PropertyDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="A"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">A</h3>
+  <p>base array</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">getA(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="A1"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">A1</h3>
+  <p>1-d base array</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">getA1(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="H"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">H</h3>
+  <p>hermitian (conjugate) transpose</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">getH(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="I"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">I</h3>
+  <p>inverse</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">getI(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="T"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">T</h3>
+  <p>transpose</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">getT(<span class="summary-sig-arg">self</span>)</span>
+        - m.T
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1
+    on Mon Sep 14 10:21:11 2009
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+Polymode Mode Solver for Microstructured Optical Fibers
+
+The package requires the following packages to be installed:
+numpy>=1.0.3
+scipy>=0.5.2
+matplotlib>=0.92
+
+They are available for download from www.scipy.org and matplotlib.sf.net
+
+See the wiki on the website http://polymode.googlecode.com for
+instructions on how to install this software on various platforms.
+
+This software contains software from the python NURBS library, found at
+http://runten.tripod.com/NURBS/index.html (GPL v2).
+
+Also included are refractive index data from the Freesnell software
+found at http://people.csail.mit.edu/jaffer/FreeSnell (GPL v3).
+
+Polymode is licenced under the GPL v3, see the licence information in
+the file "copying".

@@ -1,0 +1,1139 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>PolyMode.Modes.Mode</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="PolyMode-module.html">Package&nbsp;PolyMode</a> ::
+        <a href="PolyMode.Modes-module.html">Module&nbsp;Modes</a> ::
+        Class&nbsp;Mode
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class Mode</h1><p class="nomargin-top"><span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode">source&nbsp;code</a></span></p>
+<pre class="base-tree">
+object --+
+         |
+        <strong class="uidshort">Mode</strong>
+</pre>
+
+<dl><dt>Known Subclasses:</dt>
+<dd>
+      <ul class="subclass-list">
+<li><a href="PolyMode.Modes.ScalarMode-class.html">ScalarMode</a></li><li>, <a href="PolyMode.Modes.VectorMode-class.html">VectorMode</a></li>  </ul>
+</dd></dl>
+
+<hr />
+<pre class="literalblock">
+
+Base class for a mode, to construct a mode all paramters are optional
+and the mdoe information can be added later.
+
+Paramters:
+ coord: internal coordinate object
+ wl: the wavelength of the mode solution
+ m0: the mode class
+ evalue: the eigenvalue, automatically converted to beta and neff
+ wg: the waveguide used to solve. not stored, just used to extract info
+ left: the left eigenvector
+ right: the right eigenvector
+
+</pre>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.Modes.Mode-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">coord</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">wl</span>=<span class="summary-sig-default">1</span>,
+        <span class="summary-sig-arg">m0</span>=<span class="summary-sig-default">1</span>,
+        <span class="summary-sig-arg">evalue</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">wg</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">symmetry</span>=<span class="summary-sig-default">1</span>,
+        <span class="summary-sig-arg">left</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">right</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.Modes.Mode-class.html#copy" class="summary-sig-name">copy</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">link_fields</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Create new copy of mode.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.copy">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="floquet"></a><span class="summary-sig-name">floquet</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">m0</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">coord</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.floquet">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.Modes.Mode-class.html#gamma_ext" class="summary-sig-name">gamma_ext</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Calculate the mode parameter, &#611; = &#8730;[n&#8320;&#178; k&#8320;&#178; - &#946;&#178;]</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.gamma_ext">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.Modes.Mode-class.html#gamma_int" class="summary-sig-name">gamma_int</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Calculate the mode parameter, &#611; = &#8730;[n&#8320;&#178; k&#8320;&#178; - &#946;&#178;]</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.gamma_int">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.Modes.Mode-class.html#k0" class="summary-sig-name">k0</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Return the wavenumber</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.k0">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.Modes.Mode-class.html#neff" class="summary-sig-name">neff</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span><br />
+      Return the effective index of the mode</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.neff">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.Modes.Mode-class.html#beta" class="summary-sig-name">beta</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span><br />
+      Return the modal eigenvalue, &#946;</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.beta">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.Modes.Mode-class.html#loss" class="summary-sig-name">loss</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Calculate the confinement loss of the mode as loss = 2&#215;10&#8311; 
+      Im{&#946;}/ln(10) db/m</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.loss">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="is_converged"></a><span class="summary-sig-name">is_converged</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.is_converged">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="estimate_class"></a><span class="summary-sig-name">estimate_class</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">wg</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">core_size</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Guess the core mode class as either TM, TE or Hybrid</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.estimate_class">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="polarization_angle"></a><span class="summary-sig-name">polarization_angle</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">wg</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">core_size</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Approximate polarization angle of the mode (if linearly polarized)</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.polarization_angle">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="discard_fields"></a><span class="summary-sig-name">discard_fields</span>()</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.discard_fields">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="store_calculated_electric_field"></a><span class="summary-sig-name">store_calculated_electric_field</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">wg</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">force</span>=<span class="summary-sig-default">False</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.store_calculated_electric_field">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="add_extensions"></a><span class="summary-sig-name">add_extensions</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">bc_ext</span>=<span class="summary-sig-default">-3</span>,
+        <span class="summary-sig-arg">bc_int</span>=<span class="summary-sig-default">2</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.add_extensions">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="compress"></a><span class="summary-sig-name">compress</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">size</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">astype</span>=<span class="summary-sig-default">complex64</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.compress">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="normalize"></a><span class="summary-sig-name">normalize</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">wg</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">coord</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.normalize">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="poynting"></a><span class="summary-sig-name">poynting</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
+      The logitudinal component of the time averaged Poyting vector S_z = 
+      0.5 &#7825;&#8729;(e&#215;h*)</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.poynting">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="mode_power"></a><span class="summary-sig-name">mode_power</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">r</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">coord</span>=<span class="summary-sig-default">None</span>)</span><br />
+      The power in the computational region S_z = 1/2 |Aj|&#178; &#8747; (e&#215;h*)&#8729;&#7825; dA</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.mode_power">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="mode_unconjugated_integral"></a><span class="summary-sig-name">mode_unconjugated_integral</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">fourier</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">r</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">extend</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">coord</span>=<span class="summary-sig-default">None</span>)</span><br />
+      I = &#8747; (e&#215;h)&#8729;&#7825; dA</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.mode_unconjugated_integral">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="effective_area"></a><span class="summary-sig-name">effective_area</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">coord</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Nonlinear effective area of mode in um&#178; Aeff = [&#8747; |Sz|&#178; dA]&#178; / &#8747; 
+      |Sz|&#8308; dA See Agrawal pg.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.effective_area">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.Modes.Mode-class.html#numerical_aperture" class="summary-sig-name">numerical_aperture</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">coord</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Numerical aperture from the Gaussian approximation for a single moded
+      MOF.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.numerical_aperture">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="spot_size"></a><span class="summary-sig-name">spot_size</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">coord</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Caculate the Petersen II spot size calculated as spot size = [&#8747; Sz&#178; 
+      dA]&#178; / &#8747; (&#8711;Sz)&#178; dA</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.spot_size">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="phase_velocity"></a><span class="summary-sig-name">phase_velocity</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Caculate the phase velocity (m/s) of the mode</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.phase_velocity">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="group_velocity"></a><span class="summary-sig-name">group_velocity</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">wg</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">coord</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.group_velocity">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.Modes.Mode-class.html#group_index" class="summary-sig-name">group_index</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">wg</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">coord</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Caculate the group index (m/s) of the mode based on the profile See 
+      Snyder and Love pg.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.group_index">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="integral_propagation"></a><span class="summary-sig-name">integral_propagation</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">wg</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">coord</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Caculate the propagation constant beta of the mode based on the mode 
+      profile, requires the waveguide</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.integral_propagation">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="integral_propagation_lossless"></a><span class="summary-sig-name">integral_propagation_lossless</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">wg</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">coord</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Caculate the propagation constant beta of the mode based on the mode 
+      profile, requires the waveguide</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.integral_propagation_lossless">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.Modes.Mode-class.html#plot" class="summary-sig-name">plot</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">plottype</span>=<span class="summary-sig-default">'Sz'</span>,
+        <span class="summary-sig-arg">style</span>=<span class="summary-sig-default">'pcolor'</span>,
+        <span class="summary-sig-arg">part</span>=<span class="summary-sig-default">'real'</span>,
+        <span class="summary-sig-arg">cartesian</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">wg</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">Nx</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">sectors</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">rmin</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">rmax</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">cmap</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">coord</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">style1d</span>=<span class="summary-sig-default">'-'</span>,
+        <span class="summary-sig-arg">title</span>=<span class="summary-sig-default">r&quot;%(type)s, $n_{\mathrm{eff}}=%(tneff)s$&quot;</span>)</span><br />
+      Plot the mode.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.plot">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="info"></a><span class="summary-sig-name">info</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">wg</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.info">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__cmp__"></a><span class="summary-sig-name">__cmp__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">other</span>)</span><br />
+      Compare two Modes, based on eigenvalue</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.__cmp__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__mul__"></a><span class="summary-sig-name">__mul__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">other</span>)</span><br />
+      Construct numerical innerproduct as this.L dot that.R:</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.__mul__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.Modes.Mode-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.__str__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.Modes.Mode-class.html#__repr__" class="summary-sig-name">__repr__</a>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.__repr__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">coord</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">wl</span>=<span class="sig-default">1</span>,
+        <span class="sig-arg">m0</span>=<span class="sig-default">1</span>,
+        <span class="sig-arg">evalue</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">wg</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">symmetry</span>=<span class="sig-default">1</span>,
+        <span class="sig-arg">left</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">right</span>=<span class="sig-default">None</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.__init__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        object.__init__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="copy"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">copy</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">link_fields</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.copy">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+
+Create new copy of mode.
+link_vectors: share the mode information between modes
+        to save memory
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="gamma_ext"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">gamma_ext</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.gamma_ext">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Calculate the mode parameter, &#611; = &#8730;[n&#8320;&#178; k&#8320;&#178; - &#946;&#178;]</p>
+  <dl class="fields">
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@property</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="gamma_int"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">gamma_int</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.gamma_int">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Calculate the mode parameter, &#611; = &#8730;[n&#8320;&#178; k&#8320;&#178; - &#946;&#178;]</p>
+  <dl class="fields">
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@property</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="k0"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">k0</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.k0">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return the wavenumber</p>
+  <dl class="fields">
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@property</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="neff"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">neff</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">value</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.neff">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return the effective index of the mode</p>
+  <dl class="fields">
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@neff.setter</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="beta"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">beta</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">value</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.beta">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return the modal eigenvalue, &#946;</p>
+  <dl class="fields">
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@beta.setter</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="loss"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">loss</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.loss">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Calculate the confinement loss of the mode as loss = 2&#215;10&#8311; 
+  Im{&#946;}/ln(10) db/m</p>
+  <dl class="fields">
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@property</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="numerical_aperture"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">numerical_aperture</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">coord</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.numerical_aperture">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Numerical aperture from the Gaussian approximation for a single moded 
+  MOF. See&quot; Mortensen et al, &quot;Numerical Aperture of a Single Mode
+  Photonic Crystal Fiber&quot; PTL, Vol. 14, No. 8, 2002, pp 1094-1096</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="group_index"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">group_index</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">wg</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">coord</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.group_index">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Caculate the group index (m/s) of the mode based on the profile See 
+  Snyder and Love pg. 608</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="plot"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">plot</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">plottype</span>=<span class="sig-default">'Sz'</span>,
+        <span class="sig-arg">style</span>=<span class="sig-default">'pcolor'</span>,
+        <span class="sig-arg">part</span>=<span class="sig-default">'real'</span>,
+        <span class="sig-arg">cartesian</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">wg</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">Nx</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">sectors</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">rmin</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">rmax</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">cmap</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">coord</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">style1d</span>=<span class="sig-default">'-'</span>,
+        <span class="sig-arg">title</span>=<span class="sig-default">r&quot;%(type)s, $n_{\mathrm{eff}}=%(tneff)s$&quot;</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.plot">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+
+Plot the mode.
+
+Paramters:
+ plottype: 'vector', 'Sz'*, 'Hz', 'Ez, 'Hr, 'Ha', 'Er, 'Ea', 'Ex', 'Ey', 'Hx', 'Hy'
+ style: 'contour', 'pcolor'*, 'line'
+ style1d: line style for 1d plotting
+ part: one of 'real'*, 'imag', 'abs', 'phase' and optionally 'log'
+ rmax: maxiumum plot radius
+ Nx: plot sampling
+ cmap: color map (from pylab.cm)
+ wg: waveguide (for plotting Ez)
+ title: custom title for the plot
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__str__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__str__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Informal representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.__str__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        object.__str__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__repr__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__repr__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.Modes-pysrc.html#Mode.__repr__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        object.__repr__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1
+    on Mon Sep 14 10:29:14 2009
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
