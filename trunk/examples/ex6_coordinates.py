@@ -18,11 +18,11 @@ x2,y2 = c2.cartesian2d()
 
 #Plot the point distribution
 subplot(221)
-scatter(x1,y1, 2)
+scatter(x1.ravel(), y1.ravel(), 2)
 axis('tight')
 
 subplot(222)
-scatter(x2,y2, 2)
+scatter(x2.ravel(), y2.ravel(), 2)
 axis('tight')
 
 #Example function

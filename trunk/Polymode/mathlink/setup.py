@@ -17,14 +17,39 @@ if have_cython and not build_src.have_pyrex:
 	print "Numpy doesn't support Cython!"
 
 def configuration(parent_package='', top_path=None):
+    from numpy.distutils.system_info import get_info, NotFoundError
 
     config = Configuration('mathlink', parent_package, top_path)
-    config.add_library('famos',sources=[join('amos','*f'), join('amos','mach','*f')])
-    #config.add_extension('amos', sources=['amos.cpp'], depends=['amos.h'], libraries=['famos', 'g2c'])
-    config.add_extension('bessel_ratios', sources=['bessel_ratios.cpp'], depends=['bessel_function_ratios.h'], libraries=['famos', 'gfortran'])
+    
+    #Compile the amos library
+    config.add_library('famos',
+                    sources=[join('amos','*f'),
+                    join('amos','mach','*f')]
+                    )
 
-	#C++ tridiagonal block solver
-    #config.add_extension('ublocklu', sources=['ublas_block_lu/ublocklu.cpp','ublas_block_lu/numimport.cpp'], libraries=[])
+    config.add_extension('bessel_ratios',
+                    sources=['bessel_ratios.cpp'],
+                    depends=['bessel_function_ratios.h'],
+                    libraries=['famos', 'gfortran']
+                    )
+
+    #Get blas/lapack resources from numpy
+    lapack_opt = get_info('lapack_opt')
+
+    if not lapack_opt:
+        raise NotFoundError,'no lapack/blas resources found'
+
+    atlas_version = ([v[3:-3] for k,v in lapack_opt.get('define_macros',[]) \
+                      if k=='ATLAS_INFO']+[None])[0]
+
+    #C++ tridiagonal block solver
+    ublock_sources = ['ublas_block_lu/ublocklu.cpp','ublas_block_lu/numimport.cpp']
+    config.add_extension('ublocklu',
+                    sources=ublock_sources,
+                    include_dirs=['ublas_block_lu'],
+                    libraries=['atlas','lapack_atlas','boost_python-mt'],
+                    extra_info = lapack_opt
+                    )
 
     return config
 

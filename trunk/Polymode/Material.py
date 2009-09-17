@@ -134,7 +134,7 @@ class Material:
 		
 		return wl
 
-	def plot(self,wlrange=None, points=100):
+	def plot(self,wlrange=None, points=100, showdata=False):
 		'''
 		Plot the material refractive index
 		* wrange is the wavelength range
