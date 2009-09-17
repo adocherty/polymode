@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>PolyMode.mathlink.eigensolver</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="PolyMode-module.html">Package&nbsp;PolyMode</a> ::
+        <a href="PolyMode.mathlink-module.html">Package&nbsp;mathlink</a> ::
+        Module&nbsp;eigensolver
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module eigensolver</h1><p class="nomargin-top"><span class="codelink"><a href="PolyMode.mathlink.eigensolver-pysrc.html">source&nbsp;code</a></span></p>
+<p>&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480; Suite for solution of the linear eigenproblem  &#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480; A
+  python/numpy implementation of the Implicitly Restarted Arnoldi Method 
+  (IRAM)</p>
+  <p>Still to do: locking/purging of converged eigenvectors</p>
+  <p>&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;</p>
+
+<!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.mathlink.eigensolver.ArnoldiDense-class.html" class="summary-name">ArnoldiDense</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.mathlink.eigensolver.ArnoldiShiftInvert-class.html" class="summary-name">ArnoldiShiftInvert</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.mathlink.eigensolver.ArnoldiShiftInvertDense-class.html" class="summary-name">ArnoldiShiftInvertDense</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.mathlink.eigensolver.ArnoldiShiftInvertGmres-class.html" class="summary-name">ArnoldiShiftInvertGmres</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.mathlink.eigensolver.EigenvalueSelector-class.html" class="summary-name">EigenvalueSelector</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.mathlink.eigensolver.ClosestAbsolute-class.html" class="summary-name">ClosestAbsolute</a><br />
+      Selector to choose eigenvalues closest to the shift (i.e.
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.mathlink.eigensolver.ClosestReal-class.html" class="summary-name">ClosestReal</a><br />
+      Selector to choose eigenvalues with real part closest from the 
+        shift (i.e.
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.mathlink.eigensolver.FarthestAbsolute-class.html" class="summary-name">FarthestAbsolute</a><br />
+      Selector to choose eigenvalues farthest from the shift (i.e.
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.mathlink.eigensolver.FarthestReal-class.html" class="summary-name">FarthestReal</a><br />
+      Selector to choose eigenvalues with real part farthest from the 
+        shift (i.e.
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.mathlink.eigensolver.ClosestAbsolute-class.html" class="summary-name">LargestMagnitude</a><br />
+      Selector to choose eigenvalues closest to the shift (i.e.
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.mathlink.eigensolver.ClosestReal-class.html" class="summary-name">LargestReal</a><br />
+      Selector to choose eigenvalues with real part closest from the 
+        shift (i.e.
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.mathlink.eigensolver.FarthestAbsolute-class.html" class="summary-name">SmallestMagnitude</a><br />
+      Selector to choose eigenvalues farthest from the shift (i.e.
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.mathlink.eigensolver.FarthestReal-class.html" class="summary-name">SmallestReal</a><br />
+      Selector to choose eigenvalues with real part farthest from the 
+        shift (i.e.
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.mathlink.eigensolver.ArnoldiIR-class.html" class="summary-name">ArnoldiIR</a><br />
+      Implicitly restarted Arnoldi algorithm
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.mathlink.eigensolver.HouseholderArnoldiIR-class.html" class="summary-name">HouseholderArnoldiIR</a><br />
+      Implicitly Restarted Arnoldi Method implemented with Householder 
+        transformations
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="iprod"></a><span class="summary-sig-name">iprod</span>(<span class="summary-sig-arg">x</span>,
+        <span class="summary-sig-arg">y</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.mathlink.eigensolver-pysrc.html#iprod">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="inorm"></a><span class="summary-sig-name">inorm</span>(<span class="summary-sig-arg">x</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.mathlink.eigensolver-pysrc.html#inorm">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.mathlink.eigensolver-module.html#mgs" class="summary-sig-name">mgs</a>(<span class="summary-sig-arg">V</span>,
+        <span class="summary-sig-arg">H</span>,
+        <span class="summary-sig-arg">jj</span>)</span><br />
+      Perform single orthogonalization step using Modified Gram-Schmidt with</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.mathlink.eigensolver-pysrc.html#mgs">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.mathlink.eigensolver-module.html#djks" class="summary-sig-name">djks</a>(<span class="summary-sig-arg">V</span>,
+        <span class="summary-sig-arg">H</span>,
+        <span class="summary-sig-arg">jj</span>)</span><br />
+      Perform single orthogonalization step using Gram-Schmidt with
+Daniel, Gragg, Kaufman, and Stewart refinement
+This implementation allows for BLAS level 2 speed-up</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.mathlink.eigensolver-pysrc.html#djks">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.mathlink.eigensolver-module.html#eigs" class="summary-sig-name">eigs</a>(<span class="summary-sig-arg">A</span>,
+        <span class="summary-sig-arg">number</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">shift</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">v0</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">tol</span>=<span class="summary-sig-default">1e-10</span>,
+        <span class="summary-sig-arg">maxiter</span>=<span class="summary-sig-default">100</span>,
+        <span class="summary-sig-arg">selector</span>=<span class="summary-sig-default">ClosestAbsolute()</span>,
+        <span class="summary-sig-arg">transpose</span>=<span class="summary-sig-default">0</span>)</span><br />
+      Calculate a few eigenvalues of A using the IRAM A: matrix shift: use 
+      shift and invert to caclulate eigenvalues number: how many eigenpairs
+      to generate tol: tolerance for convergence transpose: solve right 
+      eigenproblem</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.mathlink.eigensolver-pysrc.html#eigs">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="eigensolver_debug"></a><span class="summary-name">eigensolver_debug</span> = <code title="False">False</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="eigensolver_deflation"></a><span class="summary-name">eigensolver_deflation</span> = <code title="True">True</code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="mgs"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">mgs</span>(<span class="sig-arg">V</span>,
+        <span class="sig-arg">H</span>,
+        <span class="sig-arg">jj</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.mathlink.eigensolver-pysrc.html#mgs">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+
+Perform single orthogonalization step using Modified Gram-Schmidt with
+
+Inputs:
+ V: Vectors
+ H: Dense storage of Hessian projection matrix
+ jj: orthogonalize jth vector against vectors 0..j-1
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="djks"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">djks</span>(<span class="sig-arg">V</span>,
+        <span class="sig-arg">H</span>,
+        <span class="sig-arg">jj</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.mathlink.eigensolver-pysrc.html#djks">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+
+Perform single orthogonalization step using Gram-Schmidt with
+Daniel, Gragg, Kaufman, and Stewart refinement
+This implementation allows for BLAS level 2 speed-up
+
+Inputs:
+ V: Vectors
+ H: Dense storage of Hessian projection matrix
+ jj: orthogonalize jth vector against vectors 0..j-1
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="eigs"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">eigs</span>(<span class="sig-arg">A</span>,
+        <span class="sig-arg">number</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">shift</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">v0</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">tol</span>=<span class="sig-default">1e-10</span>,
+        <span class="sig-arg">maxiter</span>=<span class="sig-default">100</span>,
+        <span class="sig-arg">selector</span>=<span class="sig-default">ClosestAbsolute()</span>,
+        <span class="sig-arg">transpose</span>=<span class="sig-default">0</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.mathlink.eigensolver-pysrc.html#eigs">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Calculate a few eigenvalues of A using the IRAM A: matrix shift: use 
+  shift and invert to caclulate eigenvalues number: how many eigenpairs to 
+  generate tol: tolerance for convergence transpose: solve right 
+  eigenproblem</p>
+  <p>returns: (u, v) u: eigenvalues v: eigenvectors</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1
+    on Mon Sep 14 10:29:12 2009
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

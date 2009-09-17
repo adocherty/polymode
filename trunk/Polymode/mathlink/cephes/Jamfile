@@ -1,0 +1,5 @@
+SubDir MATHLINK cephes ;
+
+Library $(LIB_DEST)/libcephes.a :
+	airy.c    hyp2f1.c  i0.c  iv.c  j1.c  jv.c  k1.c  mtherr.c  psi.c     yn.c
+	chbevl.c  hyperg.c  i1.c  j0.c  jn.c  k0.c  kn.c  polevl.c  struve.c ;

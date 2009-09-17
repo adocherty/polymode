@@ -1,0 +1,140 @@
+#summary Installing and running the Polymode software
+
+<wiki:toc max_depth="3" />
+
+= installation =
+
+== Installing on Windows ==
+
+*Polymode* requires the *Python(x,y)* scientific Python environment to be installed. It is available from
+http://www.pythonxy.com/
+
+First download the *Python(x,y)* web installer available on the  [http://pythonxy.com/dl.php?file=windows/xyweb-1.0.3.exe Python(x,y) website], execute the installer to start.
+<wiki:toc max_depth="3" />
+Select the light version and _download_. The packages will be downloaded to your computer and the installation will begin.
+
+http://polymode.googlecode.com/svn/wiki/figures/gs_selectversion.png
+
+After the installation is finished Polymode can be installed by running the Polymode installer.
+[http://code.google.com/p/polymode/downloads/list Polymode website]
+
+You now have everything you need to start.
+
+== Installing on Linux/Mac OSX ==
+
+Some prerequisites are required before Polymode can be installed. These are the python interpreter, an interactive python shell (IPython), numerical python (numpy and scipy) and the Matplotlib plotting library (matplotlib). These can be installed automatically on most linux distributions.
+
+On Ubuntu these required packages can be installed automatically with the command:
+{{{
+sudo aptitude install ipython python-matplotlib python-numpy python-scipy
+}}}
+
+If these install correctly then the Polymode package for your achitechture (32 bit or 64 bit) can be installed using the *easy_install* command:
+{{{
+easy_install [package name]
+}}}
+
+where the latest packages can be downloaded from the downloads section of the googlecode website.
+
+== Mac OS X ==
+
+Some prerequisites are required before Polymode can be installed. These are the python interpreter, an interactive python shell (IPython), numerical python (numpy and scipy) and the Matplotlib plotting library (matplotlib). For Mac OS X the website http://trichech.us/?page_id=5 hosts an all-in one installer for all of these dependencies.
+
+If these install correctly then Polymode can be installed using the command:
+{{{
+python setup_numpy.py install
+}}}
+
+This should build and install the package for you, if the prerequisites are also installed.
+
+
+= Using Polymode =
+
+== Running Polymode in Windows ==
+The *IPython* command prompt is used to run all code.
+It's available in Python(x,y). Start this from the Windows menu:
+
+http://polymode.googlecode.com/svn/wiki/figures/gs_runpythonxy.png
+
+Both an editor SciTE and the IPython shell can be started using this command window,
+
+From the “Interactive consoles” select IPython(x,y) and click the leftmost console button, as shown. This will start the IPython shell in a new window.
+
+http://polymode.googlecode.com/svn/wiki/figures/gs_pythonxy.png
+
+You can change directories to where your code is using the “cd” command.
+
+The “tab” key can be used to auto-complete any partially completed commands. This can be helpful going through directories and running commands.
+
+A python script file can be run by using the run command, to run a file named “ex1_materials.py” just enter:
+
+{{{
+In [1]: run ex1_materials
+}}}
+
+Also any command's help can be accessed by typing the command then a “?” afterwards, for example:
+
+{{{
+In [2]: sin? 
+Type:           ufunc 
+Base Class:     <type 'numpy.ufunc'> 
+String Form:    <ufunc 'sin'> 
+Namespace:      Interactive 
+Docstring: 
+    y = sin(x) sine elementwise. 
+}}}
+
+Some other useful commands are:
+
+ls: List the files in the current directory
+pwd: Return the current working directory path. 
+edit: starts an editor and allows you to edit the file. After closing the window the file will be run.
+history: Print input history with most recent last. 
+logstart: Log an interactive session to a file
+quickref: Show a quick reference sheet 
+rep: Repeat previous input. 
+store: Quickly store variables in a file
+whos: List used variables in the workspace
+bookmark: Bookmark a folder
+logon/logoff: Logs interactive commands to a file
+
+Help for all of these commands is available in IPython by typing the command then a “?” and hitting enter
+
+## Paths in Windows ##
+
+The *PATH* environment variable needs to be set correctly for *PythonXY* to run properly and find the required
+programs. This is automatically set up when *PythonXY* is installed, however if another user wants to use the
+same installation then each user needs to set up the environment variables
+
+In particular the *PATH* variable should include these directories:
+{{{
+C:\Python25;C:\Python25\DLLs;C:\Python25\Scripts;C:\Python25\Lib\site-packages\PyQt4;C:\PythonXY\console;C:\PythonXY\SciTE-1.77.1
+}}}
+
+== Running Polymode in Linux and Mac OS X ==
+
+Polymode is run from within a Python file, the preferred way is usually to run these scripts from within a
+*IPython* terminal session. On Linux enter the following command at a terminal prompt:
+
+{{{
+ipython -pylab
+}}}
+
+A python script file can be run by using the run command, to run a file named “ex1_materials.py” just enter:
+
+{{{
+In [1]: run ex1_materials
+}}}
+
+Also any command's help can be accessed by typing the command then a “?” afterwards, for example:
+
+{{{
+In [2]: sin? 
+Type:           ufunc 
+Base Class:     <type 'numpy.ufunc'> 
+String Form:    <ufunc 'sin'> 
+Namespace:      Interactive 
+Docstring: 
+    y = sin(x) sine elementwise. 
+}}}
+

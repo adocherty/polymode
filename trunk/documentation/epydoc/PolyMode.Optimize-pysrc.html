@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>PolyMode.Optimize</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="PolyMode-module.html">Package&nbsp;PolyMode</a> ::
+        Module&nbsp;Optimize
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="PolyMode.Optimize-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="PolyMode.Optimize-module.html" onclick="show_private();">Module PolyMode.Optimize</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">numpy</tt> <tt class="py-keyword">import</tt> <tt class="py-op">*</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-op">.</tt><tt id="link-0" class="py-name" targets="Module PolyMode.Solver=PolyMode.Solver-module.html"><a title="PolyMode.Solver" class="py-name" href="#" onclick="return doclink('link-0', 'Solver', 'link-0');">Solver</a></tt> <tt class="py-keyword">import</tt> <tt class="py-op">*</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"> </tt>
+<a name="Optimize"></a><div id="Optimize-def"><a name="L5"></a><tt class="py-lineno"> 5</tt> <a class="py-toggle" href="#" id="Optimize-toggle" onclick="return toggle('Optimize');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="PolyMode.Optimize.Optimize-class.html">Optimize</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Optimize-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="Optimize-expanded"><a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line">        <tt class="py-docstring">'''</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-docstring">        Optimize a given structure for a property that is evalutated by the evaluate function</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-docstring">        </tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-docstring">        f = evaluate(solver)</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-docstring">        df/dp = evaluate.gradient(solver, modes, mode_gradients)</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-docstring">        returns a measure of the modes</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-docstring">        </tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-docstring">        adjust(solver, p)</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-docstring">        object given a vector of paramters adjusts the structure to be evaluated</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt class="py-docstring">        </tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt class="py-docstring">        solver</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt class="py-docstring">        solver to use</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"><tt class="py-docstring">        '''</tt> </tt>
+<a name="Optimize.__init__"></a><div id="Optimize.__init__-def"><a name="L20"></a><tt class="py-lineno">20</tt> <a class="py-toggle" href="#" id="Optimize.__init__-toggle" onclick="return toggle('Optimize.__init__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.Optimize.Optimize-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">solver</tt><tt class="py-op">,</tt> <tt class="py-param">adjust</tt><tt class="py-op">,</tt> <tt class="py-param">evaluate</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Optimize.__init__-collapsed" style="display:none;" pad="++" indent="++++++++++++"></div><div id="Optimize.__init__-expanded"><a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">solver</tt> <tt class="py-op">=</tt> <tt class="py-name">solver</tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">evaluate</tt> <tt class="py-op">=</tt> <tt class="py-name">evaluate</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">adjust</tt> <tt class="py-op">=</tt> <tt class="py-name">adjust</tt> </tt>
+</div><a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line"> </tt>
+<a name="Optimize.iteration"></a><div id="Optimize.iteration-def"><a name="L25"></a><tt class="py-lineno">25</tt> <a class="py-toggle" href="#" id="Optimize.iteration-toggle" onclick="return toggle('Optimize.iteration');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.Optimize.Optimize-class.html#iteration">iteration</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">p</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Optimize.iteration-collapsed" style="display:none;" pad="++" indent="++++++++++++"></div><div id="Optimize.iteration-expanded"><a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">                <tt class="py-keyword">print</tt> <tt class="py-string">"P:"</tt><tt class="py-op">,</tt><tt class="py-name">p</tt> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line">                <tt class="py-comment">#Update structure</tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">adjust</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">solver</tt><tt class="py-op">,</tt> <tt class="py-name">p</tt><tt class="py-op">)</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">                 </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line">                <tt class="py-comment">#Must setup again when wg changed - FIX!</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">solver</tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Method PolyMode.Equation.VectorWaveEquation.setup()=PolyMode.Equation.VectorWaveEquation-class.html#setup,Method PolyMode.ExternalSolvers.JCMWaveSolver.setup()=PolyMode.ExternalSolvers.JCMWaveSolver-class.html#setup,Method PolyMode.LayeredSolver.Layer.setup()=PolyMode.LayeredSolver.Layer-class.html#setup,Method PolyMode.LayeredSolver.LayeredSolver.setup()=PolyMode.LayeredSolver.LayeredSolver-class.html#setup,Method PolyMode.Solver.Solve.setup()=PolyMode.Solver.Solve-class.html#setup,Method PolyMode.TriDiagonalSolver.FixedPointSolver.setup()=PolyMode.TriDiagonalSolver.FixedPointSolver-class.html#setup,Method PolyMode.TriDiagonalSolver.TriDiBlockSolve.setup()=PolyMode.TriDiagonalSolver.TriDiBlockSolve-class.html#setup,Method PolyMode.mathlink.eigensolver.ArnoldiDense.setup()=PolyMode.mathlink.eigensolver.ArnoldiDense-class.html#setup,Method PolyMode.mathlink.eigensolver.ArnoldiShiftInvertDense.setup()=PolyMode.mathlink.eigensolver.ArnoldiShiftInvertDense-class.html#setup,Method PolyMode.mathlink.eigensolver.ArnoldiShiftInvertGmres.setup()=PolyMode.mathlink.eigensolver.ArnoldiShiftInvertGmres-class.html#setup,Module PolyMode.mathlink.setup=PolyMode.mathlink.setup-module.html,Module PolyMode.setup=PolyMode.setup-module.html"><a title="PolyMode.Equation.VectorWaveEquation.setup
+PolyMode.ExternalSolvers.JCMWaveSolver.setup
+PolyMode.LayeredSolver.Layer.setup
+PolyMode.LayeredSolver.LayeredSolver.setup
+PolyMode.Solver.Solve.setup
+PolyMode.TriDiagonalSolver.FixedPointSolver.setup
+PolyMode.TriDiagonalSolver.TriDiBlockSolve.setup
+PolyMode.mathlink.eigensolver.ArnoldiDense.setup
+PolyMode.mathlink.eigensolver.ArnoldiShiftInvertDense.setup
+PolyMode.mathlink.eigensolver.ArnoldiShiftInvertGmres.setup
+PolyMode.mathlink.setup
+PolyMode.setup" class="py-name" href="#" onclick="return doclink('link-1', 'setup', 'link-1');">setup</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">solver</tt><tt class="py-op">.</tt><tt id="link-2" class="py-name" targets="Method PolyMode.Solver.Solve.clean_up()=PolyMode.Solver.Solve-class.html#clean_up,Method PolyMode.TriDiagonalSolver.TriDiBlockSolve.clean_up()=PolyMode.TriDiagonalSolver.TriDiBlockSolve-class.html#clean_up"><a title="PolyMode.Solver.Solve.clean_up
+PolyMode.TriDiagonalSolver.TriDiBlockSolve.clean_up" class="py-name" href="#" onclick="return doclink('link-2', 'clean_up', 'link-2');">clean_up</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">                 </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line">                <tt class="py-comment">#Solve structure</tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">solver</tt><tt class="py-op">.</tt><tt id="link-3" class="py-name" targets="Method PolyMode.ExternalSolvers.JCMWaveSolver.calculate()=PolyMode.ExternalSolvers.JCMWaveSolver-class.html#calculate,Method PolyMode.KrylovSolver.NLArnoldiSolver.calculate()=PolyMode.KrylovSolver.NLArnoldiSolver-class.html#calculate,Method PolyMode.KrylovSolver.NLBiArnoldiSolver.calculate()=PolyMode.KrylovSolver.NLBiArnoldiSolver-class.html#calculate,Method PolyMode.LayeredSolver.Layer.calculate()=PolyMode.LayeredSolver.Layer-class.html#calculate,Method PolyMode.LayeredSolver.LayeredSolver.calculate()=PolyMode.LayeredSolver.LayeredSolver-class.html#calculate,Method PolyMode.MPISolver.QueueItem.calculate()=PolyMode.MPISolver.QueueItem-class.html#calculate,Method PolyMode.NLSolver.NLResidualSolver.calculate()=PolyMode.NLSolver.NLResidualSolver-class.html#calculate,Method PolyMode.Solver.Solve.calculate()=PolyMode.Solver.Solve-class.html#calculate,Method PolyMode.Solver.WavelengthTrackingSolver.calculate()=PolyMode.Solver.WavelengthTrackingSolver-class.html#calculate,Method PolyMode.TriDiagonalSolver.CenterSolver.calculate()=PolyMode.TriDiagonalSolver.CenterSolver-class.html#calculate,Method PolyMode.Waveguide.Waveguide.calculate()=PolyMode.Waveguide.Waveguide-class.html#calculate"><a title="PolyMode.ExternalSolvers.JCMWaveSolver.calculate
+PolyMode.KrylovSolver.NLArnoldiSolver.calculate
+PolyMode.KrylovSolver.NLBiArnoldiSolver.calculate
+PolyMode.LayeredSolver.Layer.calculate
+PolyMode.LayeredSolver.LayeredSolver.calculate
+PolyMode.MPISolver.QueueItem.calculate
+PolyMode.NLSolver.NLResidualSolver.calculate
+PolyMode.Solver.Solve.calculate
+PolyMode.Solver.WavelengthTrackingSolver.calculate
+PolyMode.TriDiagonalSolver.CenterSolver.calculate
+PolyMode.Waveguide.Waveguide.calculate" class="py-name" href="#" onclick="return doclink('link-3', 'calculate', 'link-3');">calculate</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">                 </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">                <tt class="py-comment">#Calculate gradient</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">                 </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">                <tt class="py-comment">#Evaluate results</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">                <tt id="link-4" class="py-name" targets="Function PolyMode.Plotter.f()=PolyMode.Plotter-module.html#f"><a title="PolyMode.Plotter.f" class="py-name" href="#" onclick="return doclink('link-4', 'f', 'link-4');">f</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">evaluate</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">solver</tt><tt class="py-op">)</tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line"> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt id="link-5" class="py-name"><a title="PolyMode.Plotter.f" class="py-name" href="#" onclick="return doclink('link-5', 'f', 'link-4');">f</a></tt> </tt>
+</div><a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line"> </tt>
+<a name="Optimize.__call__"></a><div id="Optimize.__call__-def"><a name="L44"></a><tt class="py-lineno">44</tt> <a class="py-toggle" href="#" id="Optimize.__call__-toggle" onclick="return toggle('Optimize.__call__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.Optimize.Optimize-class.html#__call__">__call__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">p_start</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Optimize.__call__-collapsed" style="display:none;" pad="++" indent="++++++++++++"></div><div id="Optimize.__call__-expanded"><a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">                <tt class="py-keyword">from</tt> <tt class="py-name">scipy</tt> <tt class="py-keyword">import</tt> <tt id="link-6" class="py-name" targets="Variable PolyMode.NLSolver.NlepResidualIteration.optimize=PolyMode.NLSolver.NlepResidualIteration-class.html#optimize"><a title="PolyMode.NLSolver.NlepResidualIteration.optimize" class="py-name" href="#" onclick="return doclink('link-6', 'optimize', 'link-6');">optimize</a></tt> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">                 </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">                <tt class="py-name">output</tt> <tt class="py-op">=</tt> <tt id="link-7" class="py-name"><a title="PolyMode.NLSolver.NlepResidualIteration.optimize" class="py-name" href="#" onclick="return doclink('link-7', 'optimize', 'link-6');">optimize</a></tt><tt class="py-op">.</tt><tt class="py-name">fmin_cg</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Method PolyMode.Optimize.Optimize.iteration()=PolyMode.Optimize.Optimize-class.html#iteration"><a title="PolyMode.Optimize.Optimize.iteration" class="py-name" href="#" onclick="return doclink('link-8', 'iteration', 'link-8');">iteration</a></tt><tt class="py-op">,</tt> <tt class="py-name">p_start</tt><tt class="py-op">,</tt> <tt class="py-name">fprime</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt id="link-9" class="py-name" targets="Variable PolyMode.KrylovSolver.KrylovIteration.maxiter=PolyMode.KrylovSolver.KrylovIteration-class.html#maxiter,Variable PolyMode.NLSolver.NlepResidualIteration.maxiter=PolyMode.NLSolver.NlepResidualIteration-class.html#maxiter"><a title="PolyMode.KrylovSolver.KrylovIteration.maxiter
+PolyMode.NLSolver.NlepResidualIteration.maxiter" class="py-name" href="#" onclick="return doclink('link-9', 'maxiter', 'link-9');">maxiter</a></tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt>\ </tt>
+<a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line">                        <tt class="py-name">full_output</tt><tt class="py-op">=</tt><tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-name">disp</tt><tt class="py-op">=</tt><tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-name">callback</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt> </tt>
+<a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">                <tt class="py-name">popt</tt><tt class="py-op">,</tt> <tt class="py-name">fopt</tt><tt class="py-op">,</tt> <tt class="py-name">func_calls</tt><tt class="py-op">,</tt> <tt class="py-name">grad_calls</tt><tt class="py-op">,</tt> <tt class="py-name">warnflag</tt> <tt class="py-op">=</tt> <tt class="py-name">output</tt> </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line">                 </tt>
+<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line">                <tt class="py-keyword">print</tt> <tt class="py-string">"p:"</tt><tt class="py-op">,</tt> <tt class="py-name">popt</tt><tt class="py-op">,</tt> <tt class="py-string">"f:"</tt><tt class="py-op">,</tt> <tt class="py-name">fopt</tt> </tt>
+<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line">                 </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">popt</tt> </tt>
+</div></div><a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1
+    on Mon Sep 14 10:21:14 2009
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

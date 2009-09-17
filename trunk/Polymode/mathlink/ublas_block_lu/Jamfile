@@ -1,0 +1,123 @@
+#For goto: module load libgoto
+#Need Sun Lapack: module load scsl
+#Note: Only gcc 4.2 supports OpenMP
+
+OPENMP = 1 ;
+DEBUG = ;
+PROCESSOR = $(JAMUNAME[1]) ;
+#HOST = $(JAMUNAME[4]) ;
+HOST = "soliton" ;
+
+Echo "Compiling for $(OS)" ;
+Echo "Compiling for platform $(OSPLAT)" ;
+Echo "Compiling for host $(HOST)" ;
+
+if $(OSPLAT) = "IA64"
+{
+	C++ = icc ;
+	LINK = icc ;
+	OPTIM = -O3 -DNDEBUG ;
+
+	C++FLAGS += -fPIC -pthread  ;
+	LINKFLAGS += -fPIC -L$(HOME)/usr/lib ;
+
+	BOOST_HDR = $/usr/local/include/boost-bindings ;
+	ATLAS_HDR = /usr/include ;
+	MATHLINK_HDR = $(HOME)/USyd/Research/mathlink ;
+	PYTHON_HDR = /usr/include/python2.5 ;
+	NUMPY_HDR = /usr/lib/python2.5/site-packages/numpy/core/include ;
+	BLITZ_HDR = ;
+
+	BOOST_LINKLIBS = -lboost_python-mt ;
+	ATLAS_LINKLIBS = -llapack_atlas -latlas -lf77blas -lcblas ;
+
+	OMPFLAGS = -fopenmp ;
+	OMPLIBS = -lgomp ;
+
+	PY_CFLAGS = -ftemplate-depth-255 ;
+	PY_LFLAGS = -shared ;
+}
+
+if $(HOST) = "soliton"
+ {
+  	C++ = g++ ;
+	LINK = g++ ;
+	OPTIM = -O3 -ftree-vectorize -DNDEBUG ;
+
+	C++FLAGS += -fPIC -pthread  ;
+	LINKFLAGS += -fPIC -L/usr/lib -L/usr/lib64 ;
+
+	BOOST_HDR =  /opt/boost/include . ;
+	ATLAS_HDR = /usr/include ;
+	PYTHON_HDR = /opt/python/include/python2.6 ;
+	NUMPY_HDR = /opt/python/lib/python2.6/site-packages/numpy/core/include ;
+	BLITZ_HDR = ;
+
+	BOOST_LINKLIBS = -L/opt/boost/lib/ -lboost_python-gcc43-mt ;
+	ATLAS_LINKLIBS = -llapack_atlas -latlas -lf77blas -lcblas ;
+
+	OMPFLAGS = -fopenmp ;
+	OMPLIBS = -lgomp ;
+
+	PY_CFLAGS = -ftemplate-depth-255 ;
+	PY_LFLAGS = -shared ;
+ }
+  
+if $(HOST) = "traona"
+ {
+    C++  = g++ ;
+	LINK = g++ ;
+     
+    OPTIM = -O3 -ftree-vectorize -DNDEBUG ;
+	
+   	C++FLAGS += -fPIC -pthread  ;
+	LINKFLAGS += -fPIC -L/usr/lib -L/usr/lib64 ;
+			
+	USR_DIR = $(HOME)/usr ;
+	BOOST_HDR = $(USR_DIR)/include/boost-1_39/ . ;
+    ATLAS_HDR = /usr/include ;
+    PYTHON_HDR = $(USR_DIR)/include/python2.6 ;
+    NUMPY_HDR = $(USR_DIR)/lib/python2.6/site-packages/numpy/core/include ;
+    BLITZ_HDR = ;
+	
+    BOOST_LINKLIBS = -L$(USR_DIR)/lib -lboost_python-gcc41-mt ;
+    ATLAS_LINKLIBS = -llapack_atlas -latlas -lf77blas -lcblas ;
+			
+    OMPFLAGS = -fopenmp ;
+    OMPLIBS = -lgomp ;
+					
+    PY_CFLAGS = -ftemplate-depth-255 ;
+    PY_LFLAGS = -shared ;
+ }
+
+Echo "Python Location: $(PYTHON_HDR)" ;
+Echo "Using Boost includes: $(BOOST_HDR)" ;
+Echo "Using Boost includes: $(ATLAS_HDR)" ;
+Echo "Using Numpy includes: $(NUMPY_HDR)" ;
+Echo "Using Blitz++ at: $(BLITZ_HDR)" ;
+Echo "Using Mathlink at: $(MATHLINK_HDR)" ;
+
+if $(OPENMP)
+{
+	Echo "Compiling with OpenMP Support" ;
+	LINKLIBS += $(OMPLIBS) ;
+	C++FLAGS += $(OMPFLAGS) ;
+}
+
+if $(DEBUG)
+{
+	Echo "Compiling with Debugging information" ;
+	C++FLAGS += -DDEBUG -DBZ_DEBUG -g ;
+}
+
+HDRS = $(ATLAS_HDR) $(BOOST_HDR) $(MATHLINK_HDR) $(PYTHON_HDR) $(NUMPY_HDR) ;
+C++FLAGS += $(PY_CFLAGS) ;
+
+LINKFLAGS on ublocklu.so = $(PY_LFLAGS) $(LINKFLAGS) ;
+LINKLIBS on ublocklu.so = $(ATLAS_LINKLIBS) $(BOOST_LINKLIBS) $(LINKLIBS) ;
+
+LINKLIBS += $(BOOST_LINKLIBS) $(ATLAS_LINKLIBS) ;
+
+Main ublocklu.so : ublocklu.cpp numimport.cpp ;
+
+

@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>PolyMode.Material</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="PolyMode-module.html">Package&nbsp;PolyMode</a> ::
+        Module&nbsp;Material
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module Material</h1><p class="nomargin-top"><span class="codelink"><a href="PolyMode.Material-pysrc.html">source&nbsp;code</a></span></p>
+<pre class="literalblock">
+
+Materials for use in constructing Waveguide shapes.
+Each material has a refractive index that is dependent upon
+the wavelength and (in future) the temperature
+
+ ToDo:
+ *  Get info from data files
+ *  Restrict plot to wavelength limits for interpolated materials
+ *  Add temperature dependence
+ *  Use limits for all materials, not just interpolated ones
+
+</pre>
+
+<!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Material-class.html" class="summary-name">Material</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Fixed-class.html" class="summary-name">Fixed</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Sellmeier-class.html" class="summary-name">Sellmeier</a><br />
+      Sellmeier(B=[], L=[], A=1)
+A material with refractive index calulated from the Sellmeier equation
+The coefficients should be supplied in arrays B and L.
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.ClassiusMorlotti-class.html" class="summary-name">ClassiusMorlotti</a><br />
+      ClassiusMorlotti(B=[], L=[])
+A material with refractive index calulated from the Classius-Morlotti equation
+[citation needed]
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Laurent-class.html" class="summary-name">Laurent</a><br />
+      A material with refractive index calulated from the Laurent series 
+        The coefficients of the series should be supplied in array A.
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Composite-class.html" class="summary-name">Composite</a><br />
+      Composite(materials = [], weights = []) A material with refractive 
+        index calulated from the weighted average of two or more previously
+        defined materials.
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Interpolated-class.html" class="summary-name">Interpolated</a><br />
+      A material with refractive index calulated by interpolating from a 
+        list of refractive indices at different wavelengths.
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.GeneralFile-class.html" class="summary-name">GeneralFile</a><br />
+      Refractive index from file formatted in columns of wavelength      
+        nreal   nimag
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.SopraFile-class.html" class="summary-name">SopraFile</a><br />
+      Database n&amp;k
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Sopra-class.html" class="summary-name">Sopra</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Luxpop-class.html" class="summary-name">Luxpop</a><br />
+      Load a material from the Luxpop database (not included) it can be 
+        downloaded from http://www.luxpop.com/RefractiveIndexList.html and 
+        put into the directory &quot;Polymode/data/luxpop&quot; before 
+        installing
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.FreeSnell-class.html" class="summary-name">FreeSnell</a><br />
+      Load a material from the internal Freesnell materials database This
+        is taken from the freesnell thinfilm optical simulator at 
+        http://people.csail.mit.edu/jaffer/FreeSnell/
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Iron-class.html" class="summary-name">Iron</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Chromium-class.html" class="summary-name">Chromium</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Silver-class.html" class="summary-name">Silver</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Gold-class.html" class="summary-name">Gold</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Aluminium-class.html" class="summary-name">Aluminium</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Copper-class.html" class="summary-name">Copper</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Nickel-class.html" class="summary-name">Nickel</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Lithium-class.html" class="summary-name">Lithium</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Vanadium-class.html" class="summary-name">Vanadium</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Tungsten-class.html" class="summary-name">Tungsten</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Zirconium-class.html" class="summary-name">Zirconium</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.HDPE-class.html" class="summary-name">HDPE</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Germanium-class.html" class="summary-name">Germanium</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Silicon-class.html" class="summary-name">Silicon</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Water-class.html" class="summary-name">Water</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Water_IR-class.html" class="summary-name">Water_IR</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Air-class.html" class="summary-name">Air</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.PMMA-class.html" class="summary-name">PMMA</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.PMMA-class.html" class="summary-name">Polymer</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Silica-class.html" class="summary-name">Silica</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Sapphire-class.html" class="summary-name">Sapphire</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.BK7-class.html" class="summary-name">BK7</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Quartz-class.html" class="summary-name">Quartz</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.Germania-class.html" class="summary-name">Germania</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.SiO2GeO2-class.html" class="summary-name">SiO2GeO2</a>
+    </td>
+  </tr>
+<tr>
+    <td class="summary" colspan="2">
+        <a href="PolyMode.Material.SiO2Fl-class.html" class="summary-name">SiO2Fl</a>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="find_materials"></a><span class="summary-sig-name">find_materials</span>(<span class="summary-sig-arg">search_string</span>)</span><br />
+      Search the materials datafiles for a material containing the search 
+      term</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.Material-pysrc.html#find_materials">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="aa_"></a><span class="summary-name">aa_</span> = <code title="asarray">asarray</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="material_resource_dirs"></a><span class="summary-name">material_resource_dirs</span> = <code title="['Sopra', 'freesnell', 'luxpop']">['Sopra', 'freesnell', 'luxpop']</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__doc__"></a><span class="summary-name">__doc__</span> = <code title="&quot;Material: Classes for modelling materials&quot;">&quot;Material: Classes for modelling materials&quot;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="PolyMode.Material-module.html#allinstances" class="summary-name">allinstances</a> = <code title="filter(lambda item: hasattr(item [1], 'name'), locals().items())">filter(lambda item: hasattr(item [1], 'name'), <code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-VariablesDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="allinstances"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">allinstances</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+filter(lambda item: hasattr(item [1], 'name'), locals().items())
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1
+    on Mon Sep 14 10:29:12 2009
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

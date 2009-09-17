@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>PolyMode.ExternalSolvers.JCMWaveSolver</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="PolyMode-module.html">Package&nbsp;PolyMode</a> ::
+        <a href="PolyMode.ExternalSolvers-module.html">Module&nbsp;ExternalSolvers</a> ::
+        Class&nbsp;JCMWaveSolver
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class JCMWaveSolver</h1><p class="nomargin-top"><span class="codelink"><a href="PolyMode.ExternalSolvers-pysrc.html#JCMWaveSolver">source&nbsp;code</a></span></p>
+<pre class="base-tree">
+  object --+    
+           |    
+<a href="PolyMode.Solver.Solve-class.html">Solver.Solve</a> --+
+               |
+              <strong class="uidshort">JCMWaveSolver</strong>
+</pre>
+
+<hr />
+<p>External solver class for the JCMSuite solvers supply the project_path
+  where the files for the solver will be created and the main_path where 
+  the JCMsuite is installed</p>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.ExternalSolvers.JCMWaveSolver-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">wg</span>,
+        <span class="summary-sig-arg">project_path</span>=<span class="summary-sig-default">&quot;.&quot;</span>,
+        <span class="summary-sig-arg">main_path</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">numthreads</span>=<span class="summary-sig-default">1</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.ExternalSolvers-pysrc.html#JCMWaveSolver.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.ExternalSolvers.JCMWaveSolver-class.html#setup" class="summary-sig-name">setup</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">geo_accuracy</span>=<span class="summary-sig-default">1</span>,
+        <span class="summary-sig-arg">refinement_levels</span>=<span class="summary-sig-default">1</span>,
+        <span class="summary-sig-arg">tol</span>=<span class="summary-sig-default">1e-8</span>,
+        <span class="summary-sig-arg">xy_domain</span>=<span class="summary-sig-default">False</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.ExternalSolvers-pysrc.html#JCMWaveSolver.setup">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="create_materials_list"></a><span class="summary-sig-name">create_materials_list</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.ExternalSolvers-pysrc.html#JCMWaveSolver.create_materials_list">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="export_wg"></a><span class="summary-sig-name">export_wg</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">domainxy</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">sectors</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Export the internal PolyMode waveguide shapes to a JCMSuite file</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.ExternalSolvers-pysrc.html#JCMWaveSolver.export_wg">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="export_materials"></a><span class="summary-sig-name">export_materials</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">wl</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.ExternalSolvers-pysrc.html#JCMWaveSolver.export_materials">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="export_triangulation"></a><span class="summary-sig-name">export_triangulation</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">view</span>=<span class="summary-sig-default">False</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.ExternalSolvers-pysrc.html#JCMWaveSolver.export_triangulation">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="external_solve"></a><span class="summary-sig-name">external_solve</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">neffguess</span>,
+        <span class="summary-sig-arg">number</span>=<span class="summary-sig-default">1</span>,
+        <span class="summary-sig-arg">run</span>=<span class="summary-sig-default">True</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.ExternalSolvers-pysrc.html#JCMWaveSolver.external_solve">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="load_external_solutions"></a><span class="summary-sig-name">load_external_solutions</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">filename</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.ExternalSolvers-pysrc.html#JCMWaveSolver.load_external_solutions">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="PolyMode.ExternalSolvers.JCMWaveSolver-class.html#calculate" class="summary-sig-name">calculate</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">number</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="PolyMode.ExternalSolvers-pysrc.html#JCMWaveSolver.calculate">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="PolyMode.Solver.Solve-class.html">Solver.Solve</a></code></b>:
+      <code><a href="PolyMode.Solver.Solve-class.html#__call__">__call__</a></code>,
+      <code><a href="PolyMode.Solver.Solve-class.html#add_dependancy">add_dependancy</a></code>,
+      <code><a href="PolyMode.Solver.Solve-class.html#calculate_mode_properties">calculate_mode_properties</a></code>,
+      <code><a href="PolyMode.Solver.Solve-class.html#clean_up">clean_up</a></code>,
+      <code><a href="PolyMode.Solver.Solve-class.html#clear_data">clear_data</a></code>,
+      <code><a href="PolyMode.Solver.Solve-class.html#estimate_complete_fraction">estimate_complete_fraction</a></code>,
+      <code><a href="PolyMode.Solver.Solve-class.html#finalize">finalize</a></code>,
+      <code><a href="PolyMode.Solver.Solve-class.html#get_data">get_data</a></code>,
+      <code><a href="PolyMode.Solver.Solve-class.html#guess_spurious_mode">guess_spurious_mode</a></code>,
+      <code><a href="PolyMode.Solver.Solve-class.html#initialize">initialize</a></code>,
+      <code><a href="PolyMode.Solver.Solve-class.html#plot">plot</a></code>,
+      <code><a href="PolyMode.Solver.Solve-class.html#residue">residue</a></code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS VARIABLES ==================== -->
+<a name="section-ClassVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Class Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-ClassVariables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="jcmwave"></a><span class="summary-name">jcmwave</span> = <code title="None">None</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="numthreads"></a><span class="summary-name">numthreads</span> = <code title="1">1</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="shape_refinement"></a><span class="summary-name">shape_refinement</span> = <code title="2">2</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="wg_domain_refinement"></a><span class="summary-name">wg_domain_refinement</span> = <code title="1">1</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="grid_refinements"></a><span class="summary-name">grid_refinements</span> = <code title="1">1</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="fem_degree"></a><span class="summary-name">fem_degree</span> = <code title="2">2</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="path"></a><span class="summary-name">path</span> = <code title="&quot;.&quot;">&quot;.&quot;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="results_path"></a><span class="summary-name">results_path</span> = <code title="&quot;project_results&quot;">&quot;project_results&quot;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="layout_filename"></a><span class="summary-name">layout_filename</span> = <code title="&quot;layout.jcm&quot;">&quot;layout.jcm&quot;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="material_filename"></a><span class="summary-name">material_filename</span> = <code title="&quot;materials.jcm&quot;">&quot;materials.jcm&quot;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="triangulator_filename"></a><span class="summary-name">triangulator_filename</span> = <code title="&quot;triangulator.jcm&quot;">&quot;triangulator.jcm&quot;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="project_filename"></a><span class="summary-name">project_filename</span> = <code title="&quot;project.jcmp&quot;">&quot;project.jcmp&quot;</code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">wg</span>,
+        <span class="sig-arg">project_path</span>=<span class="sig-default">&quot;.&quot;</span>,
+        <span class="sig-arg">main_path</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">numthreads</span>=<span class="sig-default">1</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.ExternalSolvers-pysrc.html#JCMWaveSolver.__init__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="PolyMode.Solver.Solve-class.html#__init__">Solver.Solve.__init__</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="setup"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">setup</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">geo_accuracy</span>=<span class="sig-default">1</span>,
+        <span class="sig-arg">refinement_levels</span>=<span class="sig-default">1</span>,
+        <span class="sig-arg">tol</span>=<span class="sig-default">1e-8</span>,
+        <span class="sig-arg">xy_domain</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.ExternalSolvers-pysrc.html#JCMWaveSolver.setup">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="PolyMode.Solver.Solve-class.html#setup">Solver.Solve.setup</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="calculate"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">calculate</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">number</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="PolyMode.ExternalSolvers-pysrc.html#JCMWaveSolver.calculate">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="PolyMode.Solver.Solve-class.html#calculate">Solver.Solve.calculate</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1
+    on Mon Sep 14 10:29:13 2009
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

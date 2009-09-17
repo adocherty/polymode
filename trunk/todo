@@ -1,0 +1,13 @@
+Todo:
+
+March 2008
+* Don't save over the MPI queue file each time. Either append changes or save a copy.
+  Otherwise the process can be terminated during a save and the file will be lost!
+  
+
+October 2008
+* We've changed all the finite differences - in waveguide make sure they work for image
+  calculations of drlogn!
+
+* Change finitedifference baseclass to work properly with boundary condtions
+

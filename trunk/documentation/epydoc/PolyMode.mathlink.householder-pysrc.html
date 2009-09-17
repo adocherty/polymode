@@ -1,0 +1,1093 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>PolyMode.mathlink.householder</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="PolyMode-module.html">Package&nbsp;PolyMode</a> ::
+        <a href="PolyMode.mathlink-module.html">Package&nbsp;mathlink</a> ::
+        Module&nbsp;householder
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="PolyMode.mathlink.householder-module.html">Module PolyMode.mathlink.householder</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># coding=utf-8</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-docstring">'''</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-docstring">&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480; Householder Transformations  &#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-docstring">Elementary Householder transformations</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-docstring">QR decomposition implemented with Householder transformations</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-docstring">&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;&#9480;</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-docstring">'''</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">__future__</tt> <tt class="py-keyword">import</tt> <tt class="py-name">division</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">numpy</tt> <tt class="py-keyword">import</tt> <tt class="py-op">*</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">os</tt><tt class="py-op">,</tt> <tt class="py-name">sys</tt><tt class="py-op">,</tt> <tt class="py-name">logging</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-comment"># Helpful elementary transforms</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="ElementaryTransform"></a><div id="ElementaryTransform-def"><a name="L17"></a><tt class="py-lineno"> 17</tt> <a class="py-toggle" href="#" id="ElementaryTransform-toggle" onclick="return toggle('ElementaryTransform');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.ElementaryTransform-class.html">ElementaryTransform</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ElementaryTransform-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="ElementaryTransform-expanded"><a name="ElementaryTransform.apply"></a><div id="ElementaryTransform.apply-def"><a name="L18"></a><tt class="py-lineno"> 18</tt> <a class="py-toggle" href="#" id="ElementaryTransform.apply-toggle" onclick="return toggle('ElementaryTransform.apply');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.ElementaryTransform-class.html#apply">apply</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">X</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ElementaryTransform.apply-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="ElementaryTransform.apply-expanded"><a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line">                <tt class="py-keyword">pass</tt> </tt>
+</div><a name="ElementaryTransform.rapply"></a><div id="ElementaryTransform.rapply-def"><a name="L20"></a><tt class="py-lineno"> 20</tt> <a class="py-toggle" href="#" id="ElementaryTransform.rapply-toggle" onclick="return toggle('ElementaryTransform.rapply');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.ElementaryTransform-class.html#rapply">rapply</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">X</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ElementaryTransform.rapply-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="ElementaryTransform.rapply-expanded"><a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line">                <tt class="py-keyword">pass</tt> </tt>
+</div><a name="ElementaryTransform.inverse"></a><div id="ElementaryTransform.inverse-def"><a name="L22"></a><tt class="py-lineno"> 22</tt> <a class="py-toggle" href="#" id="ElementaryTransform.inverse-toggle" onclick="return toggle('ElementaryTransform.inverse');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.ElementaryTransform-class.html#inverse">inverse</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">X</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ElementaryTransform.inverse-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="ElementaryTransform.inverse-expanded"><a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line">                <tt class="py-keyword">pass</tt> </tt>
+</div><a name="ElementaryTransform.rinverse"></a><div id="ElementaryTransform.rinverse-def"><a name="L24"></a><tt class="py-lineno"> 24</tt> <a class="py-toggle" href="#" id="ElementaryTransform.rinverse-toggle" onclick="return toggle('ElementaryTransform.rinverse');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.ElementaryTransform-class.html#rinverse">rinverse</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">X</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ElementaryTransform.rinverse-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="ElementaryTransform.rinverse-expanded"><a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line">                <tt class="py-keyword">pass</tt> </tt>
+</div><a name="ElementaryTransform.matvec"></a><div id="ElementaryTransform.matvec-def"><a name="L26"></a><tt class="py-lineno"> 26</tt> <a class="py-toggle" href="#" id="ElementaryTransform.matvec-toggle" onclick="return toggle('ElementaryTransform.matvec');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.ElementaryTransform-class.html#matvec">matvec</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">x</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ElementaryTransform.matvec-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="ElementaryTransform.matvec-expanded"><a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line">                <tt class="py-name">Qx</tt> <tt class="py-op">=</tt> <tt id="link-0" class="py-name" targets="Variable PolyMode.difflounge.test.x=PolyMode.difflounge.test-module.html#x,Variable PolyMode.difflounge.test_fd.x=PolyMode.difflounge.test_fd-module.html#x,Variable PolyMode.mathlink.ublas_block_lu.test_block_lu.x=PolyMode.mathlink.ublas_block_lu.test_block_lu-module.html#x"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-0', 'x', 'link-0');">x</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Method PolyMode.Modes.Mode.copy()=PolyMode.Modes.Mode-class.html#copy,Method PolyMode.Modes.VectorMode.copy()=PolyMode.Modes.VectorMode-class.html#copy,Method PolyMode.Waveguide.Circle.copy()=PolyMode.Waveguide.Circle-class.html#copy,Method PolyMode.Waveguide.Polygon.copy()=PolyMode.Waveguide.Polygon-class.html#copy,Method PolyMode.Waveguide.WgShape.copy()=PolyMode.Waveguide.WgShape-class.html#copy,Method PolyMode.mathlink.coordinates.Coord.copy()=PolyMode.mathlink.coordinates.Coord-class.html#copy"><a title="PolyMode.Modes.Mode.copy
+PolyMode.Modes.VectorMode.copy
+PolyMode.Waveguide.Circle.copy
+PolyMode.Waveguide.Polygon.copy
+PolyMode.Waveguide.WgShape.copy
+PolyMode.mathlink.coordinates.Coord.copy" class="py-name" href="#" onclick="return doclink('link-1', 'copy', 'link-1');">copy</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-2" class="py-name" targets="Method PolyMode.mathlink.householder.ElementaryTransform.apply()=PolyMode.mathlink.householder.ElementaryTransform-class.html#apply,Method PolyMode.mathlink.householder.GivensRotation.apply()=PolyMode.mathlink.householder.GivensRotation-class.html#apply,Method PolyMode.mathlink.householder.HouseholderTransform.apply()=PolyMode.mathlink.householder.HouseholderTransform-class.html#apply"><a title="PolyMode.mathlink.householder.ElementaryTransform.apply
+PolyMode.mathlink.householder.GivensRotation.apply
+PolyMode.mathlink.householder.HouseholderTransform.apply" class="py-name" href="#" onclick="return doclink('link-2', 'apply', 'link-2');">apply</a></tt><tt class="py-op">(</tt><tt class="py-name">Qx</tt><tt class="py-op">)</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">Qx</tt> </tt>
+</div></div><a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"> </tt>
+<a name="HouseholderTransform"></a><div id="HouseholderTransform-def"><a name="L31"></a><tt class="py-lineno"> 31</tt> <a class="py-toggle" href="#" id="HouseholderTransform-toggle" onclick="return toggle('HouseholderTransform');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.HouseholderTransform-class.html">HouseholderTransform</a><tt class="py-op">(</tt><tt class="py-base-class">ElementaryTransform</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HouseholderTransform-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="HouseholderTransform-expanded"><a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line">        <tt class="py-docstring">"Defines and applied implicit householder transform"</tt> </tt>
+<a name="HouseholderTransform.__init__"></a><div id="HouseholderTransform.__init__-def"><a name="L33"></a><tt class="py-lineno"> 33</tt> <a class="py-toggle" href="#" id="HouseholderTransform.__init__-toggle" onclick="return toggle('HouseholderTransform.__init__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.HouseholderTransform-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">v</tt><tt class="py-op">,</tt> <tt class="py-param">offset</tt><tt class="py-op">=</tt><tt class="py-string">'end'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HouseholderTransform.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="HouseholderTransform.__init__-expanded"><a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">                <tt class="py-comment">#Ensure that v is not divided by zero</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">                <tt class="py-name">vnorm</tt> <tt class="py-op">=</tt> <tt class="py-name">sqrt</tt><tt class="py-op">(</tt><tt id="link-3" class="py-name" targets="Method PolyMode.mathlink.coordinates.Coord.dot()=PolyMode.mathlink.coordinates.Coord-class.html#dot"><a title="PolyMode.mathlink.coordinates.Coord.dot" class="py-name" href="#" onclick="return doclink('link-3', 'dot', 'link-3');">dot</a></tt><tt class="py-op">(</tt><tt class="py-name">conj</tt><tt class="py-op">(</tt><tt id="link-4" class="py-name" targets="Variable PolyMode.difflounge.test.v=PolyMode.difflounge.test-module.html#v,Variable PolyMode.difflounge.test_fd.v=PolyMode.difflounge.test_fd-module.html#v"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-4', 'v', 'link-4');">v</a></tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt id="link-5" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-5', 'v', 'link-4');">v</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">vnorm</tt><tt class="py-op">&gt;</tt><tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-6', 'v', 'link-4');">v</a></tt> <tt class="py-op">=</tt> <tt id="link-7" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-7', 'v', 'link-4');">v</a></tt><tt class="py-op">/</tt><tt class="py-name">vnorm</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line">                <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-8', 'v', 'link-4');">v</a></tt> <tt class="py-op">=</tt> <tt id="link-9" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-9', 'v', 'link-4');">v</a></tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name" targets="Method PolyMode.mathlink.householder.HouseholderTransform.set_range()=PolyMode.mathlink.householder.HouseholderTransform-class.html#set_range"><a title="PolyMode.mathlink.householder.HouseholderTransform.set_range" class="py-name" href="#" onclick="return doclink('link-10', 'set_range', 'link-10');">set_range</a></tt><tt class="py-op">(</tt><tt id="link-11" class="py-name" targets="Variable PolyMode.difflounge.test.offset=PolyMode.difflounge.test-module.html#offset"><a title="PolyMode.difflounge.test.offset" class="py-name" href="#" onclick="return doclink('link-11', 'offset', 'link-11');">offset</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">         </tt>
+<a name="HouseholderTransform.__str__"></a><div id="HouseholderTransform.__str__-def"><a name="L42"></a><tt class="py-lineno"> 42</tt> <a class="py-toggle" href="#" id="HouseholderTransform.__str__-toggle" onclick="return toggle('HouseholderTransform.__str__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.HouseholderTransform-class.html#__str__">__str__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HouseholderTransform.__str__-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="HouseholderTransform.__str__-expanded"><a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-string">"Householder length %d"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-12', 'v', 'link-4');">v</a></tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-op">)</tt> </tt>
+</div><a name="HouseholderTransform.__repr__"></a><div id="HouseholderTransform.__repr__-def"><a name="L44"></a><tt class="py-lineno"> 44</tt> <a class="py-toggle" href="#" id="HouseholderTransform.__repr__-toggle" onclick="return toggle('HouseholderTransform.__repr__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.HouseholderTransform-class.html#__repr__">__repr__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HouseholderTransform.__repr__-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="HouseholderTransform.__repr__-expanded"><a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-string">"Householder length %d"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-13', 'v', 'link-4');">v</a></tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">         </tt>
+<a name="HouseholderTransform.set_range"></a><div id="HouseholderTransform.set_range-def"><a name="L47"></a><tt class="py-lineno"> 47</tt> <a class="py-toggle" href="#" id="HouseholderTransform.set_range-toggle" onclick="return toggle('HouseholderTransform.set_range');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.HouseholderTransform-class.html#set_range">set_range</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">offset</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HouseholderTransform.set_range-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="HouseholderTransform.set_range-expanded"><a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">                <tt class="py-docstring">"""</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line"><tt class="py-docstring">                Default action is last N elements</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line"><tt class="py-docstring">                use offset to change this behaviour</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"><tt class="py-docstring">                """</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt id="link-14" class="py-name"><a title="PolyMode.difflounge.test.offset" class="py-name" href="#" onclick="return doclink('link-14', 'offset', 'link-11');">offset</a></tt><tt class="py-op">.</tt><tt class="py-name">lower</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-string">'start'</tt><tt class="py-op">:</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">range</tt> <tt class="py-op">=</tt> <tt class="py-name">slice</tt><tt class="py-op">(</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-15', 'v', 'link-4');">v</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">                <tt class="py-keyword">elif</tt> <tt id="link-16" class="py-name"><a title="PolyMode.difflounge.test.offset" class="py-name" href="#" onclick="return doclink('link-16', 'offset', 'link-11');">offset</a></tt><tt class="py-op">.</tt><tt class="py-name">lower</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-string">'end'</tt><tt class="py-op">:</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">range</tt> <tt class="py-op">=</tt> <tt class="py-name">slice</tt><tt class="py-op">(</tt><tt class="py-op">-</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-17" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-17', 'v', 'link-4');">v</a></tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">None</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">         </tt>
+<a name="HouseholderTransform.apply"></a><div id="HouseholderTransform.apply-def"><a name="L57"></a><tt class="py-lineno"> 57</tt> <a class="py-toggle" href="#" id="HouseholderTransform.apply-toggle" onclick="return toggle('HouseholderTransform.apply');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.HouseholderTransform-class.html#apply">apply</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">X</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HouseholderTransform.apply-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="HouseholderTransform.apply-expanded"><a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">                <tt class="py-docstring">"""</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line"><tt class="py-docstring">                Apply householder transformation to columns of X</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line"><tt class="py-docstring">                so Xnew = Q X</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"><tt class="py-docstring">                """</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">                <tt class="py-comment">#Vector apply:</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">                <tt class="py-comment">#for x in atleast_2d(X.T):</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">                <tt class="py-comment">#       x[self.range] -= 2*dot(conj(self.v), x[self.range])*self.v</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">                <tt id="link-18" class="py-name" targets="Variable PolyMode.difflounge.test.Y=PolyMode.difflounge.test-module.html#Y,Variable PolyMode.difflounge.test_fd.Y=PolyMode.difflounge.test_fd-module.html#Y"><a title="PolyMode.difflounge.test.Y
+PolyMode.difflounge.test_fd.Y" class="py-name" href="#" onclick="return doclink('link-18', 'Y', 'link-18');">Y</a></tt> <tt class="py-op">=</tt> <tt class="py-name">atleast_2d</tt><tt class="py-op">(</tt><tt id="link-19" class="py-name" targets="Variable PolyMode.difflounge.test.X=PolyMode.difflounge.test-module.html#X,Variable PolyMode.difflounge.test_fd.X=PolyMode.difflounge.test_fd-module.html#X"><a title="PolyMode.difflounge.test.X
+PolyMode.difflounge.test_fd.X" class="py-name" href="#" onclick="return doclink('link-19', 'X', 'link-19');">X</a></tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">range</tt><tt class="py-op">]</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">                <tt id="link-20" class="py-name"><a title="PolyMode.difflounge.test.Y
+PolyMode.difflounge.test_fd.Y" class="py-name" href="#" onclick="return doclink('link-20', 'Y', 'link-18');">Y</a></tt> <tt class="py-op">-=</tt> <tt class="py-number">2</tt><tt class="py-op">*</tt><tt id="link-21" class="py-name"><a title="PolyMode.mathlink.coordinates.Coord.dot" class="py-name" href="#" onclick="return doclink('link-21', 'dot', 'link-3');">dot</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-22', 'v', 'link-4');">v</a></tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-op">,</tt><tt class="py-name">newaxis</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt id="link-23" class="py-name"><a title="PolyMode.mathlink.coordinates.Coord.dot" class="py-name" href="#" onclick="return doclink('link-23', 'dot', 'link-3');">dot</a></tt><tt class="py-op">(</tt><tt class="py-name">conj</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-24" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-24', 'v', 'link-4');">v</a></tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt id="link-25" class="py-name"><a title="PolyMode.difflounge.test.Y
+PolyMode.difflounge.test_fd.Y" class="py-name" href="#" onclick="return doclink('link-25', 'Y', 'link-18');">Y</a></tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-name">newaxis</tt><tt class="py-op">,</tt><tt class="py-op">:</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line"> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line"> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">        <tt class="py-comment">#Inverse is the same as action</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">        <tt id="link-26" class="py-name" targets="Method PolyMode.mathlink.householder.ElementaryTransform.inverse()=PolyMode.mathlink.householder.ElementaryTransform-class.html#inverse,Method PolyMode.mathlink.householder.GivensRotation.inverse()=PolyMode.mathlink.householder.GivensRotation-class.html#inverse"><a title="PolyMode.mathlink.householder.ElementaryTransform.inverse
+PolyMode.mathlink.householder.GivensRotation.inverse" class="py-name" href="#" onclick="return doclink('link-26', 'inverse', 'link-26');">inverse</a></tt> <tt class="py-op">=</tt> <tt id="link-27" class="py-name"><a title="PolyMode.mathlink.householder.ElementaryTransform.apply
+PolyMode.mathlink.householder.GivensRotation.apply
+PolyMode.mathlink.householder.HouseholderTransform.apply" class="py-name" href="#" onclick="return doclink('link-27', 'apply', 'link-2');">apply</a></tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line"> </tt>
+<a name="HouseholderTransform.rapply"></a><div id="HouseholderTransform.rapply-def"><a name="L72"></a><tt class="py-lineno"> 72</tt> <a class="py-toggle" href="#" id="HouseholderTransform.rapply-toggle" onclick="return toggle('HouseholderTransform.rapply');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.HouseholderTransform-class.html#rapply">rapply</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">X</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HouseholderTransform.rapply-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="HouseholderTransform.rapply-expanded"><a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">                <tt class="py-docstring">"""</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line"><tt class="py-docstring">                Apply right householder transformation to rows of X</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line"><tt class="py-docstring">                so Xnew = X Q</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line"><tt class="py-docstring">                """</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">                <tt class="py-comment">#For vector:</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">                <tt class="py-comment">#for x in atleast_2d(X):</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">                <tt class="py-comment">#       x[self.range] -= 2*dot(x[self.range], self.v)*conj(self.v)</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">                <tt id="link-28" class="py-name"><a title="PolyMode.difflounge.test.Y
+PolyMode.difflounge.test_fd.Y" class="py-name" href="#" onclick="return doclink('link-28', 'Y', 'link-18');">Y</a></tt> <tt class="py-op">=</tt> <tt class="py-name">atleast_2d</tt><tt class="py-op">(</tt><tt id="link-29" class="py-name"><a title="PolyMode.difflounge.test.X
+PolyMode.difflounge.test_fd.X" class="py-name" href="#" onclick="return doclink('link-29', 'X', 'link-19');">X</a></tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-op">,</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">range</tt><tt class="py-op">]</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">                <tt id="link-30" class="py-name"><a title="PolyMode.difflounge.test.Y
+PolyMode.difflounge.test_fd.Y" class="py-name" href="#" onclick="return doclink('link-30', 'Y', 'link-18');">Y</a></tt> <tt class="py-op">-=</tt> <tt class="py-number">2</tt><tt class="py-op">*</tt><tt id="link-31" class="py-name"><a title="PolyMode.mathlink.coordinates.Coord.dot" class="py-name" href="#" onclick="return doclink('link-31', 'dot', 'link-3');">dot</a></tt><tt class="py-op">(</tt><tt id="link-32" class="py-name"><a title="PolyMode.mathlink.coordinates.Coord.dot" class="py-name" href="#" onclick="return doclink('link-32', 'dot', 'link-3');">dot</a></tt><tt class="py-op">(</tt><tt id="link-33" class="py-name"><a title="PolyMode.difflounge.test.Y
+PolyMode.difflounge.test_fd.Y" class="py-name" href="#" onclick="return doclink('link-33', 'Y', 'link-18');">Y</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-34" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-34', 'v', 'link-4');">v</a></tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-op">,</tt><tt class="py-name">newaxis</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">conj</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-35" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-35', 'v', 'link-4');">v</a></tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-name">newaxis</tt><tt class="py-op">,</tt><tt class="py-op">:</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">                 </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">        <tt class="py-comment">#Inverse is the same as action</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">        <tt id="link-36" class="py-name" targets="Method PolyMode.mathlink.householder.ElementaryTransform.rinverse()=PolyMode.mathlink.householder.ElementaryTransform-class.html#rinverse,Method PolyMode.mathlink.householder.GivensRotation.rinverse()=PolyMode.mathlink.householder.GivensRotation-class.html#rinverse"><a title="PolyMode.mathlink.householder.ElementaryTransform.rinverse
+PolyMode.mathlink.householder.GivensRotation.rinverse" class="py-name" href="#" onclick="return doclink('link-36', 'rinverse', 'link-36');">rinverse</a></tt> <tt class="py-op">=</tt> <tt id="link-37" class="py-name" targets="Method PolyMode.mathlink.householder.ElementaryTransform.rapply()=PolyMode.mathlink.householder.ElementaryTransform-class.html#rapply,Method PolyMode.mathlink.householder.GivensRotation.rapply()=PolyMode.mathlink.householder.GivensRotation-class.html#rapply,Method PolyMode.mathlink.householder.HouseholderTransform.rapply()=PolyMode.mathlink.householder.HouseholderTransform-class.html#rapply"><a title="PolyMode.mathlink.householder.ElementaryTransform.rapply
+PolyMode.mathlink.householder.GivensRotation.rapply
+PolyMode.mathlink.householder.HouseholderTransform.rapply" class="py-name" href="#" onclick="return doclink('link-37', 'rapply', 'link-37');">rapply</a></tt> </tt>
+</div><a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line"> </tt>
+<a name="UnitHouseholderTransform"></a><div id="UnitHouseholderTransform-def"><a name="L86"></a><tt class="py-lineno"> 86</tt> <a class="py-toggle" href="#" id="UnitHouseholderTransform-toggle" onclick="return toggle('UnitHouseholderTransform');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.UnitHouseholderTransform-class.html">UnitHouseholderTransform</a><tt class="py-op">(</tt><tt class="py-base-class">HouseholderTransform</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="UnitHouseholderTransform-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="UnitHouseholderTransform-expanded"><a name="UnitHouseholderTransform.__init__"></a><div id="UnitHouseholderTransform.__init__-def"><a name="L87"></a><tt class="py-lineno"> 87</tt> <a class="py-toggle" href="#" id="UnitHouseholderTransform.__init__-toggle" onclick="return toggle('UnitHouseholderTransform.__init__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.UnitHouseholderTransform-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">v</tt><tt class="py-op">,</tt> <tt class="py-param">k</tt><tt class="py-op">=</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-param">offset</tt><tt class="py-op">=</tt><tt class="py-string">'end'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="UnitHouseholderTransform.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="UnitHouseholderTransform.__init__-expanded"><a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">                <tt class="py-comment">#Take alpha = - exp(i arg(x_k)) ||v||</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">                <tt class="py-comment">#Note exp(i arg(v_k)) = v_k/abs(v_k) only if v_k&lt;&gt;0</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">                <tt class="py-name">ve1</tt> <tt class="py-op">=</tt> <tt id="link-38" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-38', 'v', 'link-4');">v</a></tt><tt class="py-op">.</tt><tt id="link-39" class="py-name"><a title="PolyMode.Modes.Mode.copy
+PolyMode.Modes.VectorMode.copy
+PolyMode.Waveguide.Circle.copy
+PolyMode.Waveguide.Polygon.copy
+PolyMode.Waveguide.WgShape.copy
+PolyMode.mathlink.coordinates.Coord.copy" class="py-name" href="#" onclick="return doclink('link-39', 'copy', 'link-1');">copy</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-40" class="py-name" targets="Variable PolyMode.mathlink.physcon.alpha=PolyMode.mathlink.physcon-module.html#alpha"><a title="PolyMode.mathlink.physcon.alpha" class="py-name" href="#" onclick="return doclink('link-40', 'alpha', 'link-40');">alpha</a></tt> <tt class="py-op">=</tt> <tt class="py-op">-</tt><tt class="py-name">sqrt</tt><tt class="py-op">(</tt><tt id="link-41" class="py-name"><a title="PolyMode.mathlink.coordinates.Coord.dot" class="py-name" href="#" onclick="return doclink('link-41', 'dot', 'link-3');">dot</a></tt><tt class="py-op">(</tt><tt class="py-name">conj</tt><tt class="py-op">(</tt><tt id="link-42" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-42', 'v', 'link-4');">v</a></tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt id="link-43" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-43', 'v', 'link-4');">v</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-op">*</tt> <tt class="py-name">exp</tt><tt class="py-op">(</tt><tt class="py-number">1j</tt><tt class="py-op">*</tt><tt class="py-name">angle</tt><tt class="py-op">(</tt><tt id="link-44" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-44', 'v', 'link-4');">v</a></tt><tt class="py-op">[</tt><tt class="py-name">k</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">                <tt class="py-name">ve1</tt><tt class="py-op">[</tt><tt class="py-name">k</tt><tt class="py-op">]</tt> <tt class="py-op">-=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-45" class="py-name"><a title="PolyMode.mathlink.physcon.alpha" class="py-name" href="#" onclick="return doclink('link-45', 'alpha', 'link-40');">alpha</a></tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line"> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">                <tt id="link-46" class="py-name" targets="Class PolyMode.mathlink.householder.HouseholderTransform=PolyMode.mathlink.householder.HouseholderTransform-class.html"><a title="PolyMode.mathlink.householder.HouseholderTransform" class="py-name" href="#" onclick="return doclink('link-46', 'HouseholderTransform', 'link-46');">HouseholderTransform</a></tt><tt class="py-op">.</tt><tt id="link-47" class="py-name" targets="Method PolyMode.Equation.VectorWaveEquation.__init__()=PolyMode.Equation.VectorWaveEquation-class.html#__init__,Method PolyMode.ExternalSolvers.JCMWaveSolver.__init__()=PolyMode.ExternalSolvers.JCMWaveSolver-class.html#__init__,Method PolyMode.Image.ImportBitmap.__init__()=PolyMode.Image.ImportBitmap-class.html#__init__,Method PolyMode.MPISolver.Master.__init__()=PolyMode.MPISolver.Master-class.html#__init__,Method PolyMode.MPISolver.Queue.__init__()=PolyMode.MPISolver.Queue-class.html#__init__,Method PolyMode.MPISolver.QueueItem.__init__()=PolyMode.MPISolver.QueueItem-class.html#__init__,Method PolyMode.MPISolver.Worker.__init__()=PolyMode.MPISolver.Worker-class.html#__init__,Method PolyMode.Material.Air.__init__()=PolyMode.Material.Air-class.html#__init__,Method PolyMode.Material.ClassiusMorlotti.__init__()=PolyMode.Material.ClassiusMorlotti-class.html#__init__,Method PolyMode.Material.Composite.__init__()=PolyMode.Material.Composite-class.html#__init__,Method PolyMode.Material.Fixed.__init__()=PolyMode.Material.Fixed-class.html#__init__,Method PolyMode.Material.FreeSnell.__init__()=PolyMode.Material.FreeSnell-class.html#__init__,Method PolyMode.Material.GeneralFile.__init__()=PolyMode.Material.GeneralFile-class.html#__init__,Method PolyMode.Material.Interpolated.__init__()=PolyMode.Material.Interpolated-class.html#__init__,Method PolyMode.Material.Laurent.__init__()=PolyMode.Material.Laurent-class.html#__init__,Method PolyMode.Material.Luxpop.__init__()=PolyMode.Material.Luxpop-class.html#__init__,Method PolyMode.Material.Sellmeier.__init__()=PolyMode.Material.Sellmeier-class.html#__init__,Method PolyMode.Material.SiO2Fl.__init__()=PolyMode.Material.SiO2Fl-class.html#__init__,Method PolyMode.Material.SiO2GeO2.__init__()=PolyMode.Material.SiO2GeO2-class.html#__init__,Method PolyMode.Material.Sopra.__init__()=PolyMode.Material.Sopra-class.html#__init__,Method PolyMode.Material.SopraFile.__init__()=PolyMode.Material.SopraFile-class.html#__init__,Method PolyMode.Material.Water.__init__()=PolyMode.Material.Water-class.html#__init__,Method PolyMode.Material.Water_IR.__init__()=PolyMode.Material.Water_IR-class.html#__init__,Method PolyMode.Modes.AnalyticExtension.__init__()=PolyMode.Modes.AnalyticExtension-class.html#__init__,Method PolyMode.Modes.CombinedVectorMode.__init__()=PolyMode.Modes.CombinedVectorMode-class.html#__init__,Method PolyMode.Modes.Mode.__init__()=PolyMode.Modes.Mode-class.html#__init__,Method PolyMode.Solver.CachedRandom.__init__()=PolyMode.Solver.CachedRandom-class.html#__init__,Method PolyMode.Solver.Solve.__init__()=PolyMode.Solver.Solve-class.html#__init__,Method PolyMode.Solver.WavelengthTrackingSolver.__init__()=PolyMode.Solver.WavelengthTrackingSolver-class.html#__init__,Method PolyMode.Waveguide.AnnularCombine.__init__()=PolyMode.Waveguide.AnnularCombine-class.html#__init__,Method PolyMode.Waveguide.Annulus.__init__()=PolyMode.Waveguide.Annulus-class.html#__init__,Method PolyMode.Waveguide.ChannelAnnulus.__init__()=PolyMode.Waveguide.ChannelAnnulus-class.html#__init__,Method PolyMode.Waveguide.Circle.__init__()=PolyMode.Waveguide.Circle-class.html#__init__,Method PolyMode.Waveguide.Combine.__init__()=PolyMode.Waveguide.Combine-class.html#__init__,Method PolyMode.Waveguide.CombinedIndex.__init__()=PolyMode.Waveguide.CombinedIndex-class.html#__init__,Method PolyMode.Waveguide.CombinedMask.__init__()=PolyMode.Waveguide.CombinedMask-class.html#__init__,Method PolyMode.Waveguide.Curve.__init__()=PolyMode.Waveguide.Curve-class.html#__init__,Method PolyMode.Waveguide.DirectCombine.__init__()=PolyMode.Waveguide.DirectCombine-class.html#__init__,Method PolyMode.Waveguide.Ellipse.__init__()=PolyMode.Waveguide.Ellipse-class.html#__init__,Method PolyMode.Waveguide.Image.__init__()=PolyMode.Waveguide.Image-class.html#__init__,Method PolyMode.Waveguide.Polygon.__init__()=PolyMode.Waveguide.Polygon-class.html#__init__,Method PolyMode.Waveguide.Rectangle.__init__()=PolyMode.Waveguide.Rectangle-class.html#__init__,Method PolyMode.Waveguide.RegularPolygon.__init__()=PolyMode.Waveguide.RegularPolygon-class.html#__init__,Method PolyMode.Waveguide.Waveguide.__init__()=PolyMode.Waveguide.Waveguide-class.html#__init__,Method PolyMode.Waveguide.WgAnnulus.__init__()=PolyMode.Waveguide.WgAnnulus-class.html#__init__,Method PolyMode.Waveguide.WgCoord.__init__()=PolyMode.Waveguide.WgCoord-class.html#__init__,Method PolyMode.Waveguide.WgShape.__init__()=PolyMode.Waveguide.WgShape-class.html#__init__,Method PolyMode.difflounge.boundary.BC_Dirichlet.__init__()=PolyMode.difflounge.boundary.BC_Dirichlet-class.html#__init__,Method PolyMode.difflounge.boundary.BC_Mixed.__init__()=PolyMode.difflounge.boundary.BC_Mixed-class.html#__init__,Method PolyMode.difflounge.boundary.BC_Neumann.__init__()=PolyMode.difflounge.boundary.BC_Neumann-class.html#__init__,Method PolyMode.difflounge.boundary.BC_OnePoint.__init__()=PolyMode.difflounge.boundary.BC_OnePoint-class.html#__init__,Method PolyMode.difflounge.boundary.BC_Switch.__init__()=PolyMode.difflounge.boundary.BC_Switch-class.html#__init__,Method PolyMode.difflounge.chebyshev.ChebyshevDense.__init__()=PolyMode.difflounge.chebyshev.ChebyshevDense-class.html#__init__,Method PolyMode.difflounge.finitedifference.DifferenceMatrix.__init__()=PolyMode.difflounge.finitedifference.DifferenceMatrix-class.html#__init__,Method PolyMode.difflounge.finitedifference.FiniteDifference.__init__()=PolyMode.difflounge.finitedifference.FiniteDifference-class.html#__init__,Method PolyMode.difflounge.finitedifference.SparseDifferenceMatrix.__init__()=PolyMode.difflounge.finitedifference.SparseDifferenceMatrix-class.html#__init__,Method PolyMode.difflounge.fourier.FourierDense.__init__()=PolyMode.difflounge.fourier.FourierDense-class.html#__init__,Method PolyMode.difflounge.line_sparse.DefaultDict.__init__()=PolyMode.difflounge.line_sparse.DefaultDict-class.html#__init__,Method PolyMode.difflounge.line_sparse.Line.__init__()=PolyMode.difflounge.line_sparse.Line-class.html#__init__,Method PolyMode.difflounge.line_sparse.LineSparse.__init__()=PolyMode.difflounge.line_sparse.LineSparse-class.html#__init__,Method PolyMode.mathlink.blockarray.BlockArray.__init__()=PolyMode.mathlink.blockarray.BlockArray-class.html#__init__,Method PolyMode.mathlink.blockarray.TriBlockLU.__init__()=PolyMode.mathlink.blockarray.TriBlockLU-class.html#__init__,Method PolyMode.mathlink.cached_calculation.CachedCalculation.__init__()=PolyMode.mathlink.cached_calculation.CachedCalculation-class.html#__init__,Method PolyMode.mathlink.coordinates.CartesianCoord.__init__()=PolyMode.mathlink.coordinates.CartesianCoord-class.html#__init__,Method PolyMode.mathlink.coordinates.PolarCoord.__init__()=PolyMode.mathlink.coordinates.PolarCoord-class.html#__init__,Method PolyMode.mathlink.eigensolver.ArnoldiIR.__init__()=PolyMode.mathlink.eigensolver.ArnoldiIR-class.html#__init__,Method PolyMode.mathlink.eigensolver.ArnoldiShiftInvertDense.__init__()=PolyMode.mathlink.eigensolver.ArnoldiShiftInvertDense-class.html#__init__,Method PolyMode.mathlink.eigensolver.ArnoldiShiftInvertGmres.__init__()=PolyMode.mathlink.eigensolver.ArnoldiShiftInvertGmres-class.html#__init__,Method PolyMode.mathlink.eigensolver.HouseholderArnoldiIR.__init__()=PolyMode.mathlink.eigensolver.HouseholderArnoldiIR-class.html#__init__,Method PolyMode.mathlink.householder.CompoundTransform.__init__()=PolyMode.mathlink.householder.CompoundTransform-class.html#__init__,Method PolyMode.mathlink.householder.GivensRotation.__init__()=PolyMode.mathlink.householder.GivensRotation-class.html#__init__,Method PolyMode.mathlink.householder.HessenbergReduce.__init__()=PolyMode.mathlink.householder.HessenbergReduce-class.html#__init__,Method PolyMode.mathlink.householder.HouseholderHessenberg.__init__()=PolyMode.mathlink.householder.HouseholderHessenberg-class.html#__init__,Method PolyMode.mathlink.householder.HouseholderQR.__init__()=PolyMode.mathlink.householder.HouseholderQR-class.html#__init__,Method PolyMode.mathlink.householder.HouseholderTransform.__init__()=PolyMode.mathlink.householder.HouseholderTransform-class.html#__init__,Method PolyMode.mathlink.householder.RowHessenberg.__init__()=PolyMode.mathlink.householder.RowHessenberg-class.html#__init__,Method PolyMode.mathlink.householder.UnitHouseholderTransform.__init__()=PolyMode.mathlink.householder.UnitHouseholderTransform-class.html#__init__,Method PolyMode.mathlink.householder.ZeroGivensRotation.__init__()=PolyMode.mathlink.householder.ZeroGivensRotation-class.html#__init__,Method PolyMode.mathlink.timer.Marker.__init__()=PolyMode.mathlink.timer.Marker-class.html#__init__,Method PolyMode.mathlink.timer.RunTime.__init__()=PolyMode.mathlink.timer.RunTime-class.html#__init__,Method PolyMode.mathlink.timer.timer.__init__()=PolyMode.mathlink.timer.timer-class.html#__init__"><a title="PolyMode.Equation.VectorWaveEquation.__init__
+PolyMode.ExternalSolvers.JCMWaveSolver.__init__
+PolyMode.Image.ImportBitmap.__init__
+PolyMode.MPISolver.Master.__init__
+PolyMode.MPISolver.Queue.__init__
+PolyMode.MPISolver.QueueItem.__init__
+PolyMode.MPISolver.Worker.__init__
+PolyMode.Material.Air.__init__
+PolyMode.Material.ClassiusMorlotti.__init__
+PolyMode.Material.Composite.__init__
+PolyMode.Material.Fixed.__init__
+PolyMode.Material.FreeSnell.__init__
+PolyMode.Material.GeneralFile.__init__
+PolyMode.Material.Interpolated.__init__
+PolyMode.Material.Laurent.__init__
+PolyMode.Material.Luxpop.__init__
+PolyMode.Material.Sellmeier.__init__
+PolyMode.Material.SiO2Fl.__init__
+PolyMode.Material.SiO2GeO2.__init__
+PolyMode.Material.Sopra.__init__
+PolyMode.Material.SopraFile.__init__
+PolyMode.Material.Water.__init__
+PolyMode.Material.Water_IR.__init__
+PolyMode.Modes.AnalyticExtension.__init__
+PolyMode.Modes.CombinedVectorMode.__init__
+PolyMode.Modes.Mode.__init__
+PolyMode.Solver.CachedRandom.__init__
+PolyMode.Solver.Solve.__init__
+PolyMode.Solver.WavelengthTrackingSolver.__init__
+PolyMode.Waveguide.AnnularCombine.__init__
+PolyMode.Waveguide.Annulus.__init__
+PolyMode.Waveguide.ChannelAnnulus.__init__
+PolyMode.Waveguide.Circle.__init__
+PolyMode.Waveguide.Combine.__init__
+PolyMode.Waveguide.CombinedIndex.__init__
+PolyMode.Waveguide.CombinedMask.__init__
+PolyMode.Waveguide.Curve.__init__
+PolyMode.Waveguide.DirectCombine.__init__
+PolyMode.Waveguide.Ellipse.__init__
+PolyMode.Waveguide.Image.__init__
+PolyMode.Waveguide.Polygon.__init__
+PolyMode.Waveguide.Rectangle.__init__
+PolyMode.Waveguide.RegularPolygon.__init__
+PolyMode.Waveguide.Waveguide.__init__
+PolyMode.Waveguide.WgAnnulus.__init__
+PolyMode.Waveguide.WgCoord.__init__
+PolyMode.Waveguide.WgShape.__init__
+PolyMode.difflounge.boundary.BC_Dirichlet.__init__
+PolyMode.difflounge.boundary.BC_Mixed.__init__
+PolyMode.difflounge.boundary.BC_Neumann.__init__
+PolyMode.difflounge.boundary.BC_OnePoint.__init__
+PolyMode.difflounge.boundary.BC_Switch.__init__
+PolyMode.difflounge.chebyshev.ChebyshevDense.__init__
+PolyMode.difflounge.finitedifference.DifferenceMatrix.__init__
+PolyMode.difflounge.finitedifference.FiniteDifference.__init__
+PolyMode.difflounge.finitedifference.SparseDifferenceMatrix.__init__
+PolyMode.difflounge.fourier.FourierDense.__init__
+PolyMode.difflounge.line_sparse.DefaultDict.__init__
+PolyMode.difflounge.line_sparse.Line.__init__
+PolyMode.difflounge.line_sparse.LineSparse.__init__
+PolyMode.mathlink.blockarray.BlockArray.__init__
+PolyMode.mathlink.blockarray.TriBlockLU.__init__
+PolyMode.mathlink.cached_calculation.CachedCalculation.__init__
+PolyMode.mathlink.coordinates.CartesianCoord.__init__
+PolyMode.mathlink.coordinates.PolarCoord.__init__
+PolyMode.mathlink.eigensolver.ArnoldiIR.__init__
+PolyMode.mathlink.eigensolver.ArnoldiShiftInvertDense.__init__
+PolyMode.mathlink.eigensolver.ArnoldiShiftInvertGmres.__init__
+PolyMode.mathlink.eigensolver.HouseholderArnoldiIR.__init__
+PolyMode.mathlink.householder.CompoundTransform.__init__
+PolyMode.mathlink.householder.GivensRotation.__init__
+PolyMode.mathlink.householder.HessenbergReduce.__init__
+PolyMode.mathlink.householder.HouseholderHessenberg.__init__
+PolyMode.mathlink.householder.HouseholderQR.__init__
+PolyMode.mathlink.householder.HouseholderTransform.__init__
+PolyMode.mathlink.householder.RowHessenberg.__init__
+PolyMode.mathlink.householder.UnitHouseholderTransform.__init__
+PolyMode.mathlink.householder.ZeroGivensRotation.__init__
+PolyMode.mathlink.timer.Marker.__init__
+PolyMode.mathlink.timer.RunTime.__init__
+PolyMode.mathlink.timer.timer.__init__" class="py-name" href="#" onclick="return doclink('link-47', '__init__', 'link-47');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt class="py-name">ve1</tt><tt class="py-op">,</tt> <tt id="link-48" class="py-name"><a title="PolyMode.difflounge.test.offset" class="py-name" href="#" onclick="return doclink('link-48', 'offset', 'link-11');">offset</a></tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line"> </tt>
+<a name="GivensRotation"></a><div id="GivensRotation-def"><a name="L96"></a><tt class="py-lineno"> 96</tt> <a class="py-toggle" href="#" id="GivensRotation-toggle" onclick="return toggle('GivensRotation');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.GivensRotation-class.html">GivensRotation</a><tt class="py-op">(</tt><tt class="py-base-class">ElementaryTransform</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GivensRotation-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="GivensRotation-expanded"><a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line">        <tt class="py-docstring">"Defines and applied implicit householder transform"</tt> </tt>
+<a name="GivensRotation.__init__"></a><div id="GivensRotation.__init__-def"><a name="L98"></a><tt class="py-lineno"> 98</tt> <a class="py-toggle" href="#" id="GivensRotation.__init__-toggle" onclick="return toggle('GivensRotation.__init__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.GivensRotation-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">cs</tt><tt class="py-op">=</tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-param">locations</tt><tt class="py-op">=</tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GivensRotation.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="GivensRotation.__init__-expanded"><a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-49" class="py-name" targets="Variable PolyMode.mathlink.physcon.c=PolyMode.mathlink.physcon-module.html#c"><a title="PolyMode.mathlink.physcon.c" class="py-name" href="#" onclick="return doclink('link-49', 'c', 'link-49');">c</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">s</tt> <tt class="py-op">=</tt> <tt class="py-name">cs</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">locations</tt> <tt class="py-op">=</tt> <tt class="py-name">locations</tt> </tt>
+</div><a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">         </tt>
+<a name="GivensRotation.set_offset"></a><div id="GivensRotation.set_offset-def"><a name="L102"></a><tt class="py-lineno">102</tt> <a class="py-toggle" href="#" id="GivensRotation.set_offset-toggle" onclick="return toggle('GivensRotation.set_offset');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.GivensRotation-class.html#set_offset">set_offset</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">offset</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GivensRotation.set_offset-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="GivensRotation.set_offset-expanded"><a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">                <tt class="py-docstring">"""</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line"><tt class="py-docstring">                Default action is to count i,j from the start</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line"><tt class="py-docstring">                use offset to change this behaviour</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line"><tt class="py-docstring">                """</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-50" class="py-name"><a title="PolyMode.difflounge.test.offset" class="py-name" href="#" onclick="return doclink('link-50', 'offset', 'link-11');">offset</a></tt> </tt>
+</div><a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line"> </tt>
+<a name="GivensRotation.rotate"></a><div id="GivensRotation.rotate-def"><a name="L109"></a><tt class="py-lineno">109</tt> <a class="py-toggle" href="#" id="GivensRotation.rotate-toggle" onclick="return toggle('GivensRotation.rotate');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.GivensRotation-class.html#rotate">rotate</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">X</tt><tt class="py-op">,</tt> <tt class="py-param">a</tt><tt class="py-op">,</tt> <tt class="py-param">b</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GivensRotation.rotate-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="GivensRotation.rotate-expanded"><a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">                <tt class="py-comment">#**todo** This is damn slow .. consider a speed up!</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">                <tt class="py-name">i</tt><tt class="py-op">,</tt><tt class="py-name">j</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">locations</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt id="link-51" class="py-name"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-51', 'x', 'link-0');">x</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">atleast_2d</tt><tt class="py-op">(</tt><tt id="link-52" class="py-name"><a title="PolyMode.difflounge.test.X
+PolyMode.difflounge.test_fd.X" class="py-name" href="#" onclick="return doclink('link-52', 'X', 'link-19');">X</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">                        <tt class="py-name">xn</tt> <tt class="py-op">=</tt> <tt class="py-name">a</tt><tt class="py-op">*</tt><tt id="link-53" class="py-name"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-53', 'x', 'link-0');">x</a></tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">]</tt> <tt class="py-op">+</tt> <tt class="py-name">b</tt><tt class="py-op">*</tt><tt id="link-54" class="py-name"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-54', 'x', 'link-0');">x</a></tt><tt class="py-op">[</tt><tt class="py-name">j</tt><tt class="py-op">]</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">                        <tt class="py-name">yn</tt> <tt class="py-op">=</tt> <tt class="py-op">-</tt><tt class="py-name">b</tt><tt class="py-op">*</tt><tt id="link-55" class="py-name"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-55', 'x', 'link-0');">x</a></tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">]</tt> <tt class="py-op">+</tt> <tt class="py-name">a</tt><tt class="py-op">*</tt><tt id="link-56" class="py-name"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-56', 'x', 'link-0');">x</a></tt><tt class="py-op">[</tt><tt class="py-name">j</tt><tt class="py-op">]</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">                        <tt id="link-57" class="py-name"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-57', 'x', 'link-0');">x</a></tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">]</tt><tt class="py-op">=</tt><tt class="py-name">xn</tt><tt class="py-op">;</tt> <tt id="link-58" class="py-name"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-58', 'x', 'link-0');">x</a></tt><tt class="py-op">[</tt><tt class="py-name">j</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">yn</tt> </tt>
+</div><a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">         </tt>
+<a name="GivensRotation.apply"></a><div id="GivensRotation.apply-def"><a name="L117"></a><tt class="py-lineno">117</tt> <a class="py-toggle" href="#" id="GivensRotation.apply-toggle" onclick="return toggle('GivensRotation.apply');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.GivensRotation-class.html#apply">apply</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">X</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GivensRotation.apply-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="GivensRotation.apply-expanded"><a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">                <tt class="py-docstring">"""</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line"><tt class="py-docstring">                Apply Givens rotation to columns of X</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line"><tt class="py-docstring">                so Xnew = G X</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line"><tt class="py-docstring">                """</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-59" class="py-name" targets="Method PolyMode.mathlink.householder.GivensRotation.rotate()=PolyMode.mathlink.householder.GivensRotation-class.html#rotate"><a title="PolyMode.mathlink.householder.GivensRotation.rotate" class="py-name" href="#" onclick="return doclink('link-59', 'rotate', 'link-59');">rotate</a></tt><tt class="py-op">(</tt><tt id="link-60" class="py-name"><a title="PolyMode.difflounge.test.X
+PolyMode.difflounge.test_fd.X" class="py-name" href="#" onclick="return doclink('link-60', 'X', 'link-19');">X</a></tt><tt class="py-op">.</tt><tt id="link-61" class="py-name" targets="Variable PolyMode.Material.Material.T=PolyMode.Material.Material-class.html#T"><a title="PolyMode.Material.Material.T" class="py-name" href="#" onclick="return doclink('link-61', 'T', 'link-61');">T</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-62" class="py-name"><a title="PolyMode.mathlink.physcon.c" class="py-name" href="#" onclick="return doclink('link-62', 'c', 'link-49');">c</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">s</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line"> </tt>
+<a name="GivensRotation.inverse"></a><div id="GivensRotation.inverse-def"><a name="L124"></a><tt class="py-lineno">124</tt> <a class="py-toggle" href="#" id="GivensRotation.inverse-toggle" onclick="return toggle('GivensRotation.inverse');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.GivensRotation-class.html#inverse">inverse</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">X</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GivensRotation.inverse-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="GivensRotation.inverse-expanded"><a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">                <tt class="py-docstring">"""</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line"><tt class="py-docstring">                Apply inverse Givens rotation to columns of X</tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line"><tt class="py-docstring">                so Xnew = G^-1 X</tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line"><tt class="py-docstring">                """</tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-63" class="py-name"><a title="PolyMode.mathlink.householder.GivensRotation.rotate" class="py-name" href="#" onclick="return doclink('link-63', 'rotate', 'link-59');">rotate</a></tt><tt class="py-op">(</tt><tt id="link-64" class="py-name"><a title="PolyMode.difflounge.test.X
+PolyMode.difflounge.test_fd.X" class="py-name" href="#" onclick="return doclink('link-64', 'X', 'link-19');">X</a></tt><tt class="py-op">.</tt><tt id="link-65" class="py-name"><a title="PolyMode.Material.Material.T" class="py-name" href="#" onclick="return doclink('link-65', 'T', 'link-61');">T</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-66" class="py-name"><a title="PolyMode.mathlink.physcon.c" class="py-name" href="#" onclick="return doclink('link-66', 'c', 'link-49');">c</a></tt><tt class="py-op">,</tt> <tt class="py-op">-</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">s</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line"> </tt>
+<a name="GivensRotation.rapply"></a><div id="GivensRotation.rapply-def"><a name="L131"></a><tt class="py-lineno">131</tt> <a class="py-toggle" href="#" id="GivensRotation.rapply-toggle" onclick="return toggle('GivensRotation.rapply');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.GivensRotation-class.html#rapply">rapply</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">X</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GivensRotation.rapply-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="GivensRotation.rapply-expanded"><a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">                <tt class="py-docstring">"""</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line"><tt class="py-docstring">                Apply right Givens rotation to rows of X</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line"><tt class="py-docstring">                so Xnew = X G</tt> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line"><tt class="py-docstring">                """</tt> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-67" class="py-name"><a title="PolyMode.mathlink.householder.GivensRotation.rotate" class="py-name" href="#" onclick="return doclink('link-67', 'rotate', 'link-59');">rotate</a></tt><tt class="py-op">(</tt><tt id="link-68" class="py-name"><a title="PolyMode.difflounge.test.X
+PolyMode.difflounge.test_fd.X" class="py-name" href="#" onclick="return doclink('link-68', 'X', 'link-19');">X</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-69" class="py-name"><a title="PolyMode.mathlink.physcon.c" class="py-name" href="#" onclick="return doclink('link-69', 'c', 'link-49');">c</a></tt><tt class="py-op">,</tt> <tt class="py-op">-</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">s</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line"> </tt>
+<a name="GivensRotation.rinverse"></a><div id="GivensRotation.rinverse-def"><a name="L138"></a><tt class="py-lineno">138</tt> <a class="py-toggle" href="#" id="GivensRotation.rinverse-toggle" onclick="return toggle('GivensRotation.rinverse');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.GivensRotation-class.html#rinverse">rinverse</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">X</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="GivensRotation.rinverse-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="GivensRotation.rinverse-expanded"><a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">                <tt class="py-docstring">"""</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line"><tt class="py-docstring">                Apply inverse right Givens rotation to rows of X</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line"><tt class="py-docstring">                so Xnew = X G</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line"><tt class="py-docstring">                """</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-70" class="py-name"><a title="PolyMode.mathlink.householder.GivensRotation.rotate" class="py-name" href="#" onclick="return doclink('link-70', 'rotate', 'link-59');">rotate</a></tt><tt class="py-op">(</tt><tt id="link-71" class="py-name"><a title="PolyMode.difflounge.test.X
+PolyMode.difflounge.test_fd.X" class="py-name" href="#" onclick="return doclink('link-71', 'X', 'link-19');">X</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-72" class="py-name"><a title="PolyMode.mathlink.physcon.c" class="py-name" href="#" onclick="return doclink('link-72', 'c', 'link-49');">c</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">s</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">                 </tt>
+<a name="ZeroGivensRotation"></a><div id="ZeroGivensRotation-def"><a name="L145"></a><tt class="py-lineno">145</tt> <a class="py-toggle" href="#" id="ZeroGivensRotation-toggle" onclick="return toggle('ZeroGivensRotation');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.ZeroGivensRotation-class.html">ZeroGivensRotation</a><tt class="py-op">(</tt><tt class="py-base-class">GivensRotation</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ZeroGivensRotation-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="ZeroGivensRotation-expanded"><a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line"><tt class="py-docstring">        A Givens rotation defined to introduce a zero to v[j]</tt> </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="ZeroGivensRotation.__init__"></a><div id="ZeroGivensRotation.__init__-def"><a name="L149"></a><tt class="py-lineno">149</tt> <a class="py-toggle" href="#" id="ZeroGivensRotation.__init__-toggle" onclick="return toggle('ZeroGivensRotation.__init__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.ZeroGivensRotation-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">v</tt><tt class="py-op">,</tt> <tt class="py-param">locations</tt><tt class="py-op">=</tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ZeroGivensRotation.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="ZeroGivensRotation.__init__-expanded"><a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line">                <tt class="py-name">i</tt><tt class="py-op">,</tt><tt class="py-name">j</tt> <tt class="py-op">=</tt> <tt class="py-name">locations</tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line">                 </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line">                <tt class="py-comment">#Handle different cases of coefficients.</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line">                <tt class="py-comment">#See:</tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line">                <tt class="py-comment"># http://en.wikipedia.org/wiki/Givens_rotation#Stable_calculation</tt> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line">                <tt class="py-comment">#</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line">                <tt class="py-comment"># and</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line">                <tt class="py-comment">#</tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line">                <tt class="py-comment">#Anderson, Edward (2000)</tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line">                <tt class="py-comment">#Discontinuous Plane Rotations and the Symmetric Eigenvalue Problem</tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line">                <tt class="py-comment">#LAPACK Working Note 150, University of Tennessee, UT-CS-00-454, December 4, 2000.</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line">                <tt class="py-comment">#http://www.netlib.org/lapack/lawnspdf/lawn150.pdf</tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line">                <tt class="py-comment">#</tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line">                <tt class="py-comment">#D. Bindel, J. Demmel, W. Kahan, O. Marques. (2001)</tt> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line">                <tt class="py-comment">#On Computing Givens rotations reliably and efficiently</tt> </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line">                <tt class="py-comment">#LAPACK Working Note 148, University of Tennessee, UT-CS-00-449, January 31, 2001.</tt> </tt>
+<a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line">                <tt class="py-comment">#http://www.netlib.org/lapack/lawnspdf/lawn148.pdf</tt> </tt>
+<a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line">                <tt class="py-comment">#</tt> </tt>
+<a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt id="link-73" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-73', 'v', 'link-4');">v</a></tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">]</tt><tt class="py-op">==</tt><tt class="py-number">0</tt> <tt class="py-keyword">and</tt> <tt id="link-74" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-74', 'v', 'link-4');">v</a></tt><tt class="py-op">[</tt><tt class="py-name">j</tt><tt class="py-op">]</tt><tt class="py-op">==</tt><tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line">                        <tt id="link-75" class="py-name"><a title="PolyMode.mathlink.physcon.c" class="py-name" href="#" onclick="return doclink('link-75', 'c', 'link-49');">c</a></tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt><tt class="py-op">;</tt> <tt class="py-name">s</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt><tt class="py-op">;</tt> <tt class="py-name">r</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line">                         </tt>
+<a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line">                <tt class="py-keyword">elif</tt> <tt id="link-76" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-76', 'v', 'link-4');">v</a></tt><tt class="py-op">[</tt><tt class="py-name">j</tt><tt class="py-op">]</tt><tt class="py-op">==</tt><tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line">                        <tt id="link-77" class="py-name"><a title="PolyMode.mathlink.physcon.c" class="py-name" href="#" onclick="return doclink('link-77', 'c', 'link-49');">c</a></tt> <tt class="py-op">=</tt> <tt class="py-name">sign</tt><tt class="py-op">(</tt><tt id="link-78" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-78', 'v', 'link-4');">v</a></tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">;</tt> <tt class="py-name">s</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt><tt class="py-op">;</tt> <tt class="py-name">r</tt> <tt class="py-op">=</tt> <tt class="py-name">abs</tt><tt class="py-op">(</tt><tt id="link-79" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-79', 'v', 'link-4');">v</a></tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line"> </tt>
+<a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line">                <tt class="py-keyword">elif</tt> <tt id="link-80" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-80', 'v', 'link-4');">v</a></tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">]</tt><tt class="py-op">==</tt><tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line">                        <tt id="link-81" class="py-name"><a title="PolyMode.mathlink.physcon.c" class="py-name" href="#" onclick="return doclink('link-81', 'c', 'link-49');">c</a></tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt><tt class="py-op">;</tt> <tt class="py-name">s</tt> <tt class="py-op">=</tt> <tt class="py-name">sign</tt><tt class="py-op">(</tt><tt id="link-82" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-82', 'v', 'link-4');">v</a></tt><tt class="py-op">[</tt><tt class="py-name">j</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">;</tt> <tt class="py-name">r</tt> <tt class="py-op">=</tt> <tt class="py-name">abs</tt><tt class="py-op">(</tt><tt id="link-83" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-83', 'v', 'link-4');">v</a></tt><tt class="py-op">[</tt><tt class="py-name">j</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line"> </tt>
+<a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line">                <tt class="py-keyword">elif</tt> <tt class="py-name">abs</tt><tt class="py-op">(</tt><tt id="link-84" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-84', 'v', 'link-4');">v</a></tt><tt class="py-op">[</tt><tt class="py-name">j</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">&gt;</tt><tt class="py-name">abs</tt><tt class="py-op">(</tt><tt id="link-85" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-85', 'v', 'link-4');">v</a></tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L178"></a><tt class="py-lineno">178</tt>  <tt class="py-line">                        <tt id="link-86" class="py-name" targets="Variable PolyMode.difflounge.test_fd.t=PolyMode.difflounge.test_fd-module.html#t,Variable PolyMode.mathlink.ublas_block_lu.test_block_lu.t=PolyMode.mathlink.ublas_block_lu.test_block_lu-module.html#t"><a title="PolyMode.difflounge.test_fd.t
+PolyMode.mathlink.ublas_block_lu.test_block_lu.t" class="py-name" href="#" onclick="return doclink('link-86', 't', 'link-86');">t</a></tt> <tt class="py-op">=</tt> <tt id="link-87" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-87', 'v', 'link-4');">v</a></tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">]</tt><tt class="py-op">/</tt><tt id="link-88" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-88', 'v', 'link-4');">v</a></tt><tt class="py-op">[</tt><tt class="py-name">j</tt><tt class="py-op">]</tt> </tt>
+<a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line">                        <tt id="link-89" class="py-name" targets="Variable PolyMode.mathlink.physcon.u=PolyMode.mathlink.physcon-module.html#u"><a title="PolyMode.mathlink.physcon.u" class="py-name" href="#" onclick="return doclink('link-89', 'u', 'link-89');">u</a></tt> <tt class="py-op">=</tt> <tt class="py-name">sign</tt><tt class="py-op">(</tt><tt id="link-90" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-90', 'v', 'link-4');">v</a></tt><tt class="py-op">[</tt><tt class="py-name">j</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> <tt class="py-op">*</tt> <tt class="py-name">sqrt</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">+</tt><tt id="link-91" class="py-name"><a title="PolyMode.difflounge.test_fd.t
+PolyMode.mathlink.ublas_block_lu.test_block_lu.t" class="py-name" href="#" onclick="return doclink('link-91', 't', 'link-86');">t</a></tt><tt class="py-op">*</tt><tt id="link-92" class="py-name"><a title="PolyMode.difflounge.test_fd.t
+PolyMode.mathlink.ublas_block_lu.test_block_lu.t" class="py-name" href="#" onclick="return doclink('link-92', 't', 'link-86');">t</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line">                        <tt class="py-name">s</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt><tt class="py-op">/</tt><tt id="link-93" class="py-name"><a title="PolyMode.mathlink.physcon.u" class="py-name" href="#" onclick="return doclink('link-93', 'u', 'link-89');">u</a></tt> </tt>
+<a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line">                        <tt id="link-94" class="py-name"><a title="PolyMode.mathlink.physcon.c" class="py-name" href="#" onclick="return doclink('link-94', 'c', 'link-49');">c</a></tt> <tt class="py-op">=</tt> <tt class="py-name">s</tt><tt class="py-op">*</tt><tt id="link-95" class="py-name"><a title="PolyMode.difflounge.test_fd.t
+PolyMode.mathlink.ublas_block_lu.test_block_lu.t" class="py-name" href="#" onclick="return doclink('link-95', 't', 'link-86');">t</a></tt> </tt>
+<a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line">                        <tt class="py-name">r</tt> <tt class="py-op">=</tt> <tt id="link-96" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-96', 'v', 'link-4');">v</a></tt><tt class="py-op">[</tt><tt class="py-name">j</tt><tt class="py-op">]</tt><tt class="py-op">*</tt><tt id="link-97" class="py-name"><a title="PolyMode.mathlink.physcon.u" class="py-name" href="#" onclick="return doclink('link-97', 'u', 'link-89');">u</a></tt> </tt>
+<a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line"> </tt>
+<a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line">                <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line">                        <tt id="link-98" class="py-name"><a title="PolyMode.difflounge.test_fd.t
+PolyMode.mathlink.ublas_block_lu.test_block_lu.t" class="py-name" href="#" onclick="return doclink('link-98', 't', 'link-86');">t</a></tt> <tt class="py-op">=</tt> <tt id="link-99" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-99', 'v', 'link-4');">v</a></tt><tt class="py-op">[</tt><tt class="py-name">j</tt><tt class="py-op">]</tt><tt class="py-op">/</tt><tt id="link-100" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-100', 'v', 'link-4');">v</a></tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">]</tt> </tt>
+<a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line">                        <tt id="link-101" class="py-name"><a title="PolyMode.mathlink.physcon.u" class="py-name" href="#" onclick="return doclink('link-101', 'u', 'link-89');">u</a></tt> <tt class="py-op">=</tt> <tt class="py-name">sign</tt><tt class="py-op">(</tt><tt id="link-102" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-102', 'v', 'link-4');">v</a></tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> <tt class="py-op">*</tt> <tt class="py-name">sqrt</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">+</tt><tt id="link-103" class="py-name"><a title="PolyMode.difflounge.test_fd.t
+PolyMode.mathlink.ublas_block_lu.test_block_lu.t" class="py-name" href="#" onclick="return doclink('link-103', 't', 'link-86');">t</a></tt><tt class="py-op">*</tt><tt id="link-104" class="py-name"><a title="PolyMode.difflounge.test_fd.t
+PolyMode.mathlink.ublas_block_lu.test_block_lu.t" class="py-name" href="#" onclick="return doclink('link-104', 't', 'link-86');">t</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line">                        <tt id="link-105" class="py-name"><a title="PolyMode.mathlink.physcon.c" class="py-name" href="#" onclick="return doclink('link-105', 'c', 'link-49');">c</a></tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt><tt class="py-op">/</tt><tt id="link-106" class="py-name"><a title="PolyMode.mathlink.physcon.u" class="py-name" href="#" onclick="return doclink('link-106', 'u', 'link-89');">u</a></tt> </tt>
+<a name="L188"></a><tt class="py-lineno">188</tt>  <tt class="py-line">                        <tt class="py-name">s</tt> <tt class="py-op">=</tt> <tt id="link-107" class="py-name"><a title="PolyMode.mathlink.physcon.c" class="py-name" href="#" onclick="return doclink('link-107', 'c', 'link-49');">c</a></tt><tt class="py-op">*</tt><tt id="link-108" class="py-name"><a title="PolyMode.difflounge.test_fd.t
+PolyMode.mathlink.ublas_block_lu.test_block_lu.t" class="py-name" href="#" onclick="return doclink('link-108', 't', 'link-86');">t</a></tt> </tt>
+<a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line">                        <tt class="py-name">r</tt> <tt class="py-op">=</tt> <tt id="link-109" class="py-name"><a title="PolyMode.difflounge.test.v
+PolyMode.difflounge.test_fd.v" class="py-name" href="#" onclick="return doclink('link-109', 'v', 'link-4');">v</a></tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">]</tt><tt class="py-op">*</tt><tt id="link-110" class="py-name"><a title="PolyMode.mathlink.physcon.u" class="py-name" href="#" onclick="return doclink('link-110', 'u', 'link-89');">u</a></tt> </tt>
+<a name="L190"></a><tt class="py-lineno">190</tt>  <tt class="py-line"> </tt>
+<a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line">                <tt class="py-keyword">print</tt> <tt id="link-111" class="py-name"><a title="PolyMode.mathlink.physcon.c" class="py-name" href="#" onclick="return doclink('link-111', 'c', 'link-49');">c</a></tt><tt class="py-op">,</tt><tt class="py-name">s</tt> </tt>
+<a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line"> </tt>
+<a name="L193"></a><tt class="py-lineno">193</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">r</tt> <tt class="py-op">=</tt> <tt class="py-name">r</tt> </tt>
+<a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line">                <tt id="link-112" class="py-name" targets="Class PolyMode.mathlink.householder.GivensRotation=PolyMode.mathlink.householder.GivensRotation-class.html"><a title="PolyMode.mathlink.householder.GivensRotation" class="py-name" href="#" onclick="return doclink('link-112', 'GivensRotation', 'link-112');">GivensRotation</a></tt><tt class="py-op">.</tt><tt id="link-113" class="py-name"><a title="PolyMode.Equation.VectorWaveEquation.__init__
+PolyMode.ExternalSolvers.JCMWaveSolver.__init__
+PolyMode.Image.ImportBitmap.__init__
+PolyMode.MPISolver.Master.__init__
+PolyMode.MPISolver.Queue.__init__
+PolyMode.MPISolver.QueueItem.__init__
+PolyMode.MPISolver.Worker.__init__
+PolyMode.Material.Air.__init__
+PolyMode.Material.ClassiusMorlotti.__init__
+PolyMode.Material.Composite.__init__
+PolyMode.Material.Fixed.__init__
+PolyMode.Material.FreeSnell.__init__
+PolyMode.Material.GeneralFile.__init__
+PolyMode.Material.Interpolated.__init__
+PolyMode.Material.Laurent.__init__
+PolyMode.Material.Luxpop.__init__
+PolyMode.Material.Sellmeier.__init__
+PolyMode.Material.SiO2Fl.__init__
+PolyMode.Material.SiO2GeO2.__init__
+PolyMode.Material.Sopra.__init__
+PolyMode.Material.SopraFile.__init__
+PolyMode.Material.Water.__init__
+PolyMode.Material.Water_IR.__init__
+PolyMode.Modes.AnalyticExtension.__init__
+PolyMode.Modes.CombinedVectorMode.__init__
+PolyMode.Modes.Mode.__init__
+PolyMode.Solver.CachedRandom.__init__
+PolyMode.Solver.Solve.__init__
+PolyMode.Solver.WavelengthTrackingSolver.__init__
+PolyMode.Waveguide.AnnularCombine.__init__
+PolyMode.Waveguide.Annulus.__init__
+PolyMode.Waveguide.ChannelAnnulus.__init__
+PolyMode.Waveguide.Circle.__init__
+PolyMode.Waveguide.Combine.__init__
+PolyMode.Waveguide.CombinedIndex.__init__
+PolyMode.Waveguide.CombinedMask.__init__
+PolyMode.Waveguide.Curve.__init__
+PolyMode.Waveguide.DirectCombine.__init__
+PolyMode.Waveguide.Ellipse.__init__
+PolyMode.Waveguide.Image.__init__
+PolyMode.Waveguide.Polygon.__init__
+PolyMode.Waveguide.Rectangle.__init__
+PolyMode.Waveguide.RegularPolygon.__init__
+PolyMode.Waveguide.Waveguide.__init__
+PolyMode.Waveguide.WgAnnulus.__init__
+PolyMode.Waveguide.WgCoord.__init__
+PolyMode.Waveguide.WgShape.__init__
+PolyMode.difflounge.boundary.BC_Dirichlet.__init__
+PolyMode.difflounge.boundary.BC_Mixed.__init__
+PolyMode.difflounge.boundary.BC_Neumann.__init__
+PolyMode.difflounge.boundary.BC_OnePoint.__init__
+PolyMode.difflounge.boundary.BC_Switch.__init__
+PolyMode.difflounge.chebyshev.ChebyshevDense.__init__
+PolyMode.difflounge.finitedifference.DifferenceMatrix.__init__
+PolyMode.difflounge.finitedifference.FiniteDifference.__init__
+PolyMode.difflounge.finitedifference.SparseDifferenceMatrix.__init__
+PolyMode.difflounge.fourier.FourierDense.__init__
+PolyMode.difflounge.line_sparse.DefaultDict.__init__
+PolyMode.difflounge.line_sparse.Line.__init__
+PolyMode.difflounge.line_sparse.LineSparse.__init__
+PolyMode.mathlink.blockarray.BlockArray.__init__
+PolyMode.mathlink.blockarray.TriBlockLU.__init__
+PolyMode.mathlink.cached_calculation.CachedCalculation.__init__
+PolyMode.mathlink.coordinates.CartesianCoord.__init__
+PolyMode.mathlink.coordinates.PolarCoord.__init__
+PolyMode.mathlink.eigensolver.ArnoldiIR.__init__
+PolyMode.mathlink.eigensolver.ArnoldiShiftInvertDense.__init__
+PolyMode.mathlink.eigensolver.ArnoldiShiftInvertGmres.__init__
+PolyMode.mathlink.eigensolver.HouseholderArnoldiIR.__init__
+PolyMode.mathlink.householder.CompoundTransform.__init__
+PolyMode.mathlink.householder.GivensRotation.__init__
+PolyMode.mathlink.householder.HessenbergReduce.__init__
+PolyMode.mathlink.householder.HouseholderHessenberg.__init__
+PolyMode.mathlink.householder.HouseholderQR.__init__
+PolyMode.mathlink.householder.HouseholderTransform.__init__
+PolyMode.mathlink.householder.RowHessenberg.__init__
+PolyMode.mathlink.householder.UnitHouseholderTransform.__init__
+PolyMode.mathlink.householder.ZeroGivensRotation.__init__
+PolyMode.mathlink.timer.Marker.__init__
+PolyMode.mathlink.timer.RunTime.__init__
+PolyMode.mathlink.timer.timer.__init__" class="py-name" href="#" onclick="return doclink('link-113', '__init__', 'link-47');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt class="py-name">cs</tt><tt class="py-op">=</tt><tt class="py-op">(</tt><tt id="link-114" class="py-name"><a title="PolyMode.mathlink.physcon.c" class="py-name" href="#" onclick="return doclink('link-114', 'c', 'link-49');">c</a></tt><tt class="py-op">,</tt><tt class="py-name">s</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">locations</tt><tt class="py-op">=</tt><tt class="py-name">locations</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L195"></a><tt class="py-lineno">195</tt>  <tt class="py-line"> </tt>
+<a name="CompoundTransform"></a><div id="CompoundTransform-def"><a name="L196"></a><tt class="py-lineno">196</tt> <a class="py-toggle" href="#" id="CompoundTransform-toggle" onclick="return toggle('CompoundTransform');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.CompoundTransform-class.html">CompoundTransform</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CompoundTransform-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="CompoundTransform-expanded"><a name="CompoundTransform.__init__"></a><div id="CompoundTransform.__init__-def"><a name="L197"></a><tt class="py-lineno">197</tt> <a class="py-toggle" href="#" id="CompoundTransform.__init__-toggle" onclick="return toggle('CompoundTransform.__init__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.CompoundTransform-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">N</tt><tt class="py-op">=</tt><tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CompoundTransform.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="CompoundTransform.__init__-expanded"><a name="L198"></a><tt class="py-lineno">198</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">transforms</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">None</tt><tt class="py-op">]</tt><tt class="py-op">*</tt><tt class="py-name">N</tt> </tt>
+</div><a name="L199"></a><tt class="py-lineno">199</tt>  <tt class="py-line"> </tt>
+<a name="CompoundTransform.clear_transforms"></a><div id="CompoundTransform.clear_transforms-def"><a name="L200"></a><tt class="py-lineno">200</tt> <a class="py-toggle" href="#" id="CompoundTransform.clear_transforms-toggle" onclick="return toggle('CompoundTransform.clear_transforms');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.CompoundTransform-class.html#clear_transforms">clear_transforms</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CompoundTransform.clear_transforms-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="CompoundTransform.clear_transforms-expanded"><a name="L201"></a><tt class="py-lineno">201</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">transforms</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line">         </tt>
+<a name="CompoundTransform.set_transform"></a><div id="CompoundTransform.set_transform-def"><a name="L203"></a><tt class="py-lineno">203</tt> <a class="py-toggle" href="#" id="CompoundTransform.set_transform-toggle" onclick="return toggle('CompoundTransform.set_transform');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.CompoundTransform-class.html#set_transform">set_transform</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">trans</tt><tt class="py-op">,</tt> <tt class="py-param">j</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CompoundTransform.set_transform-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="CompoundTransform.set_transform-expanded"><a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">transforms</tt><tt class="py-op">)</tt><tt class="py-op">&lt;=</tt><tt class="py-name">j</tt><tt class="py-op">:</tt> </tt>
+<a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">transforms</tt><tt class="py-op">.</tt><tt class="py-name">append</tt><tt class="py-op">(</tt> <tt class="py-op">[</tt><tt class="py-name">None</tt><tt class="py-op">]</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">j</tt><tt class="py-op">+</tt><tt class="py-number">1</tt><tt class="py-op">-</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">transforms</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">transforms</tt><tt class="py-op">[</tt><tt class="py-name">j</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">trans</tt> </tt>
+</div><a name="L207"></a><tt class="py-lineno">207</tt>  <tt class="py-line"> </tt>
+<a name="CompoundTransform.add_transform"></a><div id="CompoundTransform.add_transform-def"><a name="L208"></a><tt class="py-lineno">208</tt> <a class="py-toggle" href="#" id="CompoundTransform.add_transform-toggle" onclick="return toggle('CompoundTransform.add_transform');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.CompoundTransform-class.html#add_transform">add_transform</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">trans</tt><tt class="py-op">,</tt> <tt class="py-param">offset</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CompoundTransform.add_transform-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="CompoundTransform.add_transform-expanded"><a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt id="link-115" class="py-name"><a title="PolyMode.difflounge.test.offset" class="py-name" href="#" onclick="return doclink('link-115', 'offset', 'link-11');">offset</a></tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L210"></a><tt class="py-lineno">210</tt>  <tt class="py-line">                        <tt class="py-name">trans</tt><tt class="py-op">.</tt><tt id="link-116" class="py-name"><a title="PolyMode.mathlink.householder.HouseholderTransform.set_range" class="py-name" href="#" onclick="return doclink('link-116', 'set_range', 'link-10');">set_range</a></tt><tt class="py-op">(</tt><tt id="link-117" class="py-name"><a title="PolyMode.difflounge.test.offset" class="py-name" href="#" onclick="return doclink('link-117', 'offset', 'link-11');">offset</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L211"></a><tt class="py-lineno">211</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">transforms</tt><tt class="py-op">.</tt><tt class="py-name">append</tt><tt class="py-op">(</tt><tt class="py-name">trans</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L212"></a><tt class="py-lineno">212</tt>  <tt class="py-line"> </tt>
+<a name="CompoundTransform.add_transforms"></a><div id="CompoundTransform.add_transforms-def"><a name="L213"></a><tt class="py-lineno">213</tt> <a class="py-toggle" href="#" id="CompoundTransform.add_transforms-toggle" onclick="return toggle('CompoundTransform.add_transforms');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.CompoundTransform-class.html#add_transforms">add_transforms</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">trans</tt><tt class="py-op">,</tt> <tt class="py-param">offset</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CompoundTransform.add_transforms-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="CompoundTransform.add_transforms-expanded"><a name="L214"></a><tt class="py-lineno">214</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt id="link-118" class="py-name"><a title="PolyMode.difflounge.test_fd.t
+PolyMode.mathlink.ublas_block_lu.test_block_lu.t" class="py-name" href="#" onclick="return doclink('link-118', 't', 'link-86');">t</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">trans</tt><tt class="py-op">:</tt> </tt>
+<a name="L215"></a><tt class="py-lineno">215</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-119" class="py-name" targets="Method PolyMode.mathlink.householder.CompoundTransform.add_transform()=PolyMode.mathlink.householder.CompoundTransform-class.html#add_transform"><a title="PolyMode.mathlink.householder.CompoundTransform.add_transform" class="py-name" href="#" onclick="return doclink('link-119', 'add_transform', 'link-119');">add_transform</a></tt><tt class="py-op">(</tt><tt id="link-120" class="py-name"><a title="PolyMode.difflounge.test_fd.t
+PolyMode.mathlink.ublas_block_lu.test_block_lu.t" class="py-name" href="#" onclick="return doclink('link-120', 't', 'link-86');">t</a></tt><tt class="py-op">,</tt> <tt id="link-121" class="py-name"><a title="PolyMode.difflounge.test.offset" class="py-name" href="#" onclick="return doclink('link-121', 'offset', 'link-11');">offset</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L216"></a><tt class="py-lineno">216</tt>  <tt class="py-line">         </tt>
+<a name="CompoundTransform.q_action"></a><div id="CompoundTransform.q_action-def"><a name="L217"></a><tt class="py-lineno">217</tt> <a class="py-toggle" href="#" id="CompoundTransform.q_action-toggle" onclick="return toggle('CompoundTransform.q_action');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.CompoundTransform-class.html#q_action">q_action</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">x</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CompoundTransform.q_action-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="CompoundTransform.q_action-expanded"><a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt class="py-name">trans</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">transforms</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-op">:</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L219"></a><tt class="py-lineno">219</tt>  <tt class="py-line">                        <tt class="py-keyword">if</tt> <tt class="py-name">trans</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L220"></a><tt class="py-lineno">220</tt>  <tt class="py-line">                                <tt class="py-name">trans</tt><tt class="py-op">.</tt><tt id="link-122" class="py-name"><a title="PolyMode.mathlink.householder.ElementaryTransform.apply
+PolyMode.mathlink.householder.GivensRotation.apply
+PolyMode.mathlink.householder.HouseholderTransform.apply" class="py-name" href="#" onclick="return doclink('link-122', 'apply', 'link-2');">apply</a></tt><tt class="py-op">(</tt> <tt id="link-123" class="py-name"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-123', 'x', 'link-0');">x</a></tt> <tt class="py-op">)</tt> </tt>
+</div><a name="L221"></a><tt class="py-lineno">221</tt>  <tt class="py-line"> </tt>
+<a name="CompoundTransform.q_raction"></a><div id="CompoundTransform.q_raction-def"><a name="L222"></a><tt class="py-lineno">222</tt> <a class="py-toggle" href="#" id="CompoundTransform.q_raction-toggle" onclick="return toggle('CompoundTransform.q_raction');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.CompoundTransform-class.html#q_raction">q_raction</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">x</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CompoundTransform.q_raction-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="CompoundTransform.q_raction-expanded"><a name="L223"></a><tt class="py-lineno">223</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt class="py-name">trans</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">transforms</tt><tt class="py-op">:</tt> </tt>
+<a name="L224"></a><tt class="py-lineno">224</tt>  <tt class="py-line">                        <tt class="py-keyword">if</tt> <tt class="py-name">trans</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L225"></a><tt class="py-lineno">225</tt>  <tt class="py-line">                                <tt class="py-name">trans</tt><tt class="py-op">.</tt><tt id="link-124" class="py-name"><a title="PolyMode.mathlink.householder.ElementaryTransform.rapply
+PolyMode.mathlink.householder.GivensRotation.rapply
+PolyMode.mathlink.householder.HouseholderTransform.rapply" class="py-name" href="#" onclick="return doclink('link-124', 'rapply', 'link-37');">rapply</a></tt><tt class="py-op">(</tt> <tt id="link-125" class="py-name"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-125', 'x', 'link-0');">x</a></tt> <tt class="py-op">)</tt> </tt>
+</div><a name="L226"></a><tt class="py-lineno">226</tt>  <tt class="py-line"> </tt>
+<a name="CompoundTransform.q_inverse"></a><div id="CompoundTransform.q_inverse-def"><a name="L227"></a><tt class="py-lineno">227</tt> <a class="py-toggle" href="#" id="CompoundTransform.q_inverse-toggle" onclick="return toggle('CompoundTransform.q_inverse');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.CompoundTransform-class.html#q_inverse">q_inverse</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">x</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CompoundTransform.q_inverse-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="CompoundTransform.q_inverse-expanded"><a name="L228"></a><tt class="py-lineno">228</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt class="py-name">trans</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">transforms</tt><tt class="py-op">:</tt> </tt>
+<a name="L229"></a><tt class="py-lineno">229</tt>  <tt class="py-line">                        <tt class="py-keyword">if</tt> <tt class="py-name">trans</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L230"></a><tt class="py-lineno">230</tt>  <tt class="py-line">                                <tt class="py-name">trans</tt><tt class="py-op">.</tt><tt id="link-126" class="py-name"><a title="PolyMode.mathlink.householder.ElementaryTransform.inverse
+PolyMode.mathlink.householder.GivensRotation.inverse" class="py-name" href="#" onclick="return doclink('link-126', 'inverse', 'link-26');">inverse</a></tt><tt class="py-op">(</tt> <tt id="link-127" class="py-name"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-127', 'x', 'link-0');">x</a></tt> <tt class="py-op">)</tt> </tt>
+</div><a name="L231"></a><tt class="py-lineno">231</tt>  <tt class="py-line"> </tt>
+<a name="CompoundTransform.q_rinverse"></a><div id="CompoundTransform.q_rinverse-def"><a name="L232"></a><tt class="py-lineno">232</tt> <a class="py-toggle" href="#" id="CompoundTransform.q_rinverse-toggle" onclick="return toggle('CompoundTransform.q_rinverse');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.CompoundTransform-class.html#q_rinverse">q_rinverse</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">x</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CompoundTransform.q_rinverse-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="CompoundTransform.q_rinverse-expanded"><a name="L233"></a><tt class="py-lineno">233</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt class="py-name">trans</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">transforms</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-op">:</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L234"></a><tt class="py-lineno">234</tt>  <tt class="py-line">                        <tt class="py-keyword">if</tt> <tt class="py-name">trans</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L235"></a><tt class="py-lineno">235</tt>  <tt class="py-line">                                <tt class="py-name">trans</tt><tt class="py-op">.</tt><tt id="link-128" class="py-name"><a title="PolyMode.mathlink.householder.ElementaryTransform.rinverse
+PolyMode.mathlink.householder.GivensRotation.rinverse" class="py-name" href="#" onclick="return doclink('link-128', 'rinverse', 'link-36');">rinverse</a></tt><tt class="py-op">(</tt> <tt id="link-129" class="py-name"><a title="PolyMode.difflounge.test.x
+PolyMode.difflounge.test_fd.x
+PolyMode.mathlink.ublas_block_lu.test_block_lu.x" class="py-name" href="#" onclick="return doclink('link-129', 'x', 'link-0');">x</a></tt> <tt class="py-op">)</tt> </tt>
+</div></div><a name="L236"></a><tt class="py-lineno">236</tt>  <tt class="py-line"> </tt>
+<a name="HouseholderQR"></a><div id="HouseholderQR-def"><a name="L237"></a><tt class="py-lineno">237</tt> <a class="py-toggle" href="#" id="HouseholderQR-toggle" onclick="return toggle('HouseholderQR');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.HouseholderQR-class.html">HouseholderQR</a><tt class="py-op">(</tt><tt class="py-base-class">CompoundTransform</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HouseholderQR-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="HouseholderQR-expanded"><a name="L238"></a><tt class="py-lineno">238</tt>  <tt class="py-line">        <tt class="py-docstring">'''</tt> </tt>
+<a name="L239"></a><tt class="py-lineno">239</tt>  <tt class="py-line"><tt class="py-docstring">        Computes Householder QR decompostion and returns R</tt> </tt>
+<a name="L240"></a><tt class="py-lineno">240</tt>  <tt class="py-line"><tt class="py-docstring">        '''</tt> </tt>
+<a name="HouseholderQR.__init__"></a><div id="HouseholderQR.__init__-def"><a name="L241"></a><tt class="py-lineno">241</tt> <a class="py-toggle" href="#" id="HouseholderQR.__init__-toggle" onclick="return toggle('HouseholderQR.__init__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.HouseholderQR-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">overwrite</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-param">offset</tt><tt class="py-op">=</tt><tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HouseholderQR.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="HouseholderQR.__init__-expanded"><a name="L242"></a><tt class="py-lineno">242</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">overwrite</tt> <tt class="py-op">=</tt> <tt class="py-name">overwrite</tt> </tt>
+<a name="L243"></a><tt class="py-lineno">243</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-130" class="py-name"><a title="PolyMode.difflounge.test.offset" class="py-name" href="#" onclick="return doclink('link-130', 'offset', 'link-11');">offset</a></tt> <tt class="py-op">=</tt> <tt id="link-131" class="py-name"><a title="PolyMode.difflounge.test.offset" class="py-name" href="#" onclick="return doclink('link-131', 'offset', 'link-11');">offset</a></tt> </tt>
+<a name="L244"></a><tt class="py-lineno">244</tt>  <tt class="py-line">                <tt id="link-132" class="py-name" targets="Class PolyMode.mathlink.householder.CompoundTransform=PolyMode.mathlink.householder.CompoundTransform-class.html"><a title="PolyMode.mathlink.householder.CompoundTransform" class="py-name" href="#" onclick="return doclink('link-132', 'CompoundTransform', 'link-132');">CompoundTransform</a></tt><tt class="py-op">.</tt><tt id="link-133" class="py-name"><a title="PolyMode.Equation.VectorWaveEquation.__init__
+PolyMode.ExternalSolvers.JCMWaveSolver.__init__
+PolyMode.Image.ImportBitmap.__init__
+PolyMode.MPISolver.Master.__init__
+PolyMode.MPISolver.Queue.__init__
+PolyMode.MPISolver.QueueItem.__init__
+PolyMode.MPISolver.Worker.__init__
+PolyMode.Material.Air.__init__
+PolyMode.Material.ClassiusMorlotti.__init__
+PolyMode.Material.Composite.__init__
+PolyMode.Material.Fixed.__init__
+PolyMode.Material.FreeSnell.__init__
+PolyMode.Material.GeneralFile.__init__
+PolyMode.Material.Interpolated.__init__
+PolyMode.Material.Laurent.__init__
+PolyMode.Material.Luxpop.__init__
+PolyMode.Material.Sellmeier.__init__
+PolyMode.Material.SiO2Fl.__init__
+PolyMode.Material.SiO2GeO2.__init__
+PolyMode.Material.Sopra.__init__
+PolyMode.Material.SopraFile.__init__
+PolyMode.Material.Water.__init__
+PolyMode.Material.Water_IR.__init__
+PolyMode.Modes.AnalyticExtension.__init__
+PolyMode.Modes.CombinedVectorMode.__init__
+PolyMode.Modes.Mode.__init__
+PolyMode.Solver.CachedRandom.__init__
+PolyMode.Solver.Solve.__init__
+PolyMode.Solver.WavelengthTrackingSolver.__init__
+PolyMode.Waveguide.AnnularCombine.__init__
+PolyMode.Waveguide.Annulus.__init__
+PolyMode.Waveguide.ChannelAnnulus.__init__
+PolyMode.Waveguide.Circle.__init__
+PolyMode.Waveguide.Combine.__init__
+PolyMode.Waveguide.CombinedIndex.__init__
+PolyMode.Waveguide.CombinedMask.__init__
+PolyMode.Waveguide.Curve.__init__
+PolyMode.Waveguide.DirectCombine.__init__
+PolyMode.Waveguide.Ellipse.__init__
+PolyMode.Waveguide.Image.__init__
+PolyMode.Waveguide.Polygon.__init__
+PolyMode.Waveguide.Rectangle.__init__
+PolyMode.Waveguide.RegularPolygon.__init__
+PolyMode.Waveguide.Waveguide.__init__
+PolyMode.Waveguide.WgAnnulus.__init__
+PolyMode.Waveguide.WgCoord.__init__
+PolyMode.Waveguide.WgShape.__init__
+PolyMode.difflounge.boundary.BC_Dirichlet.__init__
+PolyMode.difflounge.boundary.BC_Mixed.__init__
+PolyMode.difflounge.boundary.BC_Neumann.__init__
+PolyMode.difflounge.boundary.BC_OnePoint.__init__
+PolyMode.difflounge.boundary.BC_Switch.__init__
+PolyMode.difflounge.chebyshev.ChebyshevDense.__init__
+PolyMode.difflounge.finitedifference.DifferenceMatrix.__init__
+PolyMode.difflounge.finitedifference.FiniteDifference.__init__
+PolyMode.difflounge.finitedifference.SparseDifferenceMatrix.__init__
+PolyMode.difflounge.fourier.FourierDense.__init__
+PolyMode.difflounge.line_sparse.DefaultDict.__init__
+PolyMode.difflounge.line_sparse.Line.__init__
+PolyMode.difflounge.line_sparse.LineSparse.__init__
+PolyMode.mathlink.blockarray.BlockArray.__init__
+PolyMode.mathlink.blockarray.TriBlockLU.__init__
+PolyMode.mathlink.cached_calculation.CachedCalculation.__init__
+PolyMode.mathlink.coordinates.CartesianCoord.__init__
+PolyMode.mathlink.coordinates.PolarCoord.__init__
+PolyMode.mathlink.eigensolver.ArnoldiIR.__init__
+PolyMode.mathlink.eigensolver.ArnoldiShiftInvertDense.__init__
+PolyMode.mathlink.eigensolver.ArnoldiShiftInvertGmres.__init__
+PolyMode.mathlink.eigensolver.HouseholderArnoldiIR.__init__
+PolyMode.mathlink.householder.CompoundTransform.__init__
+PolyMode.mathlink.householder.GivensRotation.__init__
+PolyMode.mathlink.householder.HessenbergReduce.__init__
+PolyMode.mathlink.householder.HouseholderHessenberg.__init__
+PolyMode.mathlink.householder.HouseholderQR.__init__
+PolyMode.mathlink.householder.HouseholderTransform.__init__
+PolyMode.mathlink.householder.RowHessenberg.__init__
+PolyMode.mathlink.householder.UnitHouseholderTransform.__init__
+PolyMode.mathlink.householder.ZeroGivensRotation.__init__
+PolyMode.mathlink.timer.Marker.__init__
+PolyMode.mathlink.timer.RunTime.__init__
+PolyMode.mathlink.timer.timer.__init__" class="py-name" href="#" onclick="return doclink('link-133', '__init__', 'link-47');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L245"></a><tt class="py-lineno">245</tt>  <tt class="py-line">         </tt>
+<a name="HouseholderQR.__call__"></a><div id="HouseholderQR.__call__-def"><a name="L246"></a><tt class="py-lineno">246</tt> <a class="py-toggle" href="#" id="HouseholderQR.__call__-toggle" onclick="return toggle('HouseholderQR.__call__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.HouseholderQR-class.html#__call__">__call__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">V</tt><tt class="py-op">,</tt> <tt class="py-param">R</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">jstart</tt><tt class="py-op">=</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-param">jend</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HouseholderQR.__call__-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="HouseholderQR.__call__-expanded"><a name="L247"></a><tt class="py-lineno">247</tt>  <tt class="py-line">                <tt class="py-name">N</tt> <tt class="py-op">=</tt> <tt class="py-name">V</tt><tt class="py-op">.</tt><tt id="link-134" class="py-name" targets="Method PolyMode.Modes.VectorMode.shape()=PolyMode.Modes.VectorMode-class.html#shape"><a title="PolyMode.Modes.VectorMode.shape" class="py-name" href="#" onclick="return doclink('link-134', 'shape', 'link-134');">shape</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L248"></a><tt class="py-lineno">248</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">jend</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> <tt class="py-name">jend</tt> <tt class="py-op">=</tt> <tt class="py-name">N</tt> </tt>
+<a name="L249"></a><tt class="py-lineno">249</tt>  <tt class="py-line">                 </tt>
+<a name="L250"></a><tt class="py-lineno">250</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">overwrite</tt><tt class="py-op">:</tt> </tt>
+<a name="L251"></a><tt class="py-lineno">251</tt>  <tt class="py-line">                        <tt class="py-name">Vtmp</tt> <tt class="py-op">=</tt> <tt class="py-name">V</tt><tt class="py-op">[</tt><tt class="py-name">jstart</tt><tt class="py-op">:</tt><tt class="py-name">jend</tt><tt class="py-op">]</tt> </tt>
+<a name="L252"></a><tt class="py-lineno">252</tt>  <tt class="py-line">                <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L253"></a><tt class="py-lineno">253</tt>  <tt class="py-line">                        <tt class="py-name">Vtmp</tt> <tt class="py-op">=</tt> <tt class="py-name">V</tt><tt class="py-op">[</tt><tt class="py-name">jstart</tt><tt class="py-op">:</tt><tt class="py-name">jend</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-135" class="py-name"><a title="PolyMode.Modes.Mode.copy
+PolyMode.Modes.VectorMode.copy
+PolyMode.Waveguide.Circle.copy
+PolyMode.Waveguide.Polygon.copy
+PolyMode.Waveguide.WgShape.copy
+PolyMode.mathlink.coordinates.Coord.copy" class="py-name" href="#" onclick="return doclink('link-135', 'copy', 'link-1');">copy</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L254"></a><tt class="py-lineno">254</tt>  <tt class="py-line">                        <tt class="py-comment">#Apply prior transforms to all vectors</tt> </tt>
+<a name="L255"></a><tt class="py-lineno">255</tt>  <tt class="py-line">                        <tt class="py-comment">#self.q_inverse( Vtmp.T )</tt> </tt>
+<a name="L256"></a><tt class="py-lineno">256</tt>  <tt class="py-line"> </tt>
+<a name="L257"></a><tt class="py-lineno">257</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt class="py-name">jj</tt> <tt class="py-keyword">in</tt> <tt class="py-name">range</tt><tt class="py-op">(</tt><tt class="py-name">jstart</tt><tt class="py-op">,</tt> <tt class="py-name">jend</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L258"></a><tt class="py-lineno">258</tt>  <tt class="py-line">                        <tt class="py-name">vi</tt> <tt class="py-op">=</tt> <tt class="py-name">Vtmp</tt><tt class="py-op">[</tt><tt class="py-name">jj</tt><tt class="py-op">-</tt><tt class="py-name">jstart</tt><tt class="py-op">,</tt><tt class="py-name">jj</tt><tt class="py-op">:</tt><tt class="py-op">]</tt> </tt>
+<a name="L259"></a><tt class="py-lineno">259</tt>  <tt class="py-line"> </tt>
+<a name="L260"></a><tt class="py-lineno">260</tt>  <tt class="py-line">                        <tt class="py-comment">#Create householder transformation and add to internal list</tt> </tt>
+<a name="L261"></a><tt class="py-lineno">261</tt>  <tt class="py-line">                        <tt class="py-name">hhtrans</tt> <tt class="py-op">=</tt> <tt id="link-136" class="py-name" targets="Class PolyMode.mathlink.householder.UnitHouseholderTransform=PolyMode.mathlink.householder.UnitHouseholderTransform-class.html"><a title="PolyMode.mathlink.householder.UnitHouseholderTransform" class="py-name" href="#" onclick="return doclink('link-136', 'UnitHouseholderTransform', 'link-136');">UnitHouseholderTransform</a></tt><tt class="py-op">(</tt><tt class="py-name">vi</tt><tt class="py-op">)</tt> </tt>
+<a name="L262"></a><tt class="py-lineno">262</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-137" class="py-name"><a title="PolyMode.mathlink.householder.CompoundTransform.add_transform" class="py-name" href="#" onclick="return doclink('link-137', 'add_transform', 'link-119');">add_transform</a></tt><tt class="py-op">(</tt><tt class="py-name">hhtrans</tt><tt class="py-op">)</tt> </tt>
+<a name="L263"></a><tt class="py-lineno">263</tt>  <tt class="py-line"> </tt>
+<a name="L264"></a><tt class="py-lineno">264</tt>  <tt class="py-line">                        <tt class="py-comment">#Update R matrix, with offset (to allow for Arnoldi updates)</tt> </tt>
+<a name="L265"></a><tt class="py-lineno">265</tt>  <tt class="py-line">                        <tt class="py-keyword">if</tt> <tt class="py-name">jj</tt><tt class="py-op">&gt;=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-138" class="py-name"><a title="PolyMode.difflounge.test.offset" class="py-name" href="#" onclick="return doclink('link-138', 'offset', 'link-11');">offset</a></tt> <tt class="py-keyword">and</tt> <tt id="link-139" class="py-name" targets="Variable PolyMode.mathlink.physcon.R=PolyMode.mathlink.physcon-module.html#R"><a title="PolyMode.mathlink.physcon.R" class="py-name" href="#" onclick="return doclink('link-139', 'R', 'link-139');">R</a></tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L266"></a><tt class="py-lineno">266</tt>  <tt class="py-line">                                <tt id="link-140" class="py-name"><a title="PolyMode.mathlink.physcon.R" class="py-name" href="#" onclick="return doclink('link-140', 'R', 'link-139');">R</a></tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-name">jj</tt><tt class="py-op">,</tt><tt class="py-name">jj</tt><tt class="py-op">-</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-141" class="py-name"><a title="PolyMode.difflounge.test.offset" class="py-name" href="#" onclick="return doclink('link-141', 'offset', 'link-11');">offset</a></tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">Vtmp</tt><tt class="py-op">[</tt><tt class="py-name">jj</tt><tt class="py-op">-</tt><tt class="py-name">jstart</tt><tt class="py-op">,</tt><tt class="py-op">:</tt><tt class="py-name">jj</tt><tt class="py-op">]</tt> </tt>
+<a name="L267"></a><tt class="py-lineno">267</tt>  <tt class="py-line">                                <tt id="link-142" class="py-name"><a title="PolyMode.mathlink.physcon.R" class="py-name" href="#" onclick="return doclink('link-142', 'R', 'link-139');">R</a></tt><tt class="py-op">[</tt><tt class="py-name">jj</tt><tt class="py-op">,</tt><tt class="py-name">jj</tt><tt class="py-op">-</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-143" class="py-name"><a title="PolyMode.difflounge.test.offset" class="py-name" href="#" onclick="return doclink('link-143', 'offset', 'link-11');">offset</a></tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">hhtrans</tt><tt class="py-op">.</tt><tt id="link-144" class="py-name"><a title="PolyMode.mathlink.physcon.alpha" class="py-name" href="#" onclick="return doclink('link-144', 'alpha', 'link-40');">alpha</a></tt> </tt>
+<a name="L268"></a><tt class="py-lineno">268</tt>  <tt class="py-line">                         </tt>
+<a name="L269"></a><tt class="py-lineno">269</tt>  <tt class="py-line">                        <tt class="py-comment">## Apply householder reflection to all subsequent vectors</tt> </tt>
+<a name="L270"></a><tt class="py-lineno">270</tt>  <tt class="py-line">                        <tt class="py-name">hhtrans</tt><tt class="py-op">.</tt><tt id="link-145" class="py-name"><a title="PolyMode.mathlink.householder.ElementaryTransform.apply
+PolyMode.mathlink.householder.GivensRotation.apply
+PolyMode.mathlink.householder.HouseholderTransform.apply" class="py-name" href="#" onclick="return doclink('link-145', 'apply', 'link-2');">apply</a></tt><tt class="py-op">(</tt> <tt class="py-name">Vtmp</tt><tt class="py-op">[</tt><tt class="py-name">jj</tt><tt class="py-op">-</tt><tt class="py-name">jstart</tt><tt class="py-op">+</tt><tt class="py-number">1</tt><tt class="py-op">:</tt><tt class="py-name">jend</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-146" class="py-name"><a title="PolyMode.Material.Material.T" class="py-name" href="#" onclick="return doclink('link-146', 'T', 'link-61');">T</a></tt> <tt class="py-op">)</tt> </tt>
+<a name="L271"></a><tt class="py-lineno">271</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt id="link-147" class="py-name"><a title="PolyMode.mathlink.physcon.R" class="py-name" href="#" onclick="return doclink('link-147', 'R', 'link-139');">R</a></tt> </tt>
+</div></div><a name="L272"></a><tt class="py-lineno">272</tt>  <tt class="py-line"> </tt>
+<a name="HouseholderHessenberg"></a><div id="HouseholderHessenberg-def"><a name="L273"></a><tt class="py-lineno">273</tt> <a class="py-toggle" href="#" id="HouseholderHessenberg-toggle" onclick="return toggle('HouseholderHessenberg');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.HouseholderHessenberg-class.html">HouseholderHessenberg</a><tt class="py-op">(</tt><tt class="py-base-class">CompoundTransform</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HouseholderHessenberg-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="HouseholderHessenberg-expanded"><a name="L274"></a><tt class="py-lineno">274</tt>  <tt class="py-line">        <tt class="py-docstring">'''</tt> </tt>
+<a name="L275"></a><tt class="py-lineno">275</tt>  <tt class="py-line"><tt class="py-docstring">        Computes Householder Hessenburg decomposition</tt> </tt>
+<a name="L276"></a><tt class="py-lineno">276</tt>  <tt class="py-line"><tt class="py-docstring">         A = Q* H Q</tt> </tt>
+<a name="L277"></a><tt class="py-lineno">277</tt>  <tt class="py-line"><tt class="py-docstring">        '''</tt> </tt>
+<a name="HouseholderHessenberg.__init__"></a><div id="HouseholderHessenberg.__init__-def"><a name="L278"></a><tt class="py-lineno">278</tt> <a class="py-toggle" href="#" id="HouseholderHessenberg.__init__-toggle" onclick="return toggle('HouseholderHessenberg.__init__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.HouseholderHessenberg-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">overwrite</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HouseholderHessenberg.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="HouseholderHessenberg.__init__-expanded"><a name="L279"></a><tt class="py-lineno">279</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">overwrite</tt> <tt class="py-op">=</tt> <tt class="py-name">overwrite</tt> </tt>
+<a name="L280"></a><tt class="py-lineno">280</tt>  <tt class="py-line">                <tt id="link-148" class="py-name"><a title="PolyMode.mathlink.householder.CompoundTransform" class="py-name" href="#" onclick="return doclink('link-148', 'CompoundTransform', 'link-132');">CompoundTransform</a></tt><tt class="py-op">.</tt><tt id="link-149" class="py-name"><a title="PolyMode.Equation.VectorWaveEquation.__init__
+PolyMode.ExternalSolvers.JCMWaveSolver.__init__
+PolyMode.Image.ImportBitmap.__init__
+PolyMode.MPISolver.Master.__init__
+PolyMode.MPISolver.Queue.__init__
+PolyMode.MPISolver.QueueItem.__init__
+PolyMode.MPISolver.Worker.__init__
+PolyMode.Material.Air.__init__
+PolyMode.Material.ClassiusMorlotti.__init__
+PolyMode.Material.Composite.__init__
+PolyMode.Material.Fixed.__init__
+PolyMode.Material.FreeSnell.__init__
+PolyMode.Material.GeneralFile.__init__
+PolyMode.Material.Interpolated.__init__
+PolyMode.Material.Laurent.__init__
+PolyMode.Material.Luxpop.__init__
+PolyMode.Material.Sellmeier.__init__
+PolyMode.Material.SiO2Fl.__init__
+PolyMode.Material.SiO2GeO2.__init__
+PolyMode.Material.Sopra.__init__
+PolyMode.Material.SopraFile.__init__
+PolyMode.Material.Water.__init__
+PolyMode.Material.Water_IR.__init__
+PolyMode.Modes.AnalyticExtension.__init__
+PolyMode.Modes.CombinedVectorMode.__init__
+PolyMode.Modes.Mode.__init__
+PolyMode.Solver.CachedRandom.__init__
+PolyMode.Solver.Solve.__init__
+PolyMode.Solver.WavelengthTrackingSolver.__init__
+PolyMode.Waveguide.AnnularCombine.__init__
+PolyMode.Waveguide.Annulus.__init__
+PolyMode.Waveguide.ChannelAnnulus.__init__
+PolyMode.Waveguide.Circle.__init__
+PolyMode.Waveguide.Combine.__init__
+PolyMode.Waveguide.CombinedIndex.__init__
+PolyMode.Waveguide.CombinedMask.__init__
+PolyMode.Waveguide.Curve.__init__
+PolyMode.Waveguide.DirectCombine.__init__
+PolyMode.Waveguide.Ellipse.__init__
+PolyMode.Waveguide.Image.__init__
+PolyMode.Waveguide.Polygon.__init__
+PolyMode.Waveguide.Rectangle.__init__
+PolyMode.Waveguide.RegularPolygon.__init__
+PolyMode.Waveguide.Waveguide.__init__
+PolyMode.Waveguide.WgAnnulus.__init__
+PolyMode.Waveguide.WgCoord.__init__
+PolyMode.Waveguide.WgShape.__init__
+PolyMode.difflounge.boundary.BC_Dirichlet.__init__
+PolyMode.difflounge.boundary.BC_Mixed.__init__
+PolyMode.difflounge.boundary.BC_Neumann.__init__
+PolyMode.difflounge.boundary.BC_OnePoint.__init__
+PolyMode.difflounge.boundary.BC_Switch.__init__
+PolyMode.difflounge.chebyshev.ChebyshevDense.__init__
+PolyMode.difflounge.finitedifference.DifferenceMatrix.__init__
+PolyMode.difflounge.finitedifference.FiniteDifference.__init__
+PolyMode.difflounge.finitedifference.SparseDifferenceMatrix.__init__
+PolyMode.difflounge.fourier.FourierDense.__init__
+PolyMode.difflounge.line_sparse.DefaultDict.__init__
+PolyMode.difflounge.line_sparse.Line.__init__
+PolyMode.difflounge.line_sparse.LineSparse.__init__
+PolyMode.mathlink.blockarray.BlockArray.__init__
+PolyMode.mathlink.blockarray.TriBlockLU.__init__
+PolyMode.mathlink.cached_calculation.CachedCalculation.__init__
+PolyMode.mathlink.coordinates.CartesianCoord.__init__
+PolyMode.mathlink.coordinates.PolarCoord.__init__
+PolyMode.mathlink.eigensolver.ArnoldiIR.__init__
+PolyMode.mathlink.eigensolver.ArnoldiShiftInvertDense.__init__
+PolyMode.mathlink.eigensolver.ArnoldiShiftInvertGmres.__init__
+PolyMode.mathlink.eigensolver.HouseholderArnoldiIR.__init__
+PolyMode.mathlink.householder.CompoundTransform.__init__
+PolyMode.mathlink.householder.GivensRotation.__init__
+PolyMode.mathlink.householder.HessenbergReduce.__init__
+PolyMode.mathlink.householder.HouseholderHessenberg.__init__
+PolyMode.mathlink.householder.HouseholderQR.__init__
+PolyMode.mathlink.householder.HouseholderTransform.__init__
+PolyMode.mathlink.householder.RowHessenberg.__init__
+PolyMode.mathlink.householder.UnitHouseholderTransform.__init__
+PolyMode.mathlink.householder.ZeroGivensRotation.__init__
+PolyMode.mathlink.timer.Marker.__init__
+PolyMode.mathlink.timer.RunTime.__init__
+PolyMode.mathlink.timer.timer.__init__" class="py-name" href="#" onclick="return doclink('link-149', '__init__', 'link-47');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L281"></a><tt class="py-lineno">281</tt>  <tt class="py-line"> </tt>
+<a name="HouseholderHessenberg.__call__"></a><div id="HouseholderHessenberg.__call__-def"><a name="L282"></a><tt class="py-lineno">282</tt> <a class="py-toggle" href="#" id="HouseholderHessenberg.__call__-toggle" onclick="return toggle('HouseholderHessenberg.__call__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.HouseholderHessenberg-class.html#__call__">__call__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">A</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HouseholderHessenberg.__call__-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="HouseholderHessenberg.__call__-expanded"><a name="L283"></a><tt class="py-lineno">283</tt>  <tt class="py-line">                <tt class="py-name">N</tt> <tt class="py-op">=</tt> <tt id="link-150" class="py-name" targets="Variable PolyMode.Material.Quartz.A=PolyMode.Material.Quartz-class.html#A,Variable PolyMode.Material.Sellmeier.A=PolyMode.Material.Sellmeier-class.html#A,Variable PolyMode.mathlink.ublas_block_lu.test_block_lu.A=PolyMode.mathlink.ublas_block_lu.test_block_lu-module.html#A"><a title="PolyMode.Material.Quartz.A
+PolyMode.Material.Sellmeier.A
+PolyMode.mathlink.ublas_block_lu.test_block_lu.A" class="py-name" href="#" onclick="return doclink('link-150', 'A', 'link-150');">A</a></tt><tt class="py-op">.</tt><tt id="link-151" class="py-name"><a title="PolyMode.Modes.VectorMode.shape" class="py-name" href="#" onclick="return doclink('link-151', 'shape', 'link-134');">shape</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L284"></a><tt class="py-lineno">284</tt>  <tt class="py-line"> </tt>
+<a name="L285"></a><tt class="py-lineno">285</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">overwrite</tt><tt class="py-op">:</tt> <tt class="py-name">H</tt> <tt class="py-op">=</tt> <tt id="link-152" class="py-name"><a title="PolyMode.Material.Quartz.A
+PolyMode.Material.Sellmeier.A
+PolyMode.mathlink.ublas_block_lu.test_block_lu.A" class="py-name" href="#" onclick="return doclink('link-152', 'A', 'link-150');">A</a></tt> </tt>
+<a name="L286"></a><tt class="py-lineno">286</tt>  <tt class="py-line">                <tt class="py-keyword">else</tt><tt class="py-op">:</tt> <tt class="py-name">H</tt> <tt class="py-op">=</tt> <tt id="link-153" class="py-name"><a title="PolyMode.Material.Quartz.A
+PolyMode.Material.Sellmeier.A
+PolyMode.mathlink.ublas_block_lu.test_block_lu.A" class="py-name" href="#" onclick="return doclink('link-153', 'A', 'link-150');">A</a></tt><tt class="py-op">.</tt><tt id="link-154" class="py-name"><a title="PolyMode.Modes.Mode.copy
+PolyMode.Modes.VectorMode.copy
+PolyMode.Waveguide.Circle.copy
+PolyMode.Waveguide.Polygon.copy
+PolyMode.Waveguide.WgShape.copy
+PolyMode.mathlink.coordinates.Coord.copy" class="py-name" href="#" onclick="return doclink('link-154', 'copy', 'link-1');">copy</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L287"></a><tt class="py-lineno">287</tt>  <tt class="py-line"> </tt>
+<a name="L288"></a><tt class="py-lineno">288</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt class="py-name">jj</tt> <tt class="py-keyword">in</tt> <tt class="py-name">range</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-name">N</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L289"></a><tt class="py-lineno">289</tt>  <tt class="py-line">                        <tt class="py-comment">#Create householder transformation and add to internal list</tt> </tt>
+<a name="L290"></a><tt class="py-lineno">290</tt>  <tt class="py-line">                        <tt class="py-name">hhtrans</tt> <tt class="py-op">=</tt> <tt id="link-155" class="py-name"><a title="PolyMode.mathlink.householder.UnitHouseholderTransform" class="py-name" href="#" onclick="return doclink('link-155', 'UnitHouseholderTransform', 'link-136');">UnitHouseholderTransform</a></tt><tt class="py-op">(</tt> <tt class="py-name">H</tt><tt class="py-op">[</tt><tt class="py-name">jj</tt><tt class="py-op">:</tt><tt class="py-op">,</tt><tt class="py-name">jj</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt id="link-156" class="py-name"><a title="PolyMode.difflounge.test.offset" class="py-name" href="#" onclick="return doclink('link-156', 'offset', 'link-11');">offset</a></tt><tt class="py-op">=</tt><tt class="py-string">'end'</tt> <tt class="py-op">)</tt> </tt>
+<a name="L291"></a><tt class="py-lineno">291</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-157" class="py-name"><a title="PolyMode.mathlink.householder.CompoundTransform.add_transform" class="py-name" href="#" onclick="return doclink('link-157', 'add_transform', 'link-119');">add_transform</a></tt><tt class="py-op">(</tt><tt class="py-name">hhtrans</tt><tt class="py-op">)</tt> </tt>
+<a name="L292"></a><tt class="py-lineno">292</tt>  <tt class="py-line"> </tt>
+<a name="L293"></a><tt class="py-lineno">293</tt>  <tt class="py-line">                        <tt class="py-comment">#Update H matrix</tt> </tt>
+<a name="L294"></a><tt class="py-lineno">294</tt>  <tt class="py-line">                        <tt class="py-name">H</tt><tt class="py-op">[</tt><tt class="py-name">jj</tt><tt class="py-op">,</tt><tt class="py-name">jj</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">hhtrans</tt><tt class="py-op">.</tt><tt id="link-158" class="py-name"><a title="PolyMode.mathlink.physcon.alpha" class="py-name" href="#" onclick="return doclink('link-158', 'alpha', 'link-40');">alpha</a></tt> </tt>
+<a name="L295"></a><tt class="py-lineno">295</tt>  <tt class="py-line">                        <tt class="py-name">H</tt><tt class="py-op">[</tt><tt class="py-name">jj</tt><tt class="py-op">+</tt><tt class="py-number">1</tt><tt class="py-op">:</tt><tt class="py-op">,</tt><tt class="py-name">jj</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L296"></a><tt class="py-lineno">296</tt>  <tt class="py-line">                         </tt>
+<a name="L297"></a><tt class="py-lineno">297</tt>  <tt class="py-line">                        <tt class="py-comment">## Apply householder transformation to partitioned matrix</tt> </tt>
+<a name="L298"></a><tt class="py-lineno">298</tt>  <tt class="py-line">                        <tt class="py-name">hhtrans</tt><tt class="py-op">.</tt><tt id="link-159" class="py-name"><a title="PolyMode.mathlink.householder.ElementaryTransform.apply
+PolyMode.mathlink.householder.GivensRotation.apply
+PolyMode.mathlink.householder.HouseholderTransform.apply" class="py-name" href="#" onclick="return doclink('link-159', 'apply', 'link-2');">apply</a></tt><tt class="py-op">(</tt><tt class="py-name">H</tt><tt class="py-op">[</tt><tt class="py-name">jj</tt><tt class="py-op">:</tt><tt class="py-op">,</tt><tt class="py-name">jj</tt><tt class="py-op">:</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L299"></a><tt class="py-lineno">299</tt>  <tt class="py-line">                        <tt class="py-name">hhtrans</tt><tt class="py-op">.</tt><tt id="link-160" class="py-name"><a title="PolyMode.mathlink.householder.ElementaryTransform.rapply
+PolyMode.mathlink.householder.GivensRotation.rapply
+PolyMode.mathlink.householder.HouseholderTransform.rapply" class="py-name" href="#" onclick="return doclink('link-160', 'rapply', 'link-37');">rapply</a></tt><tt class="py-op">(</tt><tt class="py-name">H</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-op">,</tt><tt class="py-name">jj</tt><tt class="py-op">:</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L300"></a><tt class="py-lineno">300</tt>  <tt class="py-line"> </tt>
+<a name="L301"></a><tt class="py-lineno">301</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">H</tt> </tt>
+</div></div><a name="L302"></a><tt class="py-lineno">302</tt>  <tt class="py-line"> </tt>
+<a name="RowHessenberg"></a><div id="RowHessenberg-def"><a name="L303"></a><tt class="py-lineno">303</tt> <a class="py-toggle" href="#" id="RowHessenberg-toggle" onclick="return toggle('RowHessenberg');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.RowHessenberg-class.html">RowHessenberg</a><tt class="py-op">(</tt><tt class="py-base-class">CompoundTransform</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="RowHessenberg-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="RowHessenberg-expanded"><a name="L304"></a><tt class="py-lineno">304</tt>  <tt class="py-line">        <tt class="py-docstring">'''</tt> </tt>
+<a name="L305"></a><tt class="py-lineno">305</tt>  <tt class="py-line"><tt class="py-docstring">        Computes Householder Hessenburg decomposition</tt> </tt>
+<a name="L306"></a><tt class="py-lineno">306</tt>  <tt class="py-line"><tt class="py-docstring">         A = Q* H Q</tt> </tt>
+<a name="L307"></a><tt class="py-lineno">307</tt>  <tt class="py-line"><tt class="py-docstring">        Along the rows of the matrix, so A[-1,-1] is undisturbed</tt> </tt>
+<a name="L308"></a><tt class="py-lineno">308</tt>  <tt class="py-line"><tt class="py-docstring">        '''</tt> </tt>
+<a name="RowHessenberg.__init__"></a><div id="RowHessenberg.__init__-def"><a name="L309"></a><tt class="py-lineno">309</tt> <a class="py-toggle" href="#" id="RowHessenberg.__init__-toggle" onclick="return toggle('RowHessenberg.__init__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.RowHessenberg-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">overwrite</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="RowHessenberg.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="RowHessenberg.__init__-expanded"><a name="L310"></a><tt class="py-lineno">310</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">overwrite</tt> <tt class="py-op">=</tt> <tt class="py-name">overwrite</tt> </tt>
+<a name="L311"></a><tt class="py-lineno">311</tt>  <tt class="py-line">                <tt id="link-161" class="py-name"><a title="PolyMode.mathlink.householder.CompoundTransform" class="py-name" href="#" onclick="return doclink('link-161', 'CompoundTransform', 'link-132');">CompoundTransform</a></tt><tt class="py-op">.</tt><tt id="link-162" class="py-name"><a title="PolyMode.Equation.VectorWaveEquation.__init__
+PolyMode.ExternalSolvers.JCMWaveSolver.__init__
+PolyMode.Image.ImportBitmap.__init__
+PolyMode.MPISolver.Master.__init__
+PolyMode.MPISolver.Queue.__init__
+PolyMode.MPISolver.QueueItem.__init__
+PolyMode.MPISolver.Worker.__init__
+PolyMode.Material.Air.__init__
+PolyMode.Material.ClassiusMorlotti.__init__
+PolyMode.Material.Composite.__init__
+PolyMode.Material.Fixed.__init__
+PolyMode.Material.FreeSnell.__init__
+PolyMode.Material.GeneralFile.__init__
+PolyMode.Material.Interpolated.__init__
+PolyMode.Material.Laurent.__init__
+PolyMode.Material.Luxpop.__init__
+PolyMode.Material.Sellmeier.__init__
+PolyMode.Material.SiO2Fl.__init__
+PolyMode.Material.SiO2GeO2.__init__
+PolyMode.Material.Sopra.__init__
+PolyMode.Material.SopraFile.__init__
+PolyMode.Material.Water.__init__
+PolyMode.Material.Water_IR.__init__
+PolyMode.Modes.AnalyticExtension.__init__
+PolyMode.Modes.CombinedVectorMode.__init__
+PolyMode.Modes.Mode.__init__
+PolyMode.Solver.CachedRandom.__init__
+PolyMode.Solver.Solve.__init__
+PolyMode.Solver.WavelengthTrackingSolver.__init__
+PolyMode.Waveguide.AnnularCombine.__init__
+PolyMode.Waveguide.Annulus.__init__
+PolyMode.Waveguide.ChannelAnnulus.__init__
+PolyMode.Waveguide.Circle.__init__
+PolyMode.Waveguide.Combine.__init__
+PolyMode.Waveguide.CombinedIndex.__init__
+PolyMode.Waveguide.CombinedMask.__init__
+PolyMode.Waveguide.Curve.__init__
+PolyMode.Waveguide.DirectCombine.__init__
+PolyMode.Waveguide.Ellipse.__init__
+PolyMode.Waveguide.Image.__init__
+PolyMode.Waveguide.Polygon.__init__
+PolyMode.Waveguide.Rectangle.__init__
+PolyMode.Waveguide.RegularPolygon.__init__
+PolyMode.Waveguide.Waveguide.__init__
+PolyMode.Waveguide.WgAnnulus.__init__
+PolyMode.Waveguide.WgCoord.__init__
+PolyMode.Waveguide.WgShape.__init__
+PolyMode.difflounge.boundary.BC_Dirichlet.__init__
+PolyMode.difflounge.boundary.BC_Mixed.__init__
+PolyMode.difflounge.boundary.BC_Neumann.__init__
+PolyMode.difflounge.boundary.BC_OnePoint.__init__
+PolyMode.difflounge.boundary.BC_Switch.__init__
+PolyMode.difflounge.chebyshev.ChebyshevDense.__init__
+PolyMode.difflounge.finitedifference.DifferenceMatrix.__init__
+PolyMode.difflounge.finitedifference.FiniteDifference.__init__
+PolyMode.difflounge.finitedifference.SparseDifferenceMatrix.__init__
+PolyMode.difflounge.fourier.FourierDense.__init__
+PolyMode.difflounge.line_sparse.DefaultDict.__init__
+PolyMode.difflounge.line_sparse.Line.__init__
+PolyMode.difflounge.line_sparse.LineSparse.__init__
+PolyMode.mathlink.blockarray.BlockArray.__init__
+PolyMode.mathlink.blockarray.TriBlockLU.__init__
+PolyMode.mathlink.cached_calculation.CachedCalculation.__init__
+PolyMode.mathlink.coordinates.CartesianCoord.__init__
+PolyMode.mathlink.coordinates.PolarCoord.__init__
+PolyMode.mathlink.eigensolver.ArnoldiIR.__init__
+PolyMode.mathlink.eigensolver.ArnoldiShiftInvertDense.__init__
+PolyMode.mathlink.eigensolver.ArnoldiShiftInvertGmres.__init__
+PolyMode.mathlink.eigensolver.HouseholderArnoldiIR.__init__
+PolyMode.mathlink.householder.CompoundTransform.__init__
+PolyMode.mathlink.householder.GivensRotation.__init__
+PolyMode.mathlink.householder.HessenbergReduce.__init__
+PolyMode.mathlink.householder.HouseholderHessenberg.__init__
+PolyMode.mathlink.householder.HouseholderQR.__init__
+PolyMode.mathlink.householder.HouseholderTransform.__init__
+PolyMode.mathlink.householder.RowHessenberg.__init__
+PolyMode.mathlink.householder.UnitHouseholderTransform.__init__
+PolyMode.mathlink.householder.ZeroGivensRotation.__init__
+PolyMode.mathlink.timer.Marker.__init__
+PolyMode.mathlink.timer.RunTime.__init__
+PolyMode.mathlink.timer.timer.__init__" class="py-name" href="#" onclick="return doclink('link-162', '__init__', 'link-47');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L312"></a><tt class="py-lineno">312</tt>  <tt class="py-line"> </tt>
+<a name="RowHessenberg.__call__"></a><div id="RowHessenberg.__call__-def"><a name="L313"></a><tt class="py-lineno">313</tt> <a class="py-toggle" href="#" id="RowHessenberg.__call__-toggle" onclick="return toggle('RowHessenberg.__call__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.RowHessenberg-class.html#__call__">__call__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">A</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="RowHessenberg.__call__-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="RowHessenberg.__call__-expanded"><a name="L314"></a><tt class="py-lineno">314</tt>  <tt class="py-line">                <tt class="py-name">N</tt> <tt class="py-op">=</tt> <tt id="link-163" class="py-name"><a title="PolyMode.Material.Quartz.A
+PolyMode.Material.Sellmeier.A
+PolyMode.mathlink.ublas_block_lu.test_block_lu.A" class="py-name" href="#" onclick="return doclink('link-163', 'A', 'link-150');">A</a></tt><tt class="py-op">.</tt><tt id="link-164" class="py-name"><a title="PolyMode.Modes.VectorMode.shape" class="py-name" href="#" onclick="return doclink('link-164', 'shape', 'link-134');">shape</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L315"></a><tt class="py-lineno">315</tt>  <tt class="py-line"> </tt>
+<a name="L316"></a><tt class="py-lineno">316</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">overwrite</tt><tt class="py-op">:</tt> <tt class="py-name">H</tt> <tt class="py-op">=</tt> <tt id="link-165" class="py-name"><a title="PolyMode.Material.Quartz.A
+PolyMode.Material.Sellmeier.A
+PolyMode.mathlink.ublas_block_lu.test_block_lu.A" class="py-name" href="#" onclick="return doclink('link-165', 'A', 'link-150');">A</a></tt> </tt>
+<a name="L317"></a><tt class="py-lineno">317</tt>  <tt class="py-line">                <tt class="py-keyword">else</tt><tt class="py-op">:</tt> <tt class="py-name">H</tt> <tt class="py-op">=</tt> <tt id="link-166" class="py-name"><a title="PolyMode.Material.Quartz.A
+PolyMode.Material.Sellmeier.A
+PolyMode.mathlink.ublas_block_lu.test_block_lu.A" class="py-name" href="#" onclick="return doclink('link-166', 'A', 'link-150');">A</a></tt><tt class="py-op">.</tt><tt id="link-167" class="py-name"><a title="PolyMode.Modes.Mode.copy
+PolyMode.Modes.VectorMode.copy
+PolyMode.Waveguide.Circle.copy
+PolyMode.Waveguide.Polygon.copy
+PolyMode.Waveguide.WgShape.copy
+PolyMode.mathlink.coordinates.Coord.copy" class="py-name" href="#" onclick="return doclink('link-167', 'copy', 'link-1');">copy</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L318"></a><tt class="py-lineno">318</tt>  <tt class="py-line"> </tt>
+<a name="L319"></a><tt class="py-lineno">319</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt class="py-name">jj</tt> <tt class="py-keyword">in</tt> <tt class="py-name">range</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-name">N</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L320"></a><tt class="py-lineno">320</tt>  <tt class="py-line">                        <tt class="py-comment">#Create householder transformation and add to internal list</tt> </tt>
+<a name="L321"></a><tt class="py-lineno">321</tt>  <tt class="py-line">                        <tt class="py-name">hhtrans</tt> <tt class="py-op">=</tt> <tt id="link-168" class="py-name"><a title="PolyMode.mathlink.householder.UnitHouseholderTransform" class="py-name" href="#" onclick="return doclink('link-168', 'UnitHouseholderTransform', 'link-136');">UnitHouseholderTransform</a></tt><tt class="py-op">(</tt> <tt class="py-name">H</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-name">jj</tt><tt class="py-op">,</tt> <tt class="py-op">:</tt><tt class="py-op">-</tt><tt class="py-name">jj</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">k</tt><tt class="py-op">=</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">,</tt> <tt id="link-169" class="py-name"><a title="PolyMode.difflounge.test.offset" class="py-name" href="#" onclick="return doclink('link-169', 'offset', 'link-11');">offset</a></tt><tt class="py-op">=</tt><tt class="py-string">'start'</tt> <tt class="py-op">)</tt> </tt>
+<a name="L322"></a><tt class="py-lineno">322</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-170" class="py-name"><a title="PolyMode.mathlink.householder.CompoundTransform.add_transform" class="py-name" href="#" onclick="return doclink('link-170', 'add_transform', 'link-119');">add_transform</a></tt><tt class="py-op">(</tt><tt class="py-name">hhtrans</tt><tt class="py-op">)</tt> </tt>
+<a name="L323"></a><tt class="py-lineno">323</tt>  <tt class="py-line">                         </tt>
+<a name="L324"></a><tt class="py-lineno">324</tt>  <tt class="py-line">                        <tt class="py-comment">#Update -jj th row of H matrix</tt> </tt>
+<a name="L325"></a><tt class="py-lineno">325</tt>  <tt class="py-line">                        <tt class="py-name">H</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-name">jj</tt><tt class="py-op">,</tt><tt class="py-op">:</tt><tt class="py-op">-</tt><tt class="py-name">jj</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L326"></a><tt class="py-lineno">326</tt>  <tt class="py-line">                        <tt class="py-name">H</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-name">jj</tt><tt class="py-op">,</tt><tt class="py-op">-</tt><tt class="py-name">jj</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">hhtrans</tt><tt class="py-op">.</tt><tt id="link-171" class="py-name"><a title="PolyMode.mathlink.physcon.alpha" class="py-name" href="#" onclick="return doclink('link-171', 'alpha', 'link-40');">alpha</a></tt> </tt>
+<a name="L327"></a><tt class="py-lineno">327</tt>  <tt class="py-line">                         </tt>
+<a name="L328"></a><tt class="py-lineno">328</tt>  <tt class="py-line">                        <tt class="py-comment">## Apply householder transformation to _rows_ of partitioned matrix</tt> </tt>
+<a name="L329"></a><tt class="py-lineno">329</tt>  <tt class="py-line">                        <tt class="py-name">hhtrans</tt><tt class="py-op">.</tt><tt id="link-172" class="py-name"><a title="PolyMode.mathlink.householder.ElementaryTransform.apply
+PolyMode.mathlink.householder.GivensRotation.apply
+PolyMode.mathlink.householder.HouseholderTransform.apply" class="py-name" href="#" onclick="return doclink('link-172', 'apply', 'link-2');">apply</a></tt><tt class="py-op">(</tt><tt class="py-name">H</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-op">-</tt><tt class="py-name">jj</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-173" class="py-name"><a title="PolyMode.Material.Material.T" class="py-name" href="#" onclick="return doclink('link-173', 'T', 'link-61');">T</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L330"></a><tt class="py-lineno">330</tt>  <tt class="py-line">                        <tt class="py-name">hhtrans</tt><tt class="py-op">.</tt><tt id="link-174" class="py-name"><a title="PolyMode.mathlink.householder.ElementaryTransform.rapply
+PolyMode.mathlink.householder.GivensRotation.rapply
+PolyMode.mathlink.householder.HouseholderTransform.rapply" class="py-name" href="#" onclick="return doclink('link-174', 'rapply', 'link-37');">rapply</a></tt><tt class="py-op">(</tt><tt class="py-name">H</tt><tt class="py-op">.</tt><tt id="link-175" class="py-name"><a title="PolyMode.Material.Material.T" class="py-name" href="#" onclick="return doclink('link-175', 'T', 'link-61');">T</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L331"></a><tt class="py-lineno">331</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">H</tt> </tt>
+</div></div><a name="L332"></a><tt class="py-lineno">332</tt>  <tt class="py-line"> </tt>
+<a name="HessenbergReduce"></a><div id="HessenbergReduce-def"><a name="L333"></a><tt class="py-lineno">333</tt> <a class="py-toggle" href="#" id="HessenbergReduce-toggle" onclick="return toggle('HessenbergReduce');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.HessenbergReduce-class.html">HessenbergReduce</a><tt class="py-op">(</tt><tt class="py-base-class">CompoundTransform</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HessenbergReduce-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="HessenbergReduce-expanded"><a name="L334"></a><tt class="py-lineno">334</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L335"></a><tt class="py-lineno">335</tt>  <tt class="py-line"><tt class="py-docstring">        Given A in hessenberg form reduce to triangular form</tt> </tt>
+<a name="L336"></a><tt class="py-lineno">336</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="HessenbergReduce.__init__"></a><div id="HessenbergReduce.__init__-def"><a name="L337"></a><tt class="py-lineno">337</tt> <a class="py-toggle" href="#" id="HessenbergReduce.__init__-toggle" onclick="return toggle('HessenbergReduce.__init__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.HessenbergReduce-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">overwrite</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HessenbergReduce.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="HessenbergReduce.__init__-expanded"><a name="L338"></a><tt class="py-lineno">338</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">overwrite</tt> <tt class="py-op">=</tt> <tt class="py-name">overwrite</tt> </tt>
+<a name="L339"></a><tt class="py-lineno">339</tt>  <tt class="py-line">                <tt id="link-176" class="py-name"><a title="PolyMode.mathlink.householder.CompoundTransform" class="py-name" href="#" onclick="return doclink('link-176', 'CompoundTransform', 'link-132');">CompoundTransform</a></tt><tt class="py-op">.</tt><tt id="link-177" class="py-name"><a title="PolyMode.Equation.VectorWaveEquation.__init__
+PolyMode.ExternalSolvers.JCMWaveSolver.__init__
+PolyMode.Image.ImportBitmap.__init__
+PolyMode.MPISolver.Master.__init__
+PolyMode.MPISolver.Queue.__init__
+PolyMode.MPISolver.QueueItem.__init__
+PolyMode.MPISolver.Worker.__init__
+PolyMode.Material.Air.__init__
+PolyMode.Material.ClassiusMorlotti.__init__
+PolyMode.Material.Composite.__init__
+PolyMode.Material.Fixed.__init__
+PolyMode.Material.FreeSnell.__init__
+PolyMode.Material.GeneralFile.__init__
+PolyMode.Material.Interpolated.__init__
+PolyMode.Material.Laurent.__init__
+PolyMode.Material.Luxpop.__init__
+PolyMode.Material.Sellmeier.__init__
+PolyMode.Material.SiO2Fl.__init__
+PolyMode.Material.SiO2GeO2.__init__
+PolyMode.Material.Sopra.__init__
+PolyMode.Material.SopraFile.__init__
+PolyMode.Material.Water.__init__
+PolyMode.Material.Water_IR.__init__
+PolyMode.Modes.AnalyticExtension.__init__
+PolyMode.Modes.CombinedVectorMode.__init__
+PolyMode.Modes.Mode.__init__
+PolyMode.Solver.CachedRandom.__init__
+PolyMode.Solver.Solve.__init__
+PolyMode.Solver.WavelengthTrackingSolver.__init__
+PolyMode.Waveguide.AnnularCombine.__init__
+PolyMode.Waveguide.Annulus.__init__
+PolyMode.Waveguide.ChannelAnnulus.__init__
+PolyMode.Waveguide.Circle.__init__
+PolyMode.Waveguide.Combine.__init__
+PolyMode.Waveguide.CombinedIndex.__init__
+PolyMode.Waveguide.CombinedMask.__init__
+PolyMode.Waveguide.Curve.__init__
+PolyMode.Waveguide.DirectCombine.__init__
+PolyMode.Waveguide.Ellipse.__init__
+PolyMode.Waveguide.Image.__init__
+PolyMode.Waveguide.Polygon.__init__
+PolyMode.Waveguide.Rectangle.__init__
+PolyMode.Waveguide.RegularPolygon.__init__
+PolyMode.Waveguide.Waveguide.__init__
+PolyMode.Waveguide.WgAnnulus.__init__
+PolyMode.Waveguide.WgCoord.__init__
+PolyMode.Waveguide.WgShape.__init__
+PolyMode.difflounge.boundary.BC_Dirichlet.__init__
+PolyMode.difflounge.boundary.BC_Mixed.__init__
+PolyMode.difflounge.boundary.BC_Neumann.__init__
+PolyMode.difflounge.boundary.BC_OnePoint.__init__
+PolyMode.difflounge.boundary.BC_Switch.__init__
+PolyMode.difflounge.chebyshev.ChebyshevDense.__init__
+PolyMode.difflounge.finitedifference.DifferenceMatrix.__init__
+PolyMode.difflounge.finitedifference.FiniteDifference.__init__
+PolyMode.difflounge.finitedifference.SparseDifferenceMatrix.__init__
+PolyMode.difflounge.fourier.FourierDense.__init__
+PolyMode.difflounge.line_sparse.DefaultDict.__init__
+PolyMode.difflounge.line_sparse.Line.__init__
+PolyMode.difflounge.line_sparse.LineSparse.__init__
+PolyMode.mathlink.blockarray.BlockArray.__init__
+PolyMode.mathlink.blockarray.TriBlockLU.__init__
+PolyMode.mathlink.cached_calculation.CachedCalculation.__init__
+PolyMode.mathlink.coordinates.CartesianCoord.__init__
+PolyMode.mathlink.coordinates.PolarCoord.__init__
+PolyMode.mathlink.eigensolver.ArnoldiIR.__init__
+PolyMode.mathlink.eigensolver.ArnoldiShiftInvertDense.__init__
+PolyMode.mathlink.eigensolver.ArnoldiShiftInvertGmres.__init__
+PolyMode.mathlink.eigensolver.HouseholderArnoldiIR.__init__
+PolyMode.mathlink.householder.CompoundTransform.__init__
+PolyMode.mathlink.householder.GivensRotation.__init__
+PolyMode.mathlink.householder.HessenbergReduce.__init__
+PolyMode.mathlink.householder.HouseholderHessenberg.__init__
+PolyMode.mathlink.householder.HouseholderQR.__init__
+PolyMode.mathlink.householder.HouseholderTransform.__init__
+PolyMode.mathlink.householder.RowHessenberg.__init__
+PolyMode.mathlink.householder.UnitHouseholderTransform.__init__
+PolyMode.mathlink.householder.ZeroGivensRotation.__init__
+PolyMode.mathlink.timer.Marker.__init__
+PolyMode.mathlink.timer.RunTime.__init__
+PolyMode.mathlink.timer.timer.__init__" class="py-name" href="#" onclick="return doclink('link-177', '__init__', 'link-47');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L340"></a><tt class="py-lineno">340</tt>  <tt class="py-line"> </tt>
+<a name="HessenbergReduce.__call__"></a><div id="HessenbergReduce.__call__-def"><a name="L341"></a><tt class="py-lineno">341</tt> <a class="py-toggle" href="#" id="HessenbergReduce.__call__-toggle" onclick="return toggle('HessenbergReduce.__call__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.householder.HessenbergReduce-class.html#__call__">__call__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">A</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HessenbergReduce.__call__-collapsed" style="display:none;" pad="+++" indent="++++++++++++"></div><div id="HessenbergReduce.__call__-expanded"><a name="L342"></a><tt class="py-lineno">342</tt>  <tt class="py-line">                <tt class="py-name">Na</tt> <tt class="py-op">=</tt> <tt id="link-178" class="py-name"><a title="PolyMode.Material.Quartz.A
+PolyMode.Material.Sellmeier.A
+PolyMode.mathlink.ublas_block_lu.test_block_lu.A" class="py-name" href="#" onclick="return doclink('link-178', 'A', 'link-150');">A</a></tt><tt class="py-op">.</tt><tt id="link-179" class="py-name"><a title="PolyMode.Modes.VectorMode.shape" class="py-name" href="#" onclick="return doclink('link-179', 'shape', 'link-134');">shape</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L343"></a><tt class="py-lineno">343</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt class="py-name">ii</tt> <tt class="py-keyword">in</tt> <tt class="py-name">range</tt><tt class="py-op">(</tt><tt class="py-name">Na</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L344"></a><tt class="py-lineno">344</tt>  <tt class="py-line">                        <tt class="py-comment">#Givens transforms for all off-diagonal elements</tt> </tt>
+<a name="L345"></a><tt class="py-lineno">345</tt>  <tt class="py-line">                        <tt class="py-name">givens</tt> <tt class="py-op">=</tt> <tt id="link-180" class="py-name" targets="Class PolyMode.mathlink.householder.ZeroGivensRotation=PolyMode.mathlink.householder.ZeroGivensRotation-class.html"><a title="PolyMode.mathlink.householder.ZeroGivensRotation" class="py-name" href="#" onclick="return doclink('link-180', 'ZeroGivensRotation', 'link-180');">ZeroGivensRotation</a></tt><tt class="py-op">(</tt><tt id="link-181" class="py-name"><a title="PolyMode.Material.Quartz.A
+PolyMode.Material.Sellmeier.A
+PolyMode.mathlink.ublas_block_lu.test_block_lu.A" class="py-name" href="#" onclick="return doclink('link-181', 'A', 'link-150');">A</a></tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-op">,</tt><tt class="py-name">ii</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">ii</tt><tt class="py-op">,</tt><tt class="py-name">ii</tt><tt class="py-op">+</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L346"></a><tt class="py-lineno">346</tt>  <tt class="py-line">                        <tt class="py-name">givens</tt><tt class="py-op">.</tt><tt id="link-182" class="py-name"><a title="PolyMode.mathlink.householder.ElementaryTransform.apply
+PolyMode.mathlink.householder.GivensRotation.apply
+PolyMode.mathlink.householder.HouseholderTransform.apply" class="py-name" href="#" onclick="return doclink('link-182', 'apply', 'link-2');">apply</a></tt><tt class="py-op">(</tt><tt id="link-183" class="py-name"><a title="PolyMode.Material.Quartz.A
+PolyMode.Material.Sellmeier.A
+PolyMode.mathlink.ublas_block_lu.test_block_lu.A" class="py-name" href="#" onclick="return doclink('link-183', 'A', 'link-150');">A</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L347"></a><tt class="py-lineno">347</tt>  <tt class="py-line">                         </tt>
+<a name="L348"></a><tt class="py-lineno">348</tt>  <tt class="py-line">                        <tt class="py-comment">#To replicate action add in reverse order</tt> </tt>
+<a name="L349"></a><tt class="py-lineno">349</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">transforms</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">givens</tt><tt class="py-op">]</tt> <tt class="py-op">+</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">transforms</tt> </tt>
+<a name="L350"></a><tt class="py-lineno">350</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt id="link-184" class="py-name"><a title="PolyMode.Material.Quartz.A
+PolyMode.Material.Sellmeier.A
+PolyMode.mathlink.ublas_block_lu.test_block_lu.A" class="py-name" href="#" onclick="return doclink('link-184', 'A', 'link-150');">A</a></tt> </tt>
+</div></div><a name="L351"></a><tt class="py-lineno">351</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1
+    on Mon Sep 14 10:29:17 2009
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

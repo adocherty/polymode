@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>PolyMode.mathlink.cached_calculation</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="PolyMode-module.html">Package&nbsp;PolyMode</a> ::
+        <a href="PolyMode.mathlink-module.html">Package&nbsp;mathlink</a> ::
+        Module&nbsp;cached_calculation
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="PolyMode.mathlink.cached_calculation-module.html">Module PolyMode.mathlink.cached_calculation</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment"># _*_ coding=utf-8 _*_</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-docstring">'''</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-docstring">Implementation of versitile cached calculation class, calculate once and access many times.</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-docstring">Todo:</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-docstring">* How do we know when to recalculate the cache?</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-docstring">---------------------------------------------------------------------------------</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-docstring">Copyright &#169; 2008 Andrew Docherty</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-docstring">This program is part of ABCSolver.</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-docstring">ABCSolver is free software: you can redistribute it and/or modify</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-docstring">it under the terms of the GNU General Public License as published by</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-docstring">the Free Software Foundation, either version 3 of the License, or</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-docstring">(at your option) any later version.</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt class="py-docstring">This program is distributed in the hope that it will be useful,</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt class="py-docstring">but WITHOUT ANY WARRANTY; without even the implied warranty of</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"><tt class="py-docstring">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"><tt class="py-docstring">GNU General Public License for more details.</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line"><tt class="py-docstring">You should have received a copy of the GNU General Public License</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"><tt class="py-docstring">along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line"><tt class="py-docstring">'''</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line"> </tt>
+<a name="CachedCalculation"></a><div id="CachedCalculation-def"><a name="L26"></a><tt class="py-lineno">26</tt> <a class="py-toggle" href="#" id="CachedCalculation-toggle" onclick="return toggle('CachedCalculation');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="PolyMode.mathlink.cached_calculation.CachedCalculation-class.html">CachedCalculation</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CachedCalculation-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="CachedCalculation-expanded"><a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line">        <tt class="py-docstring">"A cached calculation using descriptors"</tt> </tt>
+<a name="CachedCalculation.__init__"></a><div id="CachedCalculation.__init__-def"><a name="L28"></a><tt class="py-lineno">28</tt> <a class="py-toggle" href="#" id="CachedCalculation.__init__-toggle" onclick="return toggle('CachedCalculation.__init__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.cached_calculation.CachedCalculation-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">calc</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CachedCalculation.__init__-collapsed" style="display:none;" pad="++" indent="++++++++++++"></div><div id="CachedCalculation.__init__-expanded"><a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-0" class="py-name" targets="Method PolyMode.ExternalSolvers.JCMWaveSolver.calculate()=PolyMode.ExternalSolvers.JCMWaveSolver-class.html#calculate,Method PolyMode.MPISolver.QueueItem.calculate()=PolyMode.MPISolver.QueueItem-class.html#calculate,Method PolyMode.Solver.Solve.calculate()=PolyMode.Solver.Solve-class.html#calculate,Method PolyMode.Solver.WavelengthTrackingSolver.calculate()=PolyMode.Solver.WavelengthTrackingSolver-class.html#calculate,Method PolyMode.Waveguide.Waveguide.calculate()=PolyMode.Waveguide.Waveguide-class.html#calculate"><a title="PolyMode.ExternalSolvers.JCMWaveSolver.calculate
+PolyMode.MPISolver.QueueItem.calculate
+PolyMode.Solver.Solve.calculate
+PolyMode.Solver.WavelengthTrackingSolver.calculate
+PolyMode.Waveguide.Waveguide.calculate" class="py-name" href="#" onclick="return doclink('link-0', 'calculate', 'link-0');">calculate</a></tt> <tt class="py-op">=</tt> <tt class="py-name">calc</tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Variable PolyMode.Material.Air.name=PolyMode.Material.Air-class.html#name,Variable PolyMode.Material.Aluminium.name=PolyMode.Material.Aluminium-class.html#name,Variable PolyMode.Material.BK7.name=PolyMode.Material.BK7-class.html#name,Variable PolyMode.Material.Chromium.name=PolyMode.Material.Chromium-class.html#name,Variable PolyMode.Material.Copper.name=PolyMode.Material.Copper-class.html#name,Variable PolyMode.Material.Germania.name=PolyMode.Material.Germania-class.html#name,Variable PolyMode.Material.Germanium.name=PolyMode.Material.Germanium-class.html#name,Variable PolyMode.Material.Gold.name=PolyMode.Material.Gold-class.html#name,Variable PolyMode.Material.HDPE.name=PolyMode.Material.HDPE-class.html#name,Variable PolyMode.Material.Iron.name=PolyMode.Material.Iron-class.html#name,Variable PolyMode.Material.Lithium.name=PolyMode.Material.Lithium-class.html#name,Variable PolyMode.Material.Nickel.name=PolyMode.Material.Nickel-class.html#name,Variable PolyMode.Material.PMMA.name=PolyMode.Material.PMMA-class.html#name,Variable PolyMode.Material.Quartz.name=PolyMode.Material.Quartz-class.html#name,Variable PolyMode.Material.Sapphire.name=PolyMode.Material.Sapphire-class.html#name,Variable PolyMode.Material.SiO2Fl.name=PolyMode.Material.SiO2Fl-class.html#name,Variable PolyMode.Material.SiO2GeO2.name=PolyMode.Material.SiO2GeO2-class.html#name,Variable PolyMode.Material.Silica.name=PolyMode.Material.Silica-class.html#name,Variable PolyMode.Material.Silicon.name=PolyMode.Material.Silicon-class.html#name,Variable PolyMode.Material.Silver.name=PolyMode.Material.Silver-class.html#name,Variable PolyMode.Material.Tungsten.name=PolyMode.Material.Tungsten-class.html#name,Variable PolyMode.Material.Vanadium.name=PolyMode.Material.Vanadium-class.html#name,Variable PolyMode.Material.Water.name=PolyMode.Material.Water-class.html#name,Variable PolyMode.Material.Water_IR.name=PolyMode.Material.Water_IR-class.html#name,Variable PolyMode.Material.Zirconium.name=PolyMode.Material.Zirconium-class.html#name,Variable PolyMode.Waveguide.Annulus.name=PolyMode.Waveguide.Annulus-class.html#name,Variable PolyMode.Waveguide.ChannelAnnulus.name=PolyMode.Waveguide.ChannelAnnulus-class.html#name,Variable PolyMode.Waveguide.Circle.name=PolyMode.Waveguide.Circle-class.html#name,Variable PolyMode.Waveguide.Curve.name=PolyMode.Waveguide.Curve-class.html#name,Variable PolyMode.Waveguide.Ellipse.name=PolyMode.Waveguide.Ellipse-class.html#name,Variable PolyMode.Waveguide.Image.name=PolyMode.Waveguide.Image-class.html#name,Variable PolyMode.Waveguide.Polygon.name=PolyMode.Waveguide.Polygon-class.html#name,Variable PolyMode.Waveguide.Rectangle.name=PolyMode.Waveguide.Rectangle-class.html#name,Variable PolyMode.Waveguide.RegularPolygon.name=PolyMode.Waveguide.RegularPolygon-class.html#name"><a title="PolyMode.Material.Air.name
+PolyMode.Material.Aluminium.name
+PolyMode.Material.BK7.name
+PolyMode.Material.Chromium.name
+PolyMode.Material.Copper.name
+PolyMode.Material.Germania.name
+PolyMode.Material.Germanium.name
+PolyMode.Material.Gold.name
+PolyMode.Material.HDPE.name
+PolyMode.Material.Iron.name
+PolyMode.Material.Lithium.name
+PolyMode.Material.Nickel.name
+PolyMode.Material.PMMA.name
+PolyMode.Material.Quartz.name
+PolyMode.Material.Sapphire.name
+PolyMode.Material.SiO2Fl.name
+PolyMode.Material.SiO2GeO2.name
+PolyMode.Material.Silica.name
+PolyMode.Material.Silicon.name
+PolyMode.Material.Silver.name
+PolyMode.Material.Tungsten.name
+PolyMode.Material.Vanadium.name
+PolyMode.Material.Water.name
+PolyMode.Material.Water_IR.name
+PolyMode.Material.Zirconium.name
+PolyMode.Waveguide.Annulus.name
+PolyMode.Waveguide.ChannelAnnulus.name
+PolyMode.Waveguide.Circle.name
+PolyMode.Waveguide.Curve.name
+PolyMode.Waveguide.Ellipse.name
+PolyMode.Waveguide.Image.name
+PolyMode.Waveguide.Polygon.name
+PolyMode.Waveguide.Rectangle.name
+PolyMode.Waveguide.RegularPolygon.name" class="py-name" href="#" onclick="return doclink('link-1', 'name', 'link-1');">name</a></tt> <tt class="py-op">=</tt> <tt class="py-name">calc</tt><tt class="py-op">.</tt><tt class="py-name">__name__</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+</div><a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line"> </tt>
+<a name="CachedCalculation.__get__"></a><div id="CachedCalculation.__get__-def"><a name="L33"></a><tt class="py-lineno">33</tt> <a class="py-toggle" href="#" id="CachedCalculation.__get__-toggle" onclick="return toggle('CachedCalculation.__get__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.cached_calculation.CachedCalculation-class.html#__get__">__get__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">obj</tt><tt class="py-op">,</tt> <tt class="py-param">objtype</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CachedCalculation.__get__-collapsed" style="display:none;" pad="++" indent="++++++++++++"></div><div id="CachedCalculation.__get__-expanded"><a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line">                <tt class="py-comment">#Calculate data if no cache</tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">obj</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">:</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">                        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-name">obj</tt><tt class="py-op">]</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">                <tt class="py-keyword">elif</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-2" class="py-name"><a title="PolyMode.ExternalSolvers.JCMWaveSolver.calculate
+PolyMode.MPISolver.QueueItem.calculate
+PolyMode.Solver.Solve.calculate
+PolyMode.Solver.WavelengthTrackingSolver.calculate
+PolyMode.Waveguide.Waveguide.calculate" class="py-name" href="#" onclick="return doclink('link-2', 'calculate', 'link-0');">calculate</a></tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-name">obj</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-3" class="py-name"><a title="PolyMode.ExternalSolvers.JCMWaveSolver.calculate
+PolyMode.MPISolver.QueueItem.calculate
+PolyMode.Solver.Solve.calculate
+PolyMode.Solver.WavelengthTrackingSolver.calculate
+PolyMode.Waveguide.Waveguide.calculate" class="py-name" href="#" onclick="return doclink('link-3', 'calculate', 'link-0');">calculate</a></tt><tt class="py-op">(</tt><tt class="py-name">obj</tt><tt class="py-op">)</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">                        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-name">obj</tt><tt class="py-op">]</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">                <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">                        <tt class="py-keyword">raise</tt> <tt class="py-name">AttributeError</tt><tt class="py-op">,</tt> <tt class="py-string">"No calculation specified"</tt> </tt>
+</div><a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line"> </tt>
+<a name="CachedCalculation.__set__"></a><div id="CachedCalculation.__set__-def"><a name="L43"></a><tt class="py-lineno">43</tt> <a class="py-toggle" href="#" id="CachedCalculation.__set__-toggle" onclick="return toggle('CachedCalculation.__set__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.cached_calculation.CachedCalculation-class.html#__set__">__set__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">obj</tt><tt class="py-op">,</tt> <tt class="py-param">value</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CachedCalculation.__set__-collapsed" style="display:none;" pad="++" indent="++++++++++++"></div><div id="CachedCalculation.__set__-expanded"><a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">                <tt class="py-docstring">"Manually set cache"</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-name">obj</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-4" class="py-name" targets="Function PolyMode.mathlink.physcon.value()=PolyMode.mathlink.physcon-module.html#value"><a title="PolyMode.mathlink.physcon.value" class="py-name" href="#" onclick="return doclink('link-4', 'value', 'link-4');">value</a></tt> </tt>
+</div><a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line"> </tt>
+<a name="CachedCalculation.__delete__"></a><div id="CachedCalculation.__delete__-def"><a name="L47"></a><tt class="py-lineno">47</tt> <a class="py-toggle" href="#" id="CachedCalculation.__delete__-toggle" onclick="return toggle('CachedCalculation.__delete__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.cached_calculation.CachedCalculation-class.html#__delete__">__delete__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">obj</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CachedCalculation.__delete__-collapsed" style="display:none;" pad="++" indent="++++++++++++"></div><div id="CachedCalculation.__delete__-expanded"><a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">obj</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">:</tt> </tt>
+<a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">                        <tt class="py-keyword">del</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt><tt class="py-op">[</tt><tt class="py-name">obj</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line"> </tt>
+<a name="CachedCalculation.__getstate__"></a><div id="CachedCalculation.__getstate__-def"><a name="L51"></a><tt class="py-lineno">51</tt> <a class="py-toggle" href="#" id="CachedCalculation.__getstate__-toggle" onclick="return toggle('CachedCalculation.__getstate__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.cached_calculation.CachedCalculation-class.html#__getstate__">__getstate__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CachedCalculation.__getstate__-collapsed" style="display:none;" pad="++" indent="++++++++++++"></div><div id="CachedCalculation.__getstate__-expanded"><a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line">                <tt class="py-docstring">"Pickle all needed data, ignore cached data"</tt> </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line">                <tt class="py-name">state</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__dict__</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Method PolyMode.Modes.Mode.copy()=PolyMode.Modes.Mode-class.html#copy,Method PolyMode.Modes.VectorMode.copy()=PolyMode.Modes.VectorMode-class.html#copy,Method PolyMode.Waveguide.Circle.copy()=PolyMode.Waveguide.Circle-class.html#copy,Method PolyMode.Waveguide.Polygon.copy()=PolyMode.Waveguide.Polygon-class.html#copy,Method PolyMode.Waveguide.WgShape.copy()=PolyMode.Waveguide.WgShape-class.html#copy,Method PolyMode.mathlink.coordinates.Coord.copy()=PolyMode.mathlink.coordinates.Coord-class.html#copy"><a title="PolyMode.Modes.Mode.copy
+PolyMode.Modes.VectorMode.copy
+PolyMode.Waveguide.Circle.copy
+PolyMode.Waveguide.Polygon.copy
+PolyMode.Waveguide.WgShape.copy
+PolyMode.mathlink.coordinates.Coord.copy" class="py-name" href="#" onclick="return doclink('link-5', 'copy', 'link-5');">copy</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-string">'cache'</tt> <tt class="py-keyword">in</tt> <tt class="py-name">state</tt><tt class="py-op">:</tt> <tt class="py-keyword">del</tt> <tt class="py-name">state</tt><tt class="py-op">[</tt><tt class="py-string">'cache'</tt><tt class="py-op">]</tt> </tt>
+<a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">state</tt> </tt>
+</div><a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line">         </tt>
+<a name="CachedCalculation.__setstate__"></a><div id="CachedCalculation.__setstate__-def"><a name="L57"></a><tt class="py-lineno">57</tt> <a class="py-toggle" href="#" id="CachedCalculation.__setstate__-toggle" onclick="return toggle('CachedCalculation.__setstate__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="PolyMode.mathlink.cached_calculation.CachedCalculation-class.html#__setstate__">__setstate__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt><tt class="py-param">state</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CachedCalculation.__setstate__-collapsed" style="display:none;" pad="++" indent="++++++++++++"></div><div id="CachedCalculation.__setstate__-expanded"><a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line">                <tt class="py-docstring">"Restore data from pickler"</tt> </tt>
+<a name="L59"></a><tt class="py-lineno">59</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__dict__</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Method PolyMode.mathlink.blockarray.TriBlockLU.update()=PolyMode.mathlink.blockarray.TriBlockLU-class.html#update"><a title="PolyMode.mathlink.blockarray.TriBlockLU.update" class="py-name" href="#" onclick="return doclink('link-6', 'update', 'link-6');">update</a></tt><tt class="py-op">(</tt><tt class="py-name">state</tt><tt class="py-op">)</tt> </tt>
+<a name="L60"></a><tt class="py-lineno">60</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cache</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+</div></div><a name="L61"></a><tt class="py-lineno">61</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="PolyMode-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1
+    on Mon Sep 14 10:29:19 2009
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
