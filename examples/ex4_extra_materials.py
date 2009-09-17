@@ -5,13 +5,21 @@ from Polymode import Material, Plotter
 Material.find_materials('ag')
 
 #Use supplied data from internal material databases
-ag_sopra = Material.Sopra('Ag')
 ag_fs = Material.FreeSnell('ag')
 
-for mat in [ag_sopra, ag_fs]:
+#Compare refractive index of some plastics
+pmma = Material.PMMA()
+pc = Material.Polycarbonate()
+ps = Material.Polystyrene()
+zeo = Material.Zeonex()
+
+#Plot the dispersion of the different materials 
+#This will give some errors as we are extrapolating
+#outside the valid region of wavelengths
+for mat in [pmma, pc, ps, zeo]:
 	print mat
-	mat.plot([0.4,1.0], showdata=True)
-Plotter.title("The refractive index of silver from different sources")
+	mat.plot([0.4,1.2], showdata=True)
+Plotter.title("The refractive index of different optical polymers")
 Plotter.show()
 
 #Example of a new material using Sellmeier coefficients
@@ -35,5 +43,4 @@ nm_formula.color = 'blue'
 
 #Example of a new material using interpolation of a Sopra formatted file
 #nm_sopra = Material.SopraFile( open('test.nk', 'r') )
-
 
