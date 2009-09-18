@@ -27,7 +27,7 @@ You now have everything you need to start.
 == Using the Python(x,y) Environment ==
 
 The *IPython* command prompt is used to run all code.
-This is installed with *Python(x,y)*, you can access it through the Windows Start Menu under
+This is installed with Python(x,y), you can access it through the Windows Start Menu under
 Python (x,y) -> Enhanced Consoles -> IPython(x,y) as shown below:
 
 http://polymode.googlecode.com/svn/wiki/figures/gs_pythonxy.png
@@ -79,18 +79,16 @@ Some other useful commands are:
 
 Help for all of these commands is available in IPython by typing the command then a "?" and hitting enter
 
-== Registry Entries in MPOF Computers ==
+=== Registry Entries in MPOF Computers ===
 
-The MPOF computers do not respect the local system registry entries, to correct this download this registry file
-and double click on it. Click "	yes" when asked if you want to add the information to the registry.
+The University of Sydney Physics (MPOF) computers do not respect the local system registry entries, to correct this download this registry file and double click on it. Click "	yes" when asked if you want to add the information to the registry.
 
 [http://polymode.googlecode.com/svn/misc/mpof_pythonxy_registry.reg Download Python(x,y) registry file]
 
+=== Paths in Windows ===
 
-== Paths in Windows ==
-
-The *PATH* environment variable needs to be set correctly for *PythonXY* to run properly and find the required
-programs. This is automatically set up when *PythonXY* is installed, however if another user wants to use the
+The *PATH* environment variable needs to be set correctly for Python(x,y) to run properly and find the required
+programs. This is automatically set up when Python(x,y) is installed, however if another user wants to use the
 same installation then each user needs to set up the environment variables
 
 In particular the *PATH* variable should include these directories:
@@ -99,6 +97,18 @@ C:\Python25;C:\Python25\DLLs;C:\Python25\Scripts;C:\Python25\Lib\site-packages\P
 }}}
 
 See the [http://support.microsoft.com/kb/310519 Microsoft support page] for information on how to change the path.
+
+=== Advanced: Compiling on Windows ===
+
+To compile the code (from svn for example) on Windows machines you need to have quite a few additional dependencies. The bare essentials are Python(x,y) as explained above and a compiler, such as MinGW.
+
+To install [http://www.mingw.org MinGW] follow the instructions here in the
+[http://www.mingw.org/wiki/HOWTO_Install_the_MinGW_GCC_Compiler_Suite Howto install MinGW]
+page on their website. Install compilers for c++ and fortran.
+
+
+
+
 
 == Installing on Linux/Mac OSX ==
 
@@ -120,4 +130,3 @@ This should build and install the package for you, if the prerequisites are also
 
 === Installing on the APAC Altix Cluster computers ===
 Precompiled versions of the prerequisites for running computing jobs on the APAC Alitx cluster computers are available. Copy these files and the install file to the APAC computers and run the "install.sh" file. It will ask you for a directory and install the required files to it. You will need to add the some commands to your profile file to complete the installation, the installer will tell you what to add.
-
