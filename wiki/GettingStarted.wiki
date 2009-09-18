@@ -104,11 +104,15 @@ To compile the code (from svn for example) on Windows machines you need to have 
 
 To install [http://www.mingw.org MinGW] follow the instructions here in the
 [http://www.mingw.org/wiki/HOWTO_Install_the_MinGW_GCC_Compiler_Suite Howto install MinGW]
-page on their website. Install compilers for c++ and fortran.
+page on their website. Install compilers for c++ and fortran. Also needed are the ATLAS binaries, either
+download them or build them according to the [http://www.scipy.org/Installing_SciPy/Windows Numpy/Scipy how to]. Use the Numpy `site.cfg` file in the `other` directory and customize it to point to the ATLAS libraries as detailed in the how to.
 
+Finally, build Polymode using the command:
+{{{
+	python.exe setup.py config --compiler=mingw32 build --compiler=mingw32 bdist_wininst
+}}}
 
-
-
+_This currently doesn't work as the block lu solver requires Boost, it will be fixed soon hopefully!_
 
 == Installing on Linux/Mac OSX ==
 
