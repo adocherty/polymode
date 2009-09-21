@@ -1,9 +1,10 @@
 Polymode Mode Solver for Microstructured Optical Fibers
+-------------------------------------------------------
 
 The package requires the following packages to be installed:
-numpy>=1.0.3
-scipy>=0.5.2
-matplotlib>=0.92
+numpy>=1.3.0
+scipy>=0.7.0
+matplotlib>=0.99.0
 
 They are available for download from www.scipy.org and matplotlib.sf.net
 
