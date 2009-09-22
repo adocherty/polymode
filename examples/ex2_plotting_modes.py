@@ -7,12 +7,10 @@ modes = load_data('ex2_modes.dat')
 
 #Plot modes with vector field
 figure(1)
-clf()
 Plotter.plot_modes_in_grid(modes, 'sz', cmap=Plotter.cm.gray, Nx=(50,60), rmax=3)
 Plotter.plot_modes_in_grid(modes, 'vectore')
 
 figure(2)
-clf()
 subplot(121)
 modes[0].plot('hx', Nx=(50,60))
 

@@ -113,10 +113,14 @@ class Layer(object):
         return self.precalc_data
 
     def multiplicative_factor(self):
+        """The multiplicative factor can be applied differently to
+            allow for different styles of root-finders
+        """
         Vm,Vp,xim,xip,S = self.precalc_data
         return Vp
         
     def calculate(self, beta, r, precalc=1):
+        "Return the transfer matrix for this sinlge layer"
         kp,km = self.kp,self.km
         
         #Precalculate beta dependant stuff to speed things up
@@ -137,12 +141,11 @@ class Layer(object):
             Vm,Vp,xim,xip,S = self.precalc(beta)
         else:
             Vm,Vp,xim,xip,S = self.precalc_data
-
         Q,dQ = self.Q(xim,xip,r)
-
-        #Multiply by coefficients
-        av = self.coeffs[:Q.shape[1]]
-        qz = self.multiplicative_factor()*dot(Q,av)
+        
+        #Multiply by coefficients, remember the MF
+        av = self.coeffs[:Q.shape[1]]/self.multiplicative_factor()
+        qz = dot(Q,av)
         
         #Deal with different cases as r->0
         if abs(r)>1e-10:
@@ -155,12 +158,11 @@ class Layer(object):
             qa = -dot(dot(S,self.m*beta*dQ + dot(self.Kpm,dQ)),av)
             qr = 1j*dot(dot(S,self.m*dot(self.Kpm,dQ) + beta*dQ),av)
         
-        #Convert to magnetic & electric fields
+        #Convert to magnetic & electric fields if requested
         if he:
-            F = array([dot(self.V,qz),dot(self.V,qa),dot(self.V,qr)]).T
+            F = array([dot(self.V,qr),dot(self.V,qa),dot(self.V,qz)]).T
         else:
-            F = array([qz,qa,qr]).T
-
+            F = array([qr,qa,qz]).T
         return F
     
 class HLayer(Layer):
@@ -218,23 +220,47 @@ class LayeredMode(Mode):
         correspondance, including the intrinsic impedence of free space:
         H = Htrue, E = (e0/mu0)^1/2 Etrue
         """
-        pass
+        if coord is None:
+            coord = coordinates.PolarCoord(rrange=(0,self.layers[-1].r1*1.5), N=(100,1))
+            
+        #Normalize power of mode only (fields are always correct)
+        P0 = self.mode_power(coord=coord)
+        if by=='poynting':
+            enorm = conj(misc.absmax(self.poynting(coord=coord)))
+        else:
+            enorm = 1./P0
+        
+        #Normalize absolute power so |P|=1
+        #Can't normalize power phase and field relationship simultaneously
+        for layer in self.layers:
+            layer.coeffs *= sqrt(enorm)
 
+        #Recalulate power & field for information
+        Pang = angle(self.mode_power(coord=coord))
+        logging.debug(u"Normalized mode to power angle ∠%.3gπ" % (Pang/pi))
+        return enorm
+    
     def magnetic_transverse_field(self, fourier=False, cartesian=None, coord=None):
         '''
         The transverse magnetic field, calculated from the internal H⁺,H⁻"
         cartesian=False returns h_t=(h_r,h_ϕ)
         cartesian=True returns h_t=(h_x,h_y)
         '''
+        if coord is None: #coord=self.coord
+            raise NotImplementedError, "Need a coord for LayeredMode"
+
         H,E=self._construct_fields_(coord, he=True)
-        return H[:2]
+        return self._convert_polar_vector(H, coord, cartesian=cartesian)[:2]
 
     def magnetic_field(self, fourier=False, cartesian=None, coord=None):
         """
         The three component magnetic field (h_r,h_ϕ,h_z) or (hx,hy,hz)
         """
+        if coord is None: #coord=self.coord
+            raise NotImplementedError, "Need a coord for LayeredMode"
+        
         H,E=self._construct_fields_(coord, he=True)
-        return H
+        return self._convert_polar_vector(H, coord, cartesian=cartesian)
 
     def electric_transverse_field(self, fourier=False, cartesian=None, coord=None, wg=None):
         '''
@@ -248,15 +274,18 @@ class LayeredMode(Mode):
             raise NotImplementedError, "Need a coord for LayeredMode"
         
         H,E=self._construct_fields_(coord, he=True)
-        return E[:2]
+        return self._convert_polar_vector(E, coord, cartesian=cartesian)[:2]
 
     def electric_field(self, wg=None, fourier=False, cartesian=None, coord=None):
         """
         The three component electric field (e_r,e_ϕ,e_z)
         if calculated_electric_field is true then calculate from the the magnetic field
         """
+        if coord is None: #coord=self.coord
+            raise NotImplementedError, "Need a coord for LayeredMode"
+        
         H,E=self._construct_fields_(coord, he=True)
-        return E
+        return self._convert_polar_vector(E, coord, cartesian=cartesian)
 
     def _construct_fields_(self, coord, he=True):
         "Sample fields on a coord grid"
@@ -278,7 +307,10 @@ class LayeredMode(Mode):
         rmin = 0
         for ii in xrange(0, Nlayer):
             layer = self.layers[ii]
-
+            print "Layer  %d with coeffs: %s" % (ii, layer.coeffs)
+            print beta
+            print 
+            
             #Select points inside layer
             lstart = rmflat.searchsorted(layer.r1)
             lend = rmflat.searchsorted(layer.r2)
@@ -293,7 +325,7 @@ class LayeredMode(Mode):
                     Fcurrent = layer.field(beta, r, he=he)
                 
                 F[...,kk] = Fcurrent*exp(1j*self.m0*phi)
-        return F.reshape(fshape)
+        return  F.reshape(fshape)
 
 class LayeredSolver(Solve):
     def setup(self, Nscan=1e3, tol=1e-6):
@@ -468,6 +500,9 @@ class LayeredSolver(Solve):
 
     def calculate_mode_layers(self, beta):
         "Create new layers list with coefficients"
+        def absmax(x):
+            return x[absolute(x).argmax()]
+        
         #Find eigenvector(s)
         A = self.get_matrix(beta)
         w,v = linalg.eig(A)
@@ -478,30 +513,38 @@ class LayeredSolver(Solve):
         assert abs(w[mode_inx])<1e-4, "Error in field calculation: mode not accurate"
 
         #Field coefficients
-        mode_coeffs = v[:,mode_inx] #/absmax(v[:,mode_inx])
+        mode_coeffs = v[:,mode_inx]/absmax(v[:,mode_inx])
         a0 = zeros_like(mode_coeffs)
         an = zeros_like(mode_coeffs)
 
         a0[:2] = mode_coeffs[:2]
         an[:2] = mode_coeffs[2:]
-
+        
         #Create new layer list with coefficients
         last = self.layers[0].copy()
         last.coeffs = a0
         mode_layers = [last]
-
         for ii in range(1, self.Nlayer-1):
             layer = self.layers[ii].copy()
+
             T1 = last.calculate(beta, layer.r1)
             T2 = layer.calculate(beta, layer.r1)
+            T1 /= last.multiplicative_factor()
+            T2 /= layer.multiplicative_factor()
 
             layer.coeffs = dot(linalg.inv(T2),dot(T1,last.coeffs))
             mode_layers.append(layer)
-
+            
         #Final layer:
         layer = self.layers[-1].copy()
         layer.coeffs = an
         mode_layers.append(layer)
         return mode_layers
 
+
+class LayeredSolverCauchy(LayeredSolver):
+    pass
+
+
 DefaultSolver = LayeredSolver
+

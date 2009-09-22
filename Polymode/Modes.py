@@ -387,6 +387,11 @@ class Mode(object):
         Sz = 0.5*cross(et,conj(ht),axis=0)
         return Sz
 
+    def _convert_polar_vector(self, v, coord, cartesian=None):
+        if cartesian is None: cartesian = not coord.polar_coordinate
+        if cartesian: v = coordinates.vector_polar_to_cartesian(v, coord)       
+        return v
+
     def mode_power(self, r=None, coord=None):
         '''
         The power in the computational region
