@@ -4,6 +4,17 @@ from os.path import join
 from numpy.distutils.core import setup
 from numpy.distutils.misc_util import Configuration
 
+#Misc compilation flags
+_ublock_compile_with_openmp = True
+_ublock_compile = False
+
+#boost_include_dir = "/opt/boost/include"
+#boost_library_dir = "/opt/boost/lib"
+#boost_lib_name="boost_python-gcc43-mt"
+boost_include_dir = "/usr/include"
+boost_library_dir = "/usr/lib"
+boost_lib_name="boost_python-mt"
+
 try:
     import Cython.Compiler.Main
     have_cython = True
@@ -14,7 +25,7 @@ except ImportError:
 from numpy.distutils.command import build_src
 
 if have_cython and not build_src.have_pyrex:
-	print "Numpy doesn't support Cython!"
+    print "Numpy doesn't support Cython!"
 
 def configuration(parent_package='', top_path=None):
     from numpy.distutils.system_info import get_info, NotFoundError
@@ -42,12 +53,28 @@ def configuration(parent_package='', top_path=None):
     atlas_version = ([v[3:-3] for k,v in lapack_opt.get('define_macros',[]) \
                       if k=='ATLAS_INFO']+[None])[0]
 
-    #C++ tridiagonal block solver
     ublock_sources = ['ublas_block_lu/ublocklu.cpp','ublas_block_lu/numimport.cpp']
-    config.add_extension('ublocklu',
+    ublock_depends = ['ublas_block_lu/ublocklu.hpp','ublas_block_lu/numimport.hpp']
+    ublock_library_dirs=[boost_library_dir]
+    ublock_include_dirs=['ublas_block_lu', boost_include_dir]
+    ublock_libraries=['atlas','lapack_atlas',boost_lib_name]
+    ublock_compile_flags=[]
+    ublock_link_flags=[]
+
+    if _ublock_compile_with_openmp:
+        ublock_compile_flags += ['-fopenmp', '-ftree-vectorize']
+        ublock_link_flags += ['-lgomp']
+
+    #C++ tridiagonal block solver
+    if _ublock_compile:
+      config.add_extension('ublocklu',
                     sources=ublock_sources,
-                    include_dirs=['ublas_block_lu'],
-                    libraries=['atlas','lapack_atlas','boost_python-mt'],
+                    depends=ublock_depends,
+                    library_dirs=ublock_library_dirs,
+                    include_dirs=ublock_include_dirs,
+                    libraries=ublock_libraries,
+                    extra_compile_args=ublock_compile_flags,
+                    extra_link_args=ublock_link_flags,
                     extra_info = lapack_opt
                     )
 

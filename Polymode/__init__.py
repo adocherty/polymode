@@ -48,15 +48,15 @@ from .mathlink import coordinates, constants
 
 #Some helper functions
 def save_data(data, filename="data.mds"):
-	from cPickle import dump
-	f = open(filename, "wb")
-	dump(data, f)
-	f.close()
+    from cPickle import dump
+    f = open(filename, "wb")
+    dump(data, f)
+    f.close()
 
 def load_data(filename="data.mds"):
-	from cPickle import load
-	f = open(filename, "rb")
-	data = load(f)
-	f.close()
-	return data
+    from cPickle import load
+    f = open(filename, "rb")
+    data = load(f)
+    f.close()
+    return data
 
