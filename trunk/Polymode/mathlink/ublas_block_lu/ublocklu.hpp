@@ -32,7 +32,7 @@
 
 #include "numimport.hpp"
 
-const char UBLASBLOCKLU_VERSION[] = "v0.01";
+const char UBLASBLOCKLU_VERSION[] = "v0.1.0";
 
 namespace numpy = boost::python::numeric;
 namespace ublas = boost::numeric::ublas;
@@ -163,8 +163,8 @@ private:
 	block_array_wrapped<T> LU;
 
 public:
-	tridiagonal_block_lu( const tridiagonal_block_lu<T>& lu ) {};
-	tridiagonal_block_lu( bool overwrite_in = true )
+	tridiagonal_block_lu(const tridiagonal_block_lu<T>& lu ) {};
+	tridiagonal_block_lu(bool overwrite_in = true )
 		{ overwrite = overwrite_in; }
 	bool isoverwrite() { return overwrite; }
 	
@@ -184,8 +184,8 @@ public:
 	}
 
 	//Perform Block LU
-	bool lu(block_array_wrapped<T>& A, T shift);
-	bool lu_update(block_array_wrapped<T>& A, int nrowsup);
+	void lu(block_array_wrapped<T>& A, T shift);
+	void lu_update(block_array_wrapped<T>& A, int nrowsup);
 
 	//Back subsistution
 	template<class M, class S>
@@ -203,7 +203,7 @@ public:
 };
 
 template<class T>
-bool tridiagonal_block_lu<T>::lu(block_array_wrapped<T>& A, T shift_in=0)
+void tridiagonal_block_lu<T>::lu(block_array_wrapped<T>& A, T shift_in=0)
 {
     using namespace ublas;
 	using namespace std;
@@ -244,8 +244,8 @@ bool tridiagonal_block_lu<T>::lu(block_array_wrapped<T>& A, T shift_in=0)
 		atlas::lu_factor(b, pivots);
 		
 		int isnan_flag=0;
-		for( unsigned xx=0; xx<nblock; xx++ )
-			for( unsigned yy=0; yy<nblock; yy++ )
+		for(unsigned xx=0; xx<nblock; xx++ )
+			for(unsigned yy=0; yy<nblock; yy++ )
 				if( isnan(real(static_cast<complex_t>(b(xx,yy)))) )
 					isnan_flag = 1;
 		if( isnan_flag )
@@ -282,7 +282,7 @@ bool tridiagonal_block_lu<T>::lu(block_array_wrapped<T>& A, T shift_in=0)
 };
 
 template<class T>
-bool tridiagonal_block_lu<T>::lu_update(block_array_wrapped<T>& Aupdate, int uprows)
+void tridiagonal_block_lu<T>::lu_update(block_array_wrapped<T>& Aupdate, int uprows)
 {
     using namespace ublas;
 	using namespace std;
@@ -300,7 +300,7 @@ bool tridiagonal_block_lu<T>::lu_update(block_array_wrapped<T>& Aupdate, int upr
 	//b[i-1] is already LU decomposed from original decomposition
 	b = LU.get_block(nrows-uprows-1, 1);
 	pivots = get_pivots(nrows-uprows-1);
-	for( int i=-uprows; i<0; ++i)
+	for(int i=-uprows; i<0; ++i)
 	{
 		a = Aupdate.get_block(nrowsup+i,0);
 		if( i==-uprows )
@@ -356,7 +356,7 @@ void tridiagonal_block_lu<T>::solve(ublas::matrix<T,M,S>& x)
 	//Forward substitution pass
 	// dnew[0] = d[0]
 	// dnew[i] = d[i]-anew[i].dnew[i-1]
-	for(int i=0; i<nrows-1; ++i)
+	for(unsigned i=0; i<nrows-1; ++i)
 	{
 		xr = row(x,i+1);
 		atlas::gemv(-1, LU.get_block(i+1,0), row(x,i), 1, xr);
@@ -367,7 +367,7 @@ void tridiagonal_block_lu<T>::solve(ublas::matrix<T,M,S>& x)
 	//Backward substitution
 	for(int i=nrows-1; i>=0; --i)
 	{
-		if( i<nrows-1 )
+		if(i<int(nrows-1))
 		{	xr = row(x,i);
 			atlas::gemv(-1, LU.get_block(i,2), row(x,i+1), 1, xr);
 			row(x,i) = xr;
@@ -404,7 +404,7 @@ void tridiagonal_block_lu<T>::solve_transpose(ublas::matrix<T,M,S>& x)
 	//Backward substitution
 	// b[0].T dnew[0] = d[0]
 	// b[i].T dnew[i] = d[i] - c[i-1].T dnew[i-1]
-	for(int i=0; i<nrows; ++i)
+	for(unsigned i=0; i<nrows; ++i)
 	{
 		if( i>0 )
 		{	xr = row(x,i);
