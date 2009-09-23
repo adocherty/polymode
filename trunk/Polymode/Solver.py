@@ -362,18 +362,23 @@ class WavelengthTrackingSolver(Solve):
                 dmu = -dot(conj(m1.left), M1x)/dot(conj(m1.left), M0px)
                 neff_guess = sqrt(m1.evalue+dmu)/(2*pi/m1.wl)
             
-            if len(modes)==0:
+            Nm_current = len(modes)
+            if Nm_current==0:  #Jump to next point and try and find modes there 
                 continue
+            
+            elif Nm_current<Nm:  #Find a replacement mode?
+                print "Lost %d modes" % (Nm- Nm_current)
 
-            #Shorten list if we loose one!
-            Nm = len(modes)
-            #print "Number of modes:", Nm
-                        
-            #Guess accuracy
+            elif Nm_current>len(modes_last):
+                logging.warning("Found more modes than requested!")
+                modes = modes[:len(modes_last)]
+               
+            #Calculate mode differences
+            remove_modes = []
             dneffdwl_last = dneffdwl
-            dneffdwl = zeros(Nm, complex_)
+            dneffdwl = zeros(Nm_current, complex_)
             ga_max = 0; ga_min = inf
-            for ii in range(Nm):
+            for ii in range(Nm_current):
                 neff = modes[ii].neff
 
                 #Calculate dispersion
@@ -386,8 +391,7 @@ class WavelengthTrackingSolver(Solve):
                 #Have the modes left the tracked range?
                 if self.track_range is not None and (neff<min(track_range) or neff>max(track_range)):
                     logging.warning("Mode has left tracked neff range")
-                    
-                    #Remove mode from future tracking
+                    remove_modes.append(ii)
 
             #Adaptive guess for next dwl
             accept = True
@@ -398,11 +402,7 @@ class WavelengthTrackingSolver(Solve):
                 if (ga_max>ga_maximum) and (dwl>dwl_minimum):
                     logging.info("Eigenvalue change to large. Backtracking")
                     accept = False
-                    wl -= dwl
-                    modes = modes_last
-                    dneffdwl = dneffdwl_last
                     dwl_target = min(dwl_target,dwl*0.5)
-                    do_update = False
 
                 dwl = dwl_target
 
@@ -410,11 +410,18 @@ class WavelengthTrackingSolver(Solve):
             if accept:
                 dneffdwl_last = dneffdwl
                 self.modes += modes
+            #Backtrack!
             else:
+                wl -= dwl
+                modes = modes_last
+                dneffdwl = dneffdwl_last
                 num_eval_backtrack +=1
-
-            for ii in range(min(Nm, len(modes))):
-                modes_track[ii] = modes[ii].copy()
+            
+            #Truncate modes_track otherwise modes can be larger than modes_last
+            modes_track = [m.copy() for m in modes]
+            
+            #Update neff for modes_track
+            for ii in range(len(modes)):
                 modes_track[ii].neff = (modes[ii].neff + dneffdwl[ii]*dwl)
 
             logging.info("Dispersion: %s " % dneffdwl)

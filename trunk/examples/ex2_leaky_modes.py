@@ -5,9 +5,6 @@ from Polymode import LayeredSolver
 # Materials
 core = Material.SiO2GeO2(0.2)
 cladding = Material.Silica()
-core = Material.Fixed(1.482)
-cladding = Material.Fixed(1.4504)
-
 
 # Create waveguide
 wg = Waveguide.Waveguide(material=core, symmetry=1)
@@ -22,14 +19,17 @@ wl = 1.0					#Wavelength
 
 # Create the solver
 solver = NLSolver.DefaultSolver(wg, Nx)
-solver = LayeredSolver.DefaultSolver(wg, Nx)
-#modes = solver(wl, 0, number=2)
-modes = solver(wl, 1, number=1)
 
-#Plot modes:
-#Plotter.figure()
+#Solve for 2 modes in mode class 0
+modes = solver(wl, 0, number=2)
+
+#Solve for 1 mode in mode class 1
+modes += solver(wl, 1, number=2)
+
+#Plot modes, this defaults to 1d, as we specify Nphi = 1
+#We plot to a radial distance of 5
 Plotter.plot_modes_in_grid(modes, rmax=5)
-#Plotter.show()
+Plotter.show()
 
 #Save modes
 #save_data(modes, 'ex2_modes.dat')
