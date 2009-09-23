@@ -10,7 +10,7 @@ from Polymode import LayeredSolver
 ncore = 1.44
 n1=1.46
 n2=1.44
-neff_opt = 1.439
+neff_opt = 1.0
 wl_opt = 1.0
 
 d1 = wl_opt/(4*sqrt(n1**2 - neff_opt**2))
@@ -45,17 +45,17 @@ for ii in range(Nlayer):
 Nx=(1000,1)
 
 #The default FD solver
-solver = NLSolver.DefaultSolver(wg, Nx)
+#solver = NLSolver.DefaultSolver(wg, Nx)
 
 #Layered solver using the transfer matrix method
-#solver = LayeredSolver.DefaultSolver(wg)
+solver = LayeredSolver.DefaultSolver(wg)
 
 #The wavelength solver takes another solver as the only argument
 wlsolver = Solver.WavelengthTrackingSolver(solver)
 
 #Guess accuracy needs to be more accurate for tracking with closely spaced modes
-wlsolver.ga_target = 1e-6
-modes = wlsolver(wlrange, m, neffrange=[1.438,1.44],  number=2)
+#wlsolver.ga_target = 1e-6
+modes = wlsolver(wlrange, m, neffrange=[ncore-0.1,ncore],  number=4)
 
 subplot(211)
 Plotter.plot_mode_properties(modes, 'neff', 'wl', 'g.')

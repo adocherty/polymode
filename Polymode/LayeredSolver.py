@@ -307,9 +307,6 @@ class LayeredMode(Mode):
         rmin = 0
         for ii in xrange(0, Nlayer):
             layer = self.layers[ii]
-            print "Layer  %d with coeffs: %s" % (ii, layer.coeffs)
-            print beta
-            print 
             
             #Select points inside layer
             lstart = rmflat.searchsorted(layer.r1)
