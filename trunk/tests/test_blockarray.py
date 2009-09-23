@@ -6,15 +6,13 @@ from numpy import *
 from numpy.testing import *
 
 #--------------------------------------------------------------------------
-#Remove main ABCSolver pathname & add path one up in directory to PATH
 import sys,os
-#sys.path.append(os.path.split(os.path.abspath(os.curdir))[0])
-sys.path.append(os.path.abspath(os.curdir))
+sys.path.append(os.pardir)
 #--------------------------------------------------------------------------
 
-from blockarray import *
+from Polymode.mathlink.blockarray import *
 
-class test_blockarray(NumpyTestCase):
+class test_blockarray(TestCase):
 	blocktest = array([[ 0.,  0.,  1.,  2.,  3.,  4.],
 		 [ 0.,  0.,  5.,  6.,  7.,  8.],
 		 [ 1.1,  2.1,  3.1,  4.1,  5.1, 6.1],
@@ -28,18 +26,18 @@ class test_blockarray(NumpyTestCase):
 			 [  0.,    0.,   -1.,   -2.,   -3.,   -4.],
 			 [  0.,    0.,   -5.,   -6.,   -7.,   -8.]])
 	
-	def check_dense(self):
+	def test_dense(self):
 		self.__check_dense__(int)
 		self.__check_dense__(float)
 		self.__check_dense__(complex)
 
-	def check_matvec(self):
+	def test_matvec(self):
 		self.__check_matvec__((20,3),(5,5),complex)
 		self.__check_matvec__((20,3),(5,5),float)
 		self.__check_matvec__((20,5),(4,4),complex)
 		self.__check_matvec__((20,7),(8,8),complex)
 
-	def check_misc(self):
+	def test_misc(self):
 		self.__check_misc__((20,3),(8,8),complex)
 		self.__check_misc__((20,3),(8,8),float)
 		
@@ -77,7 +75,7 @@ class test_blockarray(NumpyTestCase):
 
 
 
-class test_blocklu(NumpyTestCase):
+class test_blocklu(TestCase):
 	'''
 	Check BlockLU Functionality
 	'''
@@ -117,5 +115,4 @@ class test_blocklu(NumpyTestCase):
 		assert_almost_equal(ba.rmatvec(ytup), x)
 		
 if __name__ == '__main__':
-	NumpyTest().run()
-	
+    run_module_suite()
