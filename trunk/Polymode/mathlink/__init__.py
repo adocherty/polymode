@@ -26,7 +26,7 @@ def utf8out(s):
 #Import bessel functions from scipy or amos
 #from .amos import hankel1, hankel1p, hankel2, hankel2p
 
-from scipy.special import hankel1, hankel2, jv, jvp
+from scipy.special import hankel1, hankel2, jv, jvp, kv, kvp
 def hankel1p(m,z):
     return hankel1(m-1,z)-hankel1(m,z)*m/z
 def hankel2p(m,z):

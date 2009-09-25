@@ -58,7 +58,7 @@ def setup_package():
         configuration = configuration,
         install_requires = ['numpy >= 1.0.1', 'scipy>=0.5.2', 'matplotlib>=0.92',],
         zip_safe = True,
-        cmdclass = {'doc' : generate_api_docs,}
+        cmdclass = {'doc' : generate_api_docs}
         )
 
     return
