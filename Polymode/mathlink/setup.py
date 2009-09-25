@@ -5,7 +5,7 @@ from numpy.distutils.core import setup
 from numpy.distutils.misc_util import Configuration
 
 #Misc compilation flags
-_ublock_compile = True
+_ublock_compile = False
 _ublock_compile_with_openmp = True
 _ublock_boost_prefix = "/opt/boost"
 _ublock_boost_lib = "boost_python-gcc43-mt"
