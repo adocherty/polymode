@@ -75,9 +75,11 @@ class Layer(object):
             return cmp(self.r1,other)
     
     def __str__(self):
-        return "%s: r1=%g r2=%g n=%g z=%g" % (type(self).__name__, self.r1, self.r2, self.n, self.zorder)
+        return "%s: r1=%g r2=%g n=%g z=%g" \
+          % (type(self).__name__, self.r1, self.r2, self.n, self.zorder)
     def __repr__(self):
-        return "%s(%g,%g,%g,%g,%g)" % (type(self).__name__, self.r1, self.r2, self.n, self. gammac, self.zorder)
+        return "%s(%g,%g,%g,%g,%g)" \
+          % (type(self).__name__, self.r1, self.r2, self.n, self. gammac, self.zorder)
 
     def copy(self):
         other = self.__class__(self.r1,self.r2,self.n,self.gammac,self.zorder)
@@ -322,8 +324,9 @@ class LayeredMode(Mode):
         return  F.reshape(fshape)
 
 class LayeredSolver(Solve):
-    def setup(self, remove_boundary_factors=True, debug_plot=False, Ncoord=1e3, Nscan=1e3, tol=1e-6):
-        self.remove_boundary_factors = remove_boundary_factors
+    def setup(self, boundary_factors=False, debug_plot=False, Ncoord=1e3, \
+              Nscan=1e3, tol=1e-6):
+        self.boundary_factors = boundary_factors
         self.Nscan = Nscan
         self.tolerance = tol
         self.default_calc_size = (Ncoord,1)
@@ -366,7 +369,7 @@ class LayeredSolver(Solve):
     def set_lambda(self, beta):
         self.get_matrix(beta)
         
-    def get_matrix(self, beta):
+    def get_matrix(self, beta, boundary_factors=True):
         "Return the matrix for the modal eigenvalue problem"
 
         #Initial layer coefficient matrix
@@ -384,7 +387,7 @@ class LayeredSolver(Solve):
             To = dot(T2,linalg.solve(T1,To))
 
         #V factor - better way to implement this?
-        if not self.remove_boundary_factors:
+        if boundary_factors:
             Tn /= self.layers[-1].multiplicative_factor()
             To /= self.layers[0].multiplicative_factor()
 
@@ -396,7 +399,7 @@ class LayeredSolver(Solve):
     def get_jacobian(self, beta):
         pass
 
-    def det(self, betas, mul_by_factor=False, div_by_factor=False):
+    def det(self, betas, boundary_factors=False, remove_zeros=[]):
         """Evaluate determinant of the eigenvalue matrix
         Zeros of the determinant indicate modes.
         multiply and divide by (k^2-beta^2) to give a better conditioned
@@ -404,28 +407,27 @@ class LayeredSolver(Solve):
         if iterable(betas):
             ans = zeros(shape(betas), complex)
             for inx in ndindex(*shape(betas)):
-                ans[inx] = self.det(betas[inx])
+                ans[inx] = self.det(betas[inx], boundary_factors, remove_zeros)
+
         else:
-            ans = linalg.det(self.get_matrix(betas))
-            if mul_by_factor:
-                ans*=self.layers[-1].multiplicative_factor()
-                ans*=self.layers[0].multiplicative_factor()
-            elif div_by_factor:
-                ans/=self.layers[-1].multiplicative_factor()
-                ans/=self.layers[0].multiplicative_factor()
+            ans = linalg.det(self.get_matrix(betas, boundary_factors))
+            for z in remove_zeros:
+              ans /= (betas-z)
         return ans
 
     def det_ri(self, bri):
         "Interface for complex root finder"
+        bf = self.boundary_factors
+        prev_roots = self.found_roots
+        
         beta = bri[0]+bri[1]*1j
-        det = self.det(beta, mul_by_factor=self.remove_boundary_factors)
+        det = self.det(beta, boundary_factors=bf, remove_zeros=prev_roots)
         return [det.real, det.imag]
 
     def calculate(self, number=inf):
         """
         Scan for modes
         """
-        roots = []
         krange = self.krange()
         k0 = self.k0
         scan_complex = abs(krange[-1]-krange[-2])>0
@@ -433,8 +435,13 @@ class LayeredSolver(Solve):
 
         #Create layers from waveguide
         self.setup_layers()
-        modecoord = coordinates.PolarCoord(N=self.default_calc_size, rrange=(0,self.layers[-1].r1), arange=(-pi,pi))
-
+        modecoord = coordinates.PolarCoord(N=self.default_calc_size, \
+                    rrange=(0,self.layers[-1].r1), arange=(-pi,pi))
+        
+        #Put found roots to deflate from solution here
+        #self.found_roots = list(unique1d([l.kp for l in self.layers]))
+        self.found_roots = []
+        
         #Iterate on list OR search over krange
         if self.nefflist is not None:
             kscan = atleast_1d(self.nefflist)*k0
@@ -461,7 +468,7 @@ class LayeredSolver(Solve):
             logging.debug( "Scanning %d points" % len(kscan.flat) )
 
             #Calculate determinant of transfer matrix over range
-            tix = self.det(kscan)
+            tix = self.det(kscan, self.boundary_factors)
             
             #Detect local minima/maxima
             possible_zc = find_sign_change(diff(absolute(tix)))[::-1]
@@ -471,43 +478,56 @@ class LayeredSolver(Solve):
         kk = 0
         for inx in possible_zc:
             inx = tuple(inx)
+            print "Possible zc:", kscan[inx]
+        
             #Try and locate closest root, if we fail go to the next in the list
             logging.debug( "Searching near: %s" % (kscan[inx]/k0))
             try:
-                bri  = sp.optimize.fsolve(self.det_ri, [kscan[inx].real,kscan[inx].imag], warning=False, xtol=1e-12)
+                bri  = sp.optimize.fsolve(self.det_ri, [kscan[inx].real,kscan[inx].imag], \
+                        warning=False, xtol=1e-12)
                 root = complex(*bri)
             except linalg.LinAlgError:
                 continue
 
+            logging.info("Found possible mode neff: %s" % (root/k0) )
+            
             #ignore those outside the range
             if real(root)<krange[0] or real(root)>krange[1]:
-                logging.debug( "Rejecting out of range solution" )
+                logging.info( "Rejecting out of range solution" )
                 continue
 
             #Ignore those with a large residue
             res = abs(self.det(root))
             if res>self.tolerance:
-                logging.debug( "Rejecting inaccurate solution %.6g" % res )
-                logging.debug( "neff: %s" % (root/k0) )
+                logging.info( "Rejecting inaccurate solution %.6g" % res )
                 continue
 
             #Finally add the root if not already in the list
-            if (len(roots)==0 or min(abs(root-array(roots)))>self.tolerance):
-                mode = LayeredMode(m0=self.m0, wl=self.wl, coord=modecoord, symmetry=1, evalue=root**2)
+            has_been_found = False
+            if not has_been_found:
+                mode = LayeredMode(m0=self.m0, wl=self.wl, coord=modecoord, \
+                        symmetry=1, evalue=root**2)
                 mode.layers = self.calculate_mode_layers(root)
                 mode.residue = res
                 self.modes += [mode]
 
                 logging.info( "Mode #%d: neff=%s, res: %.2e\n" % (kk, root/k0, res) )
-                roots.append(root)
+                self.found_roots.append(root)
                 kk+=1
                 self.numbercalculated+=1
-                    
+                
             if kk>=number or (self.numbercalculated>=self.totalnumber):
                 break
 
         if self.debug_plot:
+            print self.found_roots
+            
+            #Calculate determinant of transfer matrix over range
+            tix = self.det(kscan, self.boundary_factors)
+            pl.plot(real(kscan), abs(tix), 'g-')
+            tix = self.det(kscan, self.boundary_factors, self.found_roots)
             pl.plot(real(kscan), abs(tix), 'b--')
+
             for m in self.modes:
                 pl.plot([real(m.beta)]*2, [min(abs(tix)),max(abs(tix))], 'k:')
 
@@ -523,11 +543,13 @@ class LayeredSolver(Solve):
         #Find eigenvector(s)
         A = self.get_matrix(beta)
         w,v = linalg.eig(A)
-        
+
+        #Find the correct eigensolution
         mode_inx = abs(w).argmin()
         #if len(mode_inx)>1:
         #   print "Found %d degenerate modes" % len(mode_inx)
-        if abs(w[mode_inx])>1e-4: print "Error in field calculation: mode not accurate"
+        if abs(w[mode_inx])>1e-4:
+          logging.error("Error in field calculation: mode not accurate")
 
         #Field coefficients
         mode_coeffs = v[:,mode_inx]/absmax(v[:,mode_inx])
@@ -560,8 +582,9 @@ class LayeredSolver(Solve):
 
 
 class LayeredSolverCauchy(LayeredSolver):
-    def setup(self, remove_boundary_factors=False, debug_plot=False, Ncalc=32, Ncoord=1e3, Nscan=20, tol=1e-6):
-        self.remove_boundary_factors = remove_boundary_factors
+    def setup(self, boundary_factors=False, debug_plot=False, Ncalc=32, \
+              Ncoord=1e3, Nscan=20, tol=1e-6):
+        self.boundary_factors = boundary_factors
         self.Nscan = Nscan
         self.Ncalculate = Ncalc
         self.tolerance = tol
