@@ -1,13 +1,26 @@
 Todo:
 
-March 2008
-* Don't save over the MPI queue file each time. Either append changes or save a copy.
-  Otherwise the process can be terminated during a save and the file will be lost!
-  
 
-October 2008
-* We've changed all the finite differences - in waveguide make sure they work for image
-  calculations of drlogn!
+mathlink.coordinates:
+* Unequal node spacings
+* Coordinate for triangulation
+* Different interpolation algorithms
 
-* Change finitedifference baseclass to work properly with boundary condtions
+* Move fourier interpolation out of class
+
+
+Waveguide:
+* Deprecate special wgcoord
+
+
+Modes:
+
+
+LayeredSolver:
+* LayeredMode needs several changes to work with all Mode functions
+  In particular it needs a default coord discretization size so functions
+  which require numerical evaluation will work
+
+* LayeredMode can also perform many functions analytically - eg mode power
+
 

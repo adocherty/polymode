@@ -22,18 +22,15 @@ from __future__ import division
 import logging
 
 import pylab as pl
+import numpy as np
+import scipy as sp
+
 from numpy import *
-from scipy import sqrt,optimize
 
 from .Solver import *
 from .Modes import Mode, branchsqrt
-from .mathlink import hankel1, hankel2, hankel1p, hankel2p, jv, jvp
+from .mathlink import hankel1, hankel2, hankel1p, hankel2p, jv, jvp, kv, kvp
 from .mathlink import coordinates,timer
-
-def hankel1p(m, x):
-    return 0.5*(hankel1(m-1,x)-hankel1(m+1,x))
-def hankel2p(m, x):
-    return 0.5*(hankel2(m-1,x)-hankel2(m+1,x))
 
 def convert_condon_to_dbf(nc, gammac, k0, V=1.0, tol=1e-8):
     "Convert Condon chiral paramters to Drude-Born-Federov"
@@ -165,6 +162,9 @@ class Layer(object):
             F = array([qr,qa,qz]).T
         return F
     
+    def Q(self, xim, xip, r):
+        pass
+
 class HLayer(Layer):
     def Q(self, xim, xip, r):
         m = self.m
@@ -225,15 +225,12 @@ class LayeredMode(Mode):
             
         #Normalize power of mode only (fields are always correct)
         P0 = self.mode_power(coord=coord)
-        if by=='poynting':
-            enorm = conj(misc.absmax(self.poynting(coord=coord)))
-        else:
-            enorm = 1./P0
+        enorm = 1./P0
         
         #Normalize absolute power so |P|=1
         #Can't normalize power phase and field relationship simultaneously
         for layer in self.layers:
-            layer.coeffs *= sqrt(enorm)
+            layer.coeffs *= sp.sqrt(enorm)
 
         #Recalulate power & field for information
         Pang = angle(self.mode_power(coord=coord))
@@ -325,9 +322,12 @@ class LayeredMode(Mode):
         return  F.reshape(fshape)
 
 class LayeredSolver(Solve):
-    def setup(self, Nscan=1e3, tol=1e-6):
+    def setup(self, remove_boundary_factors=True, debug_plot=False, Ncoord=1e3, Nscan=1e3, tol=1e-6):
+        self.remove_boundary_factors = remove_boundary_factors
         self.Nscan = Nscan
         self.tolerance = tol
+        self.default_calc_size = (Ncoord,1)
+        self.debug_plot=debug_plot
 
     def setup_layers(self):
         #Construct layers
@@ -341,14 +341,17 @@ class LayeredSolver(Solve):
         self.C = zeros((4,4), dtype=complex_)
         self.J = zeros((4,4), dtype=complex_)
 
-    def krange(self):
+    def krange(self, unbounded_range=True):
         "Returns range of k scanned over, real and imag"
         #Set krange automatically or manually
         if self.bracket is None:
             #Set automatic nrange unless specific ns given
             kmin = min([min(l.kp,l.km) for l in self.layers])
             kmax = max([max(l.kp,l.km) for l in self.layers])
-            krange = array([kmin,kmax,0,0] if self.nefflist is None else [0,inf,0,0])
+            if unbounded_range:
+                krange = array([0,inf,0,inf])
+            else:
+                krange = array([kmin,kmax,0,0])
 
         else:
             #Set manual nrange
@@ -381,8 +384,9 @@ class LayeredSolver(Solve):
             To = dot(T2,linalg.solve(T1,To))
 
         #V factor - better way to implement this?
-        Tn /= self.layers[-1].multiplicative_factor()
-        To /= self.layers[0].multiplicative_factor()
+        if not self.remove_boundary_factors:
+            Tn /= self.layers[-1].multiplicative_factor()
+            To /= self.layers[0].multiplicative_factor()
 
         #Assert conditions on first an last layer
         self.C[:, :2] = To[:,:2]
@@ -392,20 +396,29 @@ class LayeredSolver(Solve):
     def get_jacobian(self, beta):
         pass
 
-    def det(self, betas):
-        #betas = squeeze(betas)
+    def det(self, betas, mul_by_factor=False, div_by_factor=False):
+        """Evaluate determinant of the eigenvalue matrix
+        Zeros of the determinant indicate modes.
+        multiply and divide by (k^2-beta^2) to give a better conditioned
+        answer"""
         if iterable(betas):
             ans = zeros(shape(betas), complex)
             for inx in ndindex(*shape(betas)):
                 ans[inx] = self.det(betas[inx])
         else:
             ans = linalg.det(self.get_matrix(betas))
+            if mul_by_factor:
+                ans*=self.layers[-1].multiplicative_factor()
+                ans*=self.layers[0].multiplicative_factor()
+            elif div_by_factor:
+                ans/=self.layers[-1].multiplicative_factor()
+                ans/=self.layers[0].multiplicative_factor()
         return ans
 
     def det_ri(self, bri):
         "Interface for complex root finder"
         beta = bri[0]+bri[1]*1j
-        det = self.det(beta)
+        det = self.det(beta, mul_by_factor=self.remove_boundary_factors)
         return [det.real, det.imag]
 
     def calculate(self, number=inf):
@@ -420,7 +433,7 @@ class LayeredSolver(Solve):
 
         #Create layers from waveguide
         self.setup_layers()
-        modecoord = coordinates.PolarCoord(rrange=(0,self.layers[-1].r1), arange=(-pi,pi))
+        modecoord = coordinates.PolarCoord(N=self.default_calc_size, rrange=(0,self.layers[-1].r1), arange=(-pi,pi))
 
         #Iterate on list OR search over krange
         if self.nefflist is not None:
@@ -449,7 +462,7 @@ class LayeredSolver(Solve):
 
             #Calculate determinant of transfer matrix over range
             tix = self.det(kscan)
-    
+            
             #Detect local minima/maxima
             possible_zc = find_sign_change(diff(absolute(tix)))[::-1]
 
@@ -459,8 +472,9 @@ class LayeredSolver(Solve):
         for inx in possible_zc:
             inx = tuple(inx)
             #Try and locate closest root, if we fail go to the next in the list
+            logging.debug( "Searching near: %s" % (kscan[inx]/k0))
             try:
-                bri  = optimize.fsolve(self.det_ri, [kscan[inx].real,kscan[inx].imag], warning=False, xtol=1e-12)
+                bri  = sp.optimize.fsolve(self.det_ri, [kscan[inx].real,kscan[inx].imag], warning=False, xtol=1e-12)
                 root = complex(*bri)
             except linalg.LinAlgError:
                 continue
@@ -473,7 +487,8 @@ class LayeredSolver(Solve):
             #Ignore those with a large residue
             res = abs(self.det(root))
             if res>self.tolerance:
-                logging.debug( "Rejecting inaccurate solution" )
+                logging.debug( "Rejecting inaccurate solution %.6g" % res )
+                logging.debug( "neff: %s" % (root/k0) )
                 continue
 
             #Finally add the root if not already in the list
@@ -490,7 +505,12 @@ class LayeredSolver(Solve):
                     
             if kk>=number or (self.numbercalculated>=self.totalnumber):
                 break
-    
+
+        if self.debug_plot:
+            pl.plot(real(kscan), abs(tix), 'b--')
+            for m in self.modes:
+                pl.plot([real(m.beta)]*2, [min(abs(tix)),max(abs(tix))], 'k:')
+
         #Sort modes in finalization method
         self.modes.sort()
         return self.modes
@@ -507,7 +527,7 @@ class LayeredSolver(Solve):
         mode_inx = abs(w).argmin()
         #if len(mode_inx)>1:
         #   print "Found %d degenerate modes" % len(mode_inx)
-        assert abs(w[mode_inx])<1e-4, "Error in field calculation: mode not accurate"
+        if abs(w[mode_inx])>1e-4: print "Error in field calculation: mode not accurate"
 
         #Field coefficients
         mode_coeffs = v[:,mode_inx]/absmax(v[:,mode_inx])
@@ -540,8 +560,103 @@ class LayeredSolver(Solve):
 
 
 class LayeredSolverCauchy(LayeredSolver):
-    pass
+    def setup(self, remove_boundary_factors=False, debug_plot=False, Ncalc=32, Ncoord=1e3, Nscan=20, tol=1e-6):
+        self.remove_boundary_factors = remove_boundary_factors
+        self.Nscan = Nscan
+        self.Ncalculate = Ncalc
+        self.tolerance = tol
+        self.default_calc_size = (Ncoord,1)
+        self.debug_plot=debug_plot
+        
+    def calculate(self, number=inf):
+        from .mathlink.cauchy_findzero import findzero_carpentier as findzero
+        
+        roots = []
+        krange = self.krange(False)
+        k0 = self.k0
+        scan_complex = abs(krange[-1]-krange[-2])>0
+        logging.info( "Searching range of neffs: %.5g -> %.5g" % (krange[0]/k0, krange[1]/k0) )
+
+        #Create layers from waveguide
+        self.setup_layers()
+        modecoord = coordinates.PolarCoord(N=self.default_calc_size, rrange=(0,self.layers[-1].r1), arange=(-pi,pi))
+
+        #For cauchy scanning we cut the interval into Nscan slices
+        #each slice is then searched around with a corresponding radius
+        dscan = (krange[1]-krange[0])/self.Nscan
+        iscan = dscan
+        Rscan = sp.sqrt(dscan**2+iscan**2)/2
+            
+        #Iterate on list OR search over krange
+        if self.nefflist is not None:
+            kscan = atleast_1d(self.nefflist)*k0
+        
+        elif self.modelist is not None:
+            nefflist = [m.neff for m in self.modelist]
+            kscan = atleast_1d(nefflist)*k0
+       
+        else:
+            #Radius of search
+            kscan = arange(real(krange[1])-dscan/2, real(krange[0]), -dscan) + 0j
+            kscan += 1j*iscan/2
+
+        logging.info( "Scanning %d intervals" % len(kscan) )
+        logging.info( "Max imag excursion is %g" % (iscan) )
+        
+        kk = 0
+        for ii in range(len(kscan)):
+            #Set radius for cauchy root finder
+            kcenter = kscan[ii]
+            
+            #Ensure we don't cross a branch point
+            R=min(Rscan, abs(krange[1]-kcenter), abs(krange[0]-kcenter))*(1-1e-8)
+            
+            #Try and locate closest root, if we fail go to the next in the list
+            curr_roots  = findzero(self.det, z0=kcenter, N=self.Ncalculate, R=R, maxiter=5, tol=self.tolerance, quiet=False)
+
+            for root in curr_roots:
+                logging.info("Found possible root")
+                #ignore those outside the range
+                if real(root)<krange[0] or real(root)>krange[1]:
+                    logging.info( "Rejecting out of range solution" )
+                    logging.info( "%s" % (root/k0))
+                    continue
+
+                #Ignore those with a large residue
+                res = abs(self.det(root))
+                if res>self.tolerance:
+                    logging.info( "Rejecting inaccurate solution" )
+                    continue
+
+                #Finally add the root if not already in the list
+                if (len(roots)==0 or min(abs(root-array(roots)))>self.tolerance):
+                    mode = LayeredMode(m0=self.m0, wl=self.wl, coord=modecoord, symmetry=1, evalue=root**2)
+                    mode.layers = self.calculate_mode_layers(root)
+                    mode.residue = res
+                    self.modes += [mode]
+
+                    logging.info( "Mode #%d: neff=%s, res: %.2e\n" % (kk, root/k0, res) )
+                    roots.append(root)
+                    kk+=1
+                    self.numbercalculated+=1
+                        
+            if kk>=number or (self.numbercalculated>=self.totalnumber):
+                break
+
+        if self.debug_plot:
+            dkr = (krange[1]-krange[0])/1000
+            kr = arange(real(krange[0])+dkr,real(krange[1])-dkr,dkr)
+
+            #Calculate determinant of transfer matrix over range
+            tix = self.det(kr)
+            pl.plot(real(kr), abs(tix), 'b--')\
+            
+            for m in self.modes:
+                pl.plot([real(m.beta)]*2, [min(abs(tix)),max(abs(tix))], 'r:')
+    
+        #Sort modes in finalization method
+        self.modes.sort()
+        return self.modes
 
 
 DefaultSolver = LayeredSolver
-

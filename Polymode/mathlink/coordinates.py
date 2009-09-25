@@ -19,8 +19,6 @@
 '''
 Lightwieght flexible coordinate classes for vector calculations
 
-Todo:
-* Unequal node spacings
 '''
 import logging
 
@@ -158,6 +156,10 @@ class Coord(object):
         "Characteristic cartesian length"
         return (1, 1)
 
+    def bounds(self):
+        "Return maximum and minimum bounds of the coordinate"
+        pass
+
 
 class PolarCoord(Coord):
     polar_coordinate = True
@@ -220,6 +222,13 @@ class PolarCoord(Coord):
         return fft.fftshift(wv)
     wv = CachedCalculation(calc_wv)
 
+    def bounds(self):
+        "Return maximum and minimum bounds of the coordinate"
+        return append(self.rrange, self.arange)
+
+    def polar_bounds(self):
+        "Return maximum and minimum bounds in terms polar coordinates"
+        return append(self.rrange, self.arange)
 
     # +-----------------------------------------------------------------------+
     # | Conversion/Matrix functions
@@ -355,6 +364,22 @@ class CartesianCoord(Coord):
         return xv
     yinterval = CachedCalculation(calc_yinterval)
 
+    def bounds(self):
+        "Return maximum and minimum bounds of the coordinate"
+        return append(self.rangex, self.rangey)
+
+    def polar_bounds(self):
+        "Return maximum and minimum bounds in terms polar coordinates"
+        rs = [hypot(x,y) for x in self.rangex for y in self.rangey]
+        rrange = [min(rs), max(rs)]
+        
+        #If the bounds don't encircle the orgin calculate the max/min args
+        if 0:
+            args = [arctan2(y,x) for x in self.rangex for y in self.rangey]
+            arange = [min(args), max(args)]
+        else:
+            arange = [-pi,pi]
+        return append(rrange, arange)
 
     # +-----------------------------------------------------------------------+
     # | Conversion/Matrix functions

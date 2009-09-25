@@ -5,8 +5,10 @@ from numpy.distutils.core import setup
 from numpy.distutils.misc_util import Configuration
 
 #Misc compilation flags
-_ublock_compile_with_openmp = False
-_ublock_compile = False
+_ublock_compile = True
+_ublock_compile_with_openmp = True
+_ublock_boost_prefix = "/opt/boost"
+_ublock_boost_lib = "boost_python-gcc43-mt"
 
 try:
     import Cython.Compiler.Main
@@ -28,13 +30,19 @@ def configuration(parent_package='', top_path=None):
                     sources=[join('amos','*f'),
                     join('amos','mach','*f')]
                     )
-    
+        
     #Add the g2c or gfortran libraries to the source, is there a better way?
     def generate_fortran_library(ext, build_dir):
-        if config.have_f77c():
-            ext.libraries.append('g2c')
-        elif config.have_f77c():
+        config_cmd = config.get_config_cmd()
+        config_cmd._check_compiler()
+        fc_type = config_cmd.fcompiler.compiler_type
+        config_cmd._clean()
+        
+        if fc_type=='gnu95':
             ext.libraries.append('gfortran')
+        elif fc_type=='gnu77':
+            ext.libraries.append('g2c')
+
         print "extend libraries:", ext.libraries
         return None
 
@@ -66,15 +74,23 @@ def configuration(parent_package='', top_path=None):
 
     #If boost_src is found, use that, otherwise use default directories
     if boost_src:
+        print "Compiling boost-python from source"
         ublock_include_dirs += boost_src['include_dirs']
         ublock_libraries += boost_src['libraries']
+    elif _ublock_boost_prefix:
+        print "Using user configured boost-python"
+        boost_include_dir = join(_ublock_boost_prefix,'inlcude')
+        boost_library_dir = join(_ublock_boost_prefix,'lib')
+        ublock_library_dirs=[boost_library_dir]
+        ublock_include_dirs=['ublas_block_lu', boost_include_dir]
+        ublock_libraries=[_ublock_boost_lib]
     else:
+        print "Using system boost-python"
         boost_include_dir = "/usr/include"
         boost_library_dir = "/usr/lib"
-        boost_lib_name="boost_python-mt"
-        #ublock_library_dirs=[boost_library_dir]
-        #ublock_include_dirs=['ublas_block_lu', boost_include_dir]
-        #ublock_libraries=['atlas','lapack_atlas',boost_lib_name]
+        ublock_library_dirs=[boost_library_dir]
+        ublock_include_dirs=['ublas_block_lu', boost_include_dir]
+        ublock_libraries=['boost_python-mt']
       
     if _ublock_compile_with_openmp:
         ublock_compile_flags += ['-fopenmp', '-ftree-vectorize']

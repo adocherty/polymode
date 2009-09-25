@@ -18,7 +18,7 @@
 #along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #---------------------------------------------------------------------------------
 '''
-The routines to store and manipulate the modes of the Vector and Scalar Wave Equations
+Base class for the storage and manipulation of mode data
 
 '''
 
@@ -579,12 +579,12 @@ class Mode(object):
                     cartesian = 1
                     Nx = (20,20)
                 else:
-                    if cartesian:                                                           #Default cartesian resolution
-                                                                            Nx = (100,100)
-                    elif self.coord.shape is None or self.coord.Naz==1:     #Keep radial coordintates
-                                                                            Nx = (200, 1)
-                    else:                                                                               #Default polar resolution
-                                                                            Nx = (50, 100)
+                    if cartesian:
+                        Nx = (100,100)  #Default cartesian resolution
+                    elif self.coord.shape is None or self.coord.shape[1]==1:
+                        Nx = (200, 1)     #Keep radial coordintates
+                    else:
+                        Nx = (50, 100)   #Default polar resolution
 
             if rmax is None: rmax = self.coord.rrange[1]
             if rmin is None: rmin = 0
@@ -715,8 +715,7 @@ class Mode(object):
             info_dict['shape'] = info_dict['symm'] = info_dict['rmax'] = "?"
         else:
             info_dict['shape'] = self.coord.shape
-            info_dict['rmax'] = self.coord.rmax
-            info_dict['rmin'] = self.coord.rmin
+            info_dict['rmin'], info_dict['rmax'] = self.coord.polar_bounds()[:2]
             info_dict['symm'] = "C%d" % self.symmetry
         
         #Construct information string

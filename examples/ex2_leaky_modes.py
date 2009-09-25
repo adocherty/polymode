@@ -18,7 +18,8 @@ Nx = 100,1				#number of radial & azimuthal points
 wl = 1.0					#Wavelength
 
 # Create the solver
-solver = NLSolver.DefaultSolver(wg, Nx)
+solver = LayeredSolver.LayeredSolverCauchy(wg, Nx)
+#solver = NLSolver.DefaultSolver(wg, Nx)
 
 #Solve for 2 modes in mode class 0
 modes = solver(wl, 0, number=2)

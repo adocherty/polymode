@@ -231,6 +231,8 @@ class WgCoord(coordinates.Coord):
     # +-----------------------------------------------------------------------+
     # | Non-cached functions
     # +-----------------------------------------------------------------------+
+    def polar_bounds(self):
+        return append(self.rrange, self.arange)
 
     def polar2d(self, interval=False):
         if interval:
