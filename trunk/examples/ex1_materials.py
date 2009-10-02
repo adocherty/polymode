@@ -13,17 +13,16 @@ pmma = Material.Polymer()
 # Accurate ref index for silica doped with 5% Germanium
 sige = Material.SiO2GeO2(0.05)
 
-wl = 1.45	#Wavelength in um
+wl = 1.45       #Wavelength in um
 
 for mat in [pmma, silica, sige]:
-	ri = mat.index(wl)
+    ri = mat.index(wl)
 
-	#Get some info
-	mat.info()
+    #Get some info
+    mat.info()
 
-	#Plot material refractive index
-	mat.plot()
+    #Plot material refractive index
+    mat.plot()
 
-	#calculate the refractive index
-	print "Refractive index at %gum is %.6g+%.4gi\n" % (wl, real(ri), imag(ri))
-
+    #calculate the refractive index
+    print "Refractive index at %gum is %.6g+%.4gi\n" % (wl, real(ri), imag(ri))

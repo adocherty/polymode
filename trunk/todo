@@ -24,3 +24,6 @@ LayeredSolver:
 * LayeredMode can also perform many functions analytically - eg mode power
 
 
+AllSolvers:
+* Include an option to return all modes searched for using nefflist=[...] even
+  if in error. This will make wltracking much better.

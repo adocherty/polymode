@@ -3,13 +3,13 @@ from pylab import *
 from Polymode import *
 
 if 'modes' not in locals():
-	wl = 1.55
-	Nx = (200,21)
-	m145 = Material.Fixed(1.45)
+    wl = 1.55
+    Nx = (200,21)
+    m145 = Material.Fixed(1.45)
 
-	wg = Waveguide.Waveguide(material=m145, symmetry=6)
-	wg.add_shape(Waveguide.Circle(Material.Air(), center=(6.75,0), radius=2.5))
-	modes = NLSolver.DefaultSolver(wg,Nx)(wl, 0, 1.43, number=2)
+    wg = Waveguide.Waveguide(material=m145, symmetry=6)
+    wg.add_shape(Waveguide.Circle(Material.Air(), center=(6.75,0), radius=2.5))
+    modes = NLSolver.DefaultSolver(wg,Nx)(wl, 0, 1.43, number=2)
 
 #Coordinate object for mode
 res = 50
@@ -48,5 +48,3 @@ wg.plot(fill=0, substrate=0)
 subplot(133)
 Plotter.plot_v(c2, poynting[2].real)
 wg.plot(fill=0, substrate=0)
-
-

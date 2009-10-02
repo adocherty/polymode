@@ -16,8 +16,8 @@ s3 = Waveguide.RegularPolygon(m2, center=(6,0), Nsides=6, length=1.5, rot=pi/6, 
 
 wg.add_shapes(s1, s2, s3)
 
-wl = 1.45						#Wavelength
-Nx = 100,21				#number of radial & azimuthal points
+wl = 1.45                                               #Wavelength
+Nx = 100,21                             #number of radial & azimuthal points
 
 # Create the solver
 solver = NLSolver.DefaultSolver(wg, Nx)
@@ -41,4 +41,3 @@ llmode.plot()
 wg.plot(fill=0)
 
 Plotter.show()
-

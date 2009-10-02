@@ -10,7 +10,7 @@ modes = sorted(modes, reverse=1)
 
 #Print information about the modes
 for mode in modes:
-	mode.info()
+    mode.info()
 
 #Create or select the first figure
 figure(1)
@@ -31,15 +31,14 @@ m = modes[0]
 #Plot Ez in a cartesian grid. Note that the waveguide is required to calculate Ez
 subplot(121)
 m.plot('ez', cartesian=1, rmax=10, wg=wg)
-colorbar()					#A color bar gives the valueof the colors
-wg.plot(fill=0)				#Plot an outline of the waveguide on top
+colorbar()                                      #A color bar gives the valueof the colors
+wg.plot(fill=0)                         #Plot an outline of the waveguide on top
 
 #Now plot Hz in the same way. We don't need the waveguide for this
 subplot(122)
 m.plot('hz', cartesian=1, rmax=10)
-colorbar()					#A color bar gives the valueof the colors
-wg.plot(fill=0)				#Plot an outline of the waveguide on top
+colorbar()                                      #A color bar gives the valueof the colors
+wg.plot(fill=0)                         #Plot an outline of the waveguide on top
 
 #To save a figure to a file use this command
 savefig("fig_compressmodes.png")
-

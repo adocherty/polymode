@@ -13,8 +13,8 @@ wg = Waveguide.Waveguide(material=polymer, symmetry=6)
 wg.add_shape( Waveguide.Circle(air, center=(3,0), radius=1.25) )
 
 # Waveguide Parameters:
-Nx = 100,20					#number of radial & azimuthal points
-wl = 1.0							#Wavelength
+Nx = 100,20                                     #number of radial & azimuthal points
+wl = 1.0                                                        #Wavelength
 
 # Create the solver
 solver = NLSolver.DefaultSolver(wg, Nx)

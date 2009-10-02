@@ -6,6 +6,8 @@ from Polymode import *
 air = Material.Air()
 polymer = Material.Fixed(1.49)
 
+image_file_name = os.path.join("images","MOF_NRL.png")
+
 # Create waveguide and specify the problem domain to have radius 15
 # With an Image shape we need to specify the interior material
 #wg = Waveguide.Waveguide(rmax=15, material=polymer, symmetry=1)
@@ -16,7 +18,7 @@ polymer = Material.Fixed(1.49)
 #image = Image.ImportBitmap(imagefilename, size=(60,120), center=(230,140), negative=True)
 
 wg = Waveguide.Waveguide(rmax=5, material=polymer, symmetry=6)
-image = Image.ImportBitmap(os.path.join("images","MOF_NRL.png"), size=(40,40), offset = pi/6, negative=True)
+image = Image.ImportBitmap(image_file_name, size=(40,40), offset = pi/6, negative=True)
 image.polar_regrid = Image.nn_polar_regrid
 image.contrast(scale=15, transition=0.45)
 
@@ -24,8 +26,8 @@ image.contrast(scale=15, transition=0.45)
 wg.add_shape(Waveguide.Image(air, image))
 
 # Waveguide Parameters:
-Nx=100,60			#number of radial & azimuthal points
-wl=1.55				#Wavelength
+Nx=100,60                       #number of radial & azimuthal points
+wl=1.55                         #Wavelength
 
 # Create the solver
 solver = NLSolver.DefaultSolver(wg, Nx)

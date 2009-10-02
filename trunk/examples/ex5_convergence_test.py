@@ -23,9 +23,9 @@ Naz = 41
 solvers = []
 Nrs = [50,100,200,400,800]
 for Nr in Nrs:
-	solver = NLSolver.DefaultSolver(wg, (Nr,Naz))
-	solver.initialize(wl, 1, 1.45, number=1)
-	solvers.append(solver)
+    solver = NLSolver.DefaultSolver(wg, (Nr,Naz))
+    solver.initialize(wl, 1, 1.45, number=1)
+    solvers.append(solver)
 
 modes = Solver.batch_solve(solvers, filename="convergencerun.solve")
 

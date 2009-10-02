@@ -16,8 +16,8 @@ s1 = Waveguide.Circle(core, center=(0,0), radius=3.0)
 wg.add_shape(s1)
 
 # Waveguide Parameters:
-Nx = 500,1			#number of radial & azimuthal points
-wl = 1.0					#Wavelength
+Nx = 500,1                      #number of radial & azimuthal points
+wl = 1.0                                        #Wavelength
 
 # Create the solvers
 wlrange=[1.0,3.0]
@@ -32,4 +32,3 @@ modesl = wlsolver(wlrange, 1,  neffrange=[cladding.index(wl), core.index(wl)], n
 
 Plotter.plot_mode_properties(modes, 'neff', 'wl', 'bx')
 Plotter.plot_mode_properties(modesl, 'neff', 'wl', 'r.')
-

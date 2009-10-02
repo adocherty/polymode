@@ -18,8 +18,8 @@ Nrings = 2
 D = 4.0
 d = 0.5*D
 for nr in range(1,Nrings+1):
-	for ii in range(Nrings+1):
-		wg.add_shape( Waveguide.Circle(air,center=(nr*D,ii*D),radius=d/2,xy=1) )
+    for ii in range(Nrings+1):
+        wg.add_shape( Waveguide.Circle(air,center=(nr*D,ii*D),radius=d/2,xy=1) )
 
 aff = pi/(2*sqrt(3))*(d/D)**2
 print "Created waveguide with %d rings and air fill fraction f=%.2g" % (Nrings, aff)
@@ -43,7 +43,7 @@ def cb(r):
     global counter
     print counter, r
     counter +=1
-    
+
 def det(M):
     return linalg.det(M)
 

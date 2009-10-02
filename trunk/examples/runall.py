@@ -1,22 +1,36 @@
 #!/bin/env python
 import os, sys
+
+output_path='output'
+logging_file_name=os.path.join(output_path, 'runall_output.txt')
+
+#Configure matplotlib for file output
 import matplotlib
 matplotlib.use('agg')
 
-from pylab import *
+#Configure logging to file
+import logging
+logging.basicConfig(level=logging.INFO,
+                    filename=logging_file_name,
+                    format='%(levelname).1s: %(message)s')
 
-output_path='output'
+import pylab as pl
+
+#Lambda functions refer to this global workspace
+#Thus even though we do an import in the file
+#Lambda functions won't see it unless it's here
+from numpy import *
 
 def runtut(tut):
-	#Test for existance
-	figfilename = os.path.join(output_path,tut+'.png')
-	if os.access(figfilename, os.F_OK):
-		print "Skipping tutorial '%s'" % tut
-	else:
-		clf()
-		print "\nRunning tutorial '%s'" % tut
-		execfile(tut+'.py')
-		savefig(figfilename)
+    #Test for existance
+    figfilename = os.path.join(output_path,tut+'.png')
+    if os.access(figfilename, os.F_OK):
+        print "Skipping tutorial '%s'" % tut
+    else:
+        pl.clf()
+        print "\nRunning tutorial '%s'" % tut
+        execfile(tut+'.py')
+        pl.savefig(figfilename)
 
 runtut('ex1_materials')
 runtut('ex1_the_waveguide')
@@ -55,4 +69,3 @@ runtut('ex7_birefringent_fiber')
 runtut('ex7_birefringent_fiber_2')
 
 runtut('ex8_kagome_fiber')
-

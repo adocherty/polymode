@@ -27,4 +27,3 @@ Plotter.subplot(122)
 wg.plot()
 
 Plotter.show()
-

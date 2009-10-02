@@ -52,7 +52,7 @@ import numpy as np
 #To be depricated, should use above imports only
 from numpy import *
 
-from . import Material, Waveguide, Equation, Modes
+from . import Material, Waveguide, Equation, Modes, Plotter
 
 # Cached random functions
 class CachedRandom(object):
@@ -297,18 +297,23 @@ class WavelengthTrack(Solve):
     '''
     Track modes over a wavelength range with adaptive step size
     '''
-    def __init__(self, solver, track_range=None):
+    def __init__(self, solver, track_range=None, dont_lose_modes=False):
         self.solver = solver
         self.track_range = None
         self.ga_target = 1e-3
+        self.dont_lose_modes = dont_lose_modes
 
         Solve.__init__(self, solver.wg, compress_to_size=solver.compress_to_size)
         
-    def initialize(self, wl_range, m0=0, **kwargs):
+    def initialize(self, wl_range, *args, **kwargs):
         self.wl_range = wl_range
         
-        self.m0 = m0
-        self.solver.initialize(wl_range[0], m0, **kwargs)
+        self.solver_args = args
+        self.solver_kwargs = kwargs
+        
+        #We need the m0 SC to restart the solver at different wavelengths
+        #This shouldn't be needed!
+        self.m0 = args[0] if len(args)>0 else kwargs.get('m0', 0)
 
     def calculate(self, number=inf):
         import pylab as pl
@@ -329,7 +334,7 @@ class WavelengthTrack(Solve):
         ga_maximum = ga_target*10
 
         #Find start modes to track
-        modes = self.solver.calculate()
+        modes = self.solver(wl_start, *self.solver_args, **self.solver_kwargs)
         
         #Tracking modes
         Nm = len(modes)
@@ -355,14 +360,11 @@ class WavelengthTrack(Solve):
             logging.info("WL %.6g, step size: %.4g" % (wl,dwl))
 
             #Find new modes
-            modes_last = modes
             self.solver.initialize(wl, self.m0, modelist=modes_track)
-            modes = self.solver.calculate()
+            modes_current = self.solver.calculate()
             num_eval +=1
 
             if 0:
-                print "Neff guess accuracy:", abs(modes[0].neff-neff_guess)/abs(neff_guess)
-
                 m1 = modes[0]
                 solver.equation.set_lambda(m1.evalue)
                 M1x = solver.equation.matvec(m1.right) - m1.evalue*m1.right
@@ -374,30 +376,38 @@ class WavelengthTrack(Solve):
                 dmu = -dot(conj(m1.left), M1x)/dot(conj(m1.left), M0px)
                 neff_guess = sqrt(m1.evalue+dmu)/(2*pi/m1.wl)
             
-            Nm_current = len(modes)
+            Nm_current = len(modes_current)
             if Nm_current==0:  #Jump to next point and try and find modes there 
                 continue
             
             elif Nm_current<Nm:  #Find a replacement mode?
-                print "Lost %d modes" % (Nm- Nm_current)
+                if self.dont_lose_modes:
+                    wl -= dwl/2
+                    logging.info("Lost %d modes: Retracking" % (Nm - Nm_current))
+                    continue
+                else:
+                    logging.info("Lost %d modes" % (Nm - Nm_current))
 
-            elif Nm_current>len(modes_last):
+            elif Nm_current>Nm:
                 logging.warning("Found more modes than requested!")
-                modes = modes[:len(modes_last)]
-               
+            
             #Calculate mode differences
             remove_modes = []
             dneffdwl_last = dneffdwl
             dneffdwl = zeros(Nm_current, complex_)
             ga_max = 0; ga_min = inf
             for ii in range(Nm_current):
-                neff = modes[ii].neff
+                neff = modes_current[ii].neff
 
-                #Calculate dispersion
-                dneffdwl[ii] = (neff - modes_last[ii].neff)/dwl
+                #Find closest neff
+                neff_differences = [neff - x.neff for x in modes_track]
+                track_closest = np.argmin(np.absolute(neff_differences))
+
+                #Calculate dispersion from previous mode
+                dneffdwl[ii] = (modes[track_closest].neff - neff)/dwl
 
                 #Guess accuracy
-                ga = abs(modes_track[ii].neff-neff)/abs(modes_track[ii].neff)
+                ga = abs(neff_differences[track_closest])/abs(neff)
                 ga_max=max(ga_max,ga); ga_min=min(ga_min,ga)
 
                 #Have the modes left the tracked range?
@@ -420,20 +430,24 @@ class WavelengthTrack(Solve):
 
             #Guess next neff
             if accept:
+                self.modes += modes_current
                 dneffdwl_last = dneffdwl
-                self.modes += modes
-            #Backtrack!
+                modes = modes_current
+
+            #Backtrack!!
             else:
                 wl -= dwl
-                modes = modes_last
                 dneffdwl = dneffdwl_last
                 num_eval_backtrack +=1
-            
+
+            #Use length of current modes, which must be the same as length of dneffdwl
+            Nm = len(modes)
+
             #Truncate modes_track otherwise modes can be larger than modes_last
             modes_track = [m.copy() for m in modes]
             
             #Update neff for modes_track
-            for ii in range(len(modes)):
+            for ii in range(Nm):
                 modes_track[ii].neff = (modes[ii].neff + dneffdwl[ii]*dwl)
 
             logging.info("Dispersion: %s " % dneffdwl)
@@ -493,11 +507,65 @@ class WavelengthTrack(Solve):
             print "Diff1", linalg.norm(solver.equation(y)-m2.evalue*y)
             print "Diff2", linalg.norm(solver.equation(m1.right)-m2.evalue*m1.right)
             
-            #plot([(m1.wavelength+m2.wavelength)/2], [dneffm], 'rs')
-            #plot([m1.wavelength], [dneffc], 'bo')
+    def plot(self, style=''):
+        """Plot the found effective index versus the wavelength for all modes
+            fourd in the wavelength scan.
+            
+            Arguments:
+            style:  the matplotlib line style for the plotted points
+        """
+        Plotter.plot_mode_properties(self.modes, 'neff', 'wl', style=style)
 
 
 class WavelengthScan(Solve):
+    '''
+    Find all modes within a range at constant wavelength step size
+    '''
+    def __init__(self, solver, Nscan=100):
+        self.solver = solver
+        self.Nscan = Nscan
+
+        Solve.__init__(self, solver.wg, compress_to_size=solver.compress_to_size)
+        
+    def initialize(self, wl_range, *args, **kwargs):
+        self.wl_range = wl_range
+        self.solver_args = args
+        self.solver_kwargs = kwargs
+
+    def calculate(self, number=inf):
+        import pylab as pl
+        solver = self.solver
+
+        #Setup wavelength range
+        wl_start, wl_stop = self.wl_range
+
+        #Step size
+        dwl = (wl_stop-wl_start)/self.Nscan
+        
+        wl = wl_start
+        self.modes = []
+        while wl<wl_stop:
+            logging.info("WL %.6g, step size: %.4g" % (wl,dwl))
+
+            #Find new modes
+            modes_current = self.solver(wl, *self.solver_args, **self.solver_kwargs)
+            self.modes.extend(modes_current)
+            
+            #Update wavelength
+            wl += dwl
+        return self.modes
+
+    def plot(self, style=''):
+        """Plot the found effective index versus the wavelength for all modes
+            fourd in the wavelength scan.
+            
+            Arguments:
+            style:  the matplotlib line style for the plotted points
+        """
+        Plotter.plot_mode_properties(self.modes, 'neff', 'wl', style=style)
+
+
+class WavelengthConditionScan(Solve):
     '''
     Scan over a wavelength range and plot a condition number for the modal
     eigenvalue problem. The exact nature of this condition number depends
@@ -510,14 +578,16 @@ class WavelengthScan(Solve):
         #The condition number scan is stored here
         self.Cscan = np.zeros(self.Nscan, dtype=float)
         self.neffscan = np.zeros(self.Nscan, dtype=float)
+        self.wlscan = np.zeros(self.Nscan[0], dtype=float)
         
         Solve.__init__(self, solver.wg, compress_to_size=solver.compress_to_size)
     
-    def initialize(self, wl_range, m0=0, **kwargs):
+    def initialize(self, wl_range, *args, **kwargs):
         self.wl_range = wl_range
         
-        self.m0 = m0
-        self.solver.initialize(wl_range[0], m0, **kwargs)
+        self.solver_args = args
+        self.solver_kwargs = kwargs
+        self.solver.initialize(wl_range[0], *args, **kwargs)
 
         if 'neffrange' in kwargs:
             self.neffrange = kwargs['neffrange']
@@ -530,11 +600,12 @@ class WavelengthScan(Solve):
 
         #Setup wavelengths
         dwl = (self.wl_range[1]-self.wl_range[0])/self.Nscan[0]
-        wls = np.arange(self.wl_range[0], self.wl_range[1], dwl)
-
-        for ii,wl in enumerate(wls):
-           #Update wavelength
-            self.solver.initialize(wl, self.m0)
+        for ii in range(self.Nscan[0]):
+            wl = self.wl_range[0] + ii*dwl
+            print "Calculating scan at %d of %d points" % (ii, self.Nscan[0])
+            
+            #Update wavelength
+            self.solver.initialize(wl, *self.solver_args)
 
             #Range to scan
             if self.neffrange is None:
@@ -548,6 +619,7 @@ class WavelengthScan(Solve):
             #Scan over beta range
             self.Cscan[ii] = np.abs(self.solver.condition(neffs*self.solver.k0))
             self.neffscan[ii] = neffs
+            self.wlscan[ii] = wl
 
         return self.Cscan
         
@@ -556,13 +628,15 @@ class WavelengthScan(Solve):
 
         dwl = (self.wl_range[1]-self.wl_range[0])/self.Nscan[0]
         wls = np.arange(self.wl_range[0], self.wl_range[1], dwl)
-        wlscan = wls[:,newaxis] + 0*self.neffscan
+        wlscan = self.wlscan[:,newaxis] + 0*self.neffscan
         
-        pl.pcolor(wlscan, self.neffscan, np.log10(self.Cscan), **style)
+        #We need to plot it twice otherwise it introduces odd lines
+        pl.contourf(wlscan, self.neffscan, np.log10(self.Cscan), 50, **style)
+        pl.contourf(wlscan, self.neffscan, np.log10(self.Cscan), 50, **style)
 
         if 0:
             pl.plot(betascan/self.solver.k0, self.Cscan[ii])
-
+            pl.pcolor(wlscan, self.neffscan, np.log10(self.Cscan), **style)
 
 
 def batch_file_save(solvers, filename=None):

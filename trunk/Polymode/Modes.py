@@ -1046,11 +1046,11 @@ class VectorMode(Mode):
         '''
         if not (self.left is None or force):
             return
-        logging.info("Calculating electric field")
+        logging.debug("Calculating electric field")
         
         if wg is None:      
-                            logging.warning("Electric field calculation being approximated as no waveguide available")
-                            n2 = self.interior_index**2
+            logging.warning("Electric field calculation being approximated as no waveguide available")
+            n2 = self.interior_index**2
         else:
             n2 = wg.index2(wl=self.wl, coord=self.coord)
         
