@@ -268,7 +268,7 @@ class TriDiBlockSolve(Solve):
         self.equationip.diff.generate(leftbc=1, rightbc=1, nodefault=1)
         
         if generate: self.generate()
-        logging.info("Matrix generation done in %.4gs" % t.lap())
+        logging.debug("Matrix generation done in %.4gs" % t.lap())
 
     def update_lambda(self, ev, update=1):
         "Set the boundary eigenvalue and update those rows affected"

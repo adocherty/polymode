@@ -19,7 +19,7 @@ wg.add_shape( Waveguide.Circle(air, center=(6.75,0), radius=2.5) )
 solver = NLSolver.DefaultSolver(wg, Nx)
 modes = []
 for wlx in [wl-dwl, wl, wl+dwl]:
-	modes += solver(wlx, 1, number=1)
+    modes += solver(wlx, 1, number=1)
 
 #Estimate dβ/dλ with a finite difference
 dbetadl = (modes[2].beta - modes[0].beta)/(2*dwl)
@@ -33,5 +33,3 @@ ngm = m.group_index(wg)
 print "\nCalculations of group index:\n"
 print "ng from wavelength:",ng
 print "ng from integral:", ngm
-
-

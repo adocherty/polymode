@@ -14,9 +14,9 @@ m0 = 1
 wl = 1
 Nx = 300,50
 
-sw = 0.4		#Wall width
-s1 = 7.4		#Primary scaling parameter: the length of the inner walls
-Nt = 2			#Number of layers
+sw = 0.4                #Wall width
+s1 = 7.4                #Primary scaling parameter: the length of the inner walls
+Nt = 2                  #Number of layers
 
 #Calculate wall length of dodecagons
 s2 = s1/(1+2*cos(pi/6))
@@ -48,5 +48,3 @@ solver = NLSolver.DefaultSolver(wg, Nx)
 modes = solver(wl, m0, 1.0, number=6)
 
 Plotter.plot_modes_in_grid(modes, cartesian=1)
-
-

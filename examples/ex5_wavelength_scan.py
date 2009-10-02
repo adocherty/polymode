@@ -12,7 +12,6 @@ pmma = Material.PMMA()
 
 wg = Waveguide.Waveguide(material=pmma, symmetry=sym)
 
-#Create holes in square lattice
 layers = 3
 D = 6.0
 d = 4.0
@@ -25,10 +24,13 @@ wg.add_shapes(shapes)
 solver = NLSolver.DefaultSolver(wg, Nx)
 
 #Create WL range solver
-wlsolver = Solver.WavelengthTrackingSolver(solver)
+wlsolver = Solver.WavelengthTrack(solver)
 
 wlrange=[1.0,1.5]
 modes = wlsolver(wlrange, 0, nefflist=[1.3])
 
+subplot(121)
 Plotter.plot_mode_properties(modes, 'neff', 'wl')
+subplot(122)
+Plotter.plot_mode_properties(modes, 'loss', 'wl')
 

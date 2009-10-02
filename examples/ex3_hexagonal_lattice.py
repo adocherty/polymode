@@ -29,4 +29,3 @@ modes = solver(wl, 0, nefflist=[1.48, 1.475,1.46])
 Plotter.figure()
 Plotter.plot_modes_in_grid(modes, wg=wg)
 Plotter.show()
-

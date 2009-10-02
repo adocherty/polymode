@@ -3,8 +3,7 @@ from numpy import *
 from Polymode import *
 
 ## Waveguide Parameters:
-Nx=200,30
-wavelength = 0.764
+Nx=100,20
 m0 = 1
 
 ## Materials
@@ -26,33 +25,37 @@ shapes = Waveguide.create_hexagonal_tiling(e, layers=2, D=Dx, symmetry=2)
 Waveguide.transform_shape_centers(shapes, scale=(1,yscaling))
 wg.add_shapes(shapes)
 
-#Create the solvers
-allmodes = []
-wls = arange(0.1,0.2,0.005)*Dx
+solver = NLSolver.DefaultSolver(wg, Nx)
 
-birefringence = []
-neffapprox = polymer.index(wls[0])-1e-3
+wlrange = array([0.1,0.2])*Dx
+neffapprox = polymer.index(wlrange[0])-1e-4
+
+#Track fundamental modes over wavelength range
+wltrack = Solver.WavelengthTrack(solver, dont_lose_modes=True)
+wltrack.ga_target=1e-3
+modes = wltrack(wlrange, m0, neffapprox, number=2)
+
+#Sort modes by polarization and calculate birefringence
+plot_wls=[]
+plot_bifi=[]
+
+wls = array([m.wl for m in modes])
 for wl in wls:
-	solver = NLSolver.DefaultSolver(wg, Nx)
-	modes = solver(wl, m0, neffapprox, number=2)
+    wlinx = nonzero(wls==wl)
+    mx = array(modes)[wlinx]
+    if len(mx)==2:
+        #Find x polarized mode:
+        pa = mx[0].polarization_angle()
 
-	bifi = 0
-	if len(modes)>1:
-		neffapprox = modes[0].neff.real
-		allmodes += modes
+        if abs(pa)<pi/4: #x-polarized
+            bifi = mx[1].beta - mx[0].beta
+        else:                #y-polarized
+            bifi = mx[0].beta - mx[1].beta
 
-		#Find x polarized mode:
-		pa = modes[0].polarization_angle()
+        plot_bifi.append(bifi)
+        plot_wls.append(wl)
 
-		if abs(pa)<pi/4:	#x-polarized
-			bifi = modes[1].beta-modes[0].beta
-		else:	#y-polarized
-			bifi = modes[0].beta-modes[1].beta
-		neffapprox = modes[0].neff
-	
-	birefringence.append(bifi)
-
-Plotter.plot(wls, birefringence, 'b-')
+Plotter.plot(plot_wls, plot_bifi, 'b-')
 Plotter.xlabel('Wavelength, um')
 Plotter.ylabel('Birefringence, ')
 

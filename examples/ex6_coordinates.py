@@ -1,6 +1,7 @@
+from Polymode import *
+
 from numpy import *
 from pylab import *
-from Polymode import *
 
 res = 20
 
@@ -43,4 +44,3 @@ print "Function integral on polar grid:", c1.int_dA(abs(f(x1,y1)))
 print "Function integral on cartesian grid:", c2.int_dA(abs(f(x2,y2)))
 
 draw()
-

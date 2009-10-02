@@ -39,7 +39,7 @@ __version__ = '0.1'
 __all__ = ['Modes', 'Image', 'Solver', 'NLSolver', 'Waveguide', 'Material', 'Plotter', 'Equation']
 __all__ += ['save_data', 'load_data', 'coordinates', 'constants']
 
-# Do default config for logging
+#Easy configure logging
 import logging
 logging.basicConfig(level=logging.INFO, format='%(levelname).1s: %(message)s')
 

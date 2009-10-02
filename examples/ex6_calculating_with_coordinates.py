@@ -7,15 +7,15 @@ from Polymode import *
 #option - the second time the modes already calculated
 #will be used
 if 'modes' not in locals():
-	wl = 1.55
-	Nx = (400,41)
-	m145 = Material.Fixed(1.45)
+    wl = 1.55
+    Nx = (400,41)
+    m145 = Material.Fixed(1.45)
 
-	wg = Waveguide.Waveguide(material=m145, symmetry=6)
-	wg.add_shape(Waveguide.Circle(Material.Air(), center=(6.75,0), radius=2.5))
+    wg = Waveguide.Waveguide(material=m145, symmetry=6)
+    wg.add_shape(Waveguide.Circle(Material.Air(), center=(6.75,0), radius=2.5))
 
-	solver = NLSolver.DefaultSolver(wg, Nx)
-	modes = solver(wl, 1, number=1)
+    solver = NLSolver.DefaultSolver(wg, Nx)
+    modes = solver(wl, 1, number=1)
 
 #Coordinate object for mode
 res = 20
@@ -55,5 +55,3 @@ beta = 2*(2*pi/wl)*c1.int_dA(n2*exh)/c1.int_dA(h2 + conj(n2)*e2)
 
 print "Propagation constant from integral", beta
 print "Propagation constant of mode", m.beta
-
-

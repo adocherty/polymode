@@ -5,7 +5,7 @@ from Polymode import *
 import pickle
 
 ## Waveguide Parameters:
-Nx=100,11		#number of radial & azimuthal points
+Nx=100,11               #number of radial & azimuthal points
 
 ## Materials
 air = Material.Air()
@@ -42,5 +42,3 @@ modes[0].plot()
 
 subplot(122)
 modes_comp[0].plot()
-
-

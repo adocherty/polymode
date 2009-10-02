@@ -210,8 +210,7 @@ def extract_data_from_modes(modes=[], datatype='', return_label=False):
         return_label: if true also return a latex formatted data label
     """
     #Deal with groups of modes
-    if iterable(modes[0]):
-        modes = ravel(modes)
+    modes = flatten(modes)
 
     if datatype.startswith('loss'):
         y = [ m.loss for m in modes ]

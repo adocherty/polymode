@@ -366,8 +366,13 @@ class NLResidualSolver(NlepResidualIteration):
             return number_test
 
     def calculate(self, number=inf):
-        logging.info( "NL Inverse Iteration solver. Finding modes, m0=%d, wl=%.3g" \
-            % (self.m0, self.wl) )
+        if self.totalnumber is inf and number is inf:
+            find_number_info = 'all'
+        else:
+            find_number_info = min(self.totalnumber, number)
+        
+        logging.info( "NLII solver. Finding %s modes, m0=%d, wl=%.3g" \
+            % (find_number_info, self.m0, self.wl) )
 
         #Set this here for now...
         self.ssmodes = []
@@ -413,7 +418,7 @@ class NLResidualSolver(NlepResidualIteration):
             elif self.modelist is not None:
                 neffapprox = self.modelist[ii].neff
         
-            logging.info("Finding mode near %s" % neffapprox)
+            logging.debug("Finding mode near %s" % neffapprox)
         
             evapprox = (neffapprox*self.k0)**2
 
@@ -440,7 +445,7 @@ class NLResidualSolver(NlepResidualIteration):
 
             #Reject mode from ssmodes list if it hasn't converged
             if nextmode.residue>self.tolerance:
-                logging.info( "Rejecting unconverged mode" )
+                logging.info("Rejecting unconverged mode" )
                 nextmode.status = "Rejected"
                 if self.add_if_unconverged: self.modes += [nextmode]
             else:

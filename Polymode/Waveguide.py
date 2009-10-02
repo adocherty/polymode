@@ -450,10 +450,7 @@ class WgShape(object):
             return self.center
 
     def set_center(self, center, xy=False):
-        if xy:
-            self.center = self.cartesian_to_polar(center)
-        else:
-            self.center = center
+        self.center = self.convert_to_polar(center, xy=xy)
 
     def get_rotation(self, c1=None, xy=True):
         c1 = self.center[1] if c1 is None else c1
@@ -475,7 +472,7 @@ class WgShape(object):
         
         if xy:
             c += array(shift)
-            c = self.cartesian_to_polar(c)
+            c = self.convert_to_polar(c)
             c = (c[0], c[1]+rotate)
         else:
             c = (c[0], c[1]+rotate)
@@ -752,7 +749,7 @@ class Polygon(WgShape):
                 nodexy = self.convert_to_cartesian([node[0], node[1]+rotate])
             else:
                 #Scale in local polars
-                node = self.cartesian_to_polar(nodexy)
+                node = self.convert_to_polar(nodexy)
                 node = asarray(node)*asarray(scale)
 
                 #Rotate in local polars
@@ -2190,7 +2187,7 @@ class Waveguide(object):
         if 'color' in user_style:
             user_style['ec'] = user_style['fc'] = user_style.pop('color')
 
-        logging.info( "Plotting Waveguide from %d object%s" \
+        logging.debug( "Plotting Waveguide from %d object%s" \
                 % misc.numands(len(self.shapes)) )
 
         ax = p_.gca()

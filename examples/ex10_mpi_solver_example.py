@@ -36,18 +36,16 @@ dneff = (fullneffrange[1]-fullneffrange[0])/number_of_jobs
 
 solvers = []
 for ii in range(number_of_jobs):
-	m0=0
+    m0=0
 
-	#Specify search range
-	neffrange = fullneffrange[0] + dneff*ii, fullneffrange[0] + dneff*(ii+1)
-	
-	#Create new solver object
-	solver = Solver.DefaultSolver(Nx, wg1)
-	solver.initialize(m0, k0, neffrange, number=totalnumber//number_of_jobs)
+    #Specify search range
+    neffrange = fullneffrange[0] + dneff*ii, fullneffrange[0] + dneff*(ii+1)
 
-	solvers += [ solver ]
+    #Create new solver object
+    solver = Solver.DefaultSolver(Nx, wg1)
+    solver.initialize(m0, k0, neffrange, number=totalnumber//number_of_jobs)
+
+    solvers += [ solver ]
 
 queue_save_filename = 'data/mpi_test.queue'
 MPISolver.mpi_batch_solve(solvers, queue_save_filename)
-
-

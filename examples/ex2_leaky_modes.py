@@ -14,8 +14,8 @@ s1 = Waveguide.Annulus(cladding, r=(2.0,3.0))
 wg.add_shape(s1)
 
 # Waveguide Parameters:
-Nx = 100,1				#number of radial & azimuthal points
-wl = 1.0					#Wavelength
+Nx = 100,1                              #number of radial & azimuthal points
+wl = 1.0                                        #Wavelength
 
 # Create the solver
 #solver = LayeredSolver.LayeredSolver(wg)

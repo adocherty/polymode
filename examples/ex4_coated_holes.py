@@ -30,4 +30,3 @@ Plotter.figure()
 modes[0].plot()
 wg.plot(fill=0)
 Plotter.show()
-

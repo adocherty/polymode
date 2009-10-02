@@ -8,7 +8,7 @@ k = 2*pi/1.0
 ## Materials
 air = Material.Air()
 silica = Material.Silica()
-dsilica = Material.SiO2GeO2(0.2)	#20% doped silica
+dsilica = Material.SiO2GeO2(0.2)        #20% doped silica
 
 ## Create waveguide
 wg = Waveguide.Waveguide(rmax=8, material=silica, symmetry=2)
