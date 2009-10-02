@@ -5,21 +5,25 @@ http://polymode.googlecode.com/svn/misc/images/polymode2.png
 <wiki:toc max_depth="3" />
 
 == Running the tutorials ==
-In the directory named “tutorials” which contains a number of test programs that use the Polymode code.
-After installing Polymode you can move this folder anywhere you wish, and run your own code using Polymode from any directory.
+The code for all the tutorials can be downloaded from the "Downloads" section of the
+[http://polymode.googlecode.com Polymode website] or are also available in the "examples" directory
+of the svn repository if you downloaded the code from svn.
+
+The examples which contains a number of test programs that use the Polymode code. After installing Polymode
+you can run the examples or your own code from any directory.
 
 The *IPython* interactive python shell is assumed throughout this tutorial, although they
 can be run directly using python non-interactively as well.
 To run these examples open the IPython shell and cd to this directory.
 
 {{{
-cd _tutorial directory_
+cd _examples directory_
 }}}
 
 Run the  program (in this case named “ex1_materials.py”) typing:
 
 {{{
-run _name of file_
+run _ex1_materials.py_
 }}}
 
 You can include the “.py” extension but it is not necessary.
@@ -28,6 +32,11 @@ These examples don't assume any familiarity with the Python programming language
 for more advanced usage it is useful to have some knowledge of programming in it. A good
 introduction to Python programming is available at the [http://docs.python.org/tutorial/index.htm Python tutorial]
 or the [http://www.diveintopython.org/ Dive Into Python] websites.
+
+The numerical capabilities of Python are provided by the [http://www.scipy.org Scipy and Numpy libraries], and more information on how to use Python for numerical calulations is given on their website. If you are unfamiliar with them a good place to get information is on their [http://scipy.org/Getting_Started Getting Started] webpage.
+
+The plotting is provided by [http://matplotlib.sf.net Matplotlib] and a good introduction to commands available (which are all
+similar to Matlab plotting commands) is available on their website.
 
 ----
 
@@ -45,30 +54,30 @@ You should get an output similar to this:
 {{{
 PMMA
 Wavelength limits (um): 0.25->1.5
-Temperature limits (K): 0->400 
+Temperature limits (K): 0->400
 Cite: 
-Refractive index at 1.45um is 1.48074+0i 
+Refractive index at 1.45um is 1.48074+0i
 
-Fused Silicon Oxide (SiO₂) 
-Wavelength limits (um): 0.2->3.8 
-Temperature limits (K): 0->400 
-Cite: Malitson 1965, http://www.opticsinfobase.org/abstract.cfm?URI=josa-55-10-1205 
-Refractive index at 1.45um is 1.4452+0i 
+Fused Silicon Oxide (SiO2)
+Wavelength limits (um): 0.2->3.8
+Temperature limits (K): 0->400
+Cite: Malitson 1965, http://www.opticsinfobase.org/abstract.cfm?URI=josa-55-10-1205
+Refractive index at 1.45um is 1.4452+0i
 
-Silica doped with Germania 
-Wavelength limits (um): 0.6->1.8 
-Temperature limits (K): 0->400 
-Cite: Sunak, H.R.D.; Bastien, S.P., Photonics Technology Letters V1 N6 142-145, 1989 
-Refractive index at 1.45um is 1.45313+0i 
+Silica doped with Germania
+Wavelength limits (um): 0.6->1.8
+Temperature limits (K): 0->400
+Cite: Sunak, H.R.D.; Bastien, S.P., Photonics Technology Letters V1 N6 142-145, 1989
+Refractive index at 1.45um is 1.45313+0i
 }}}
 
 The code itself is shown and explained following:
 
 {{{
 from numpy import *
-from ABCSolver import *
+from Polymode import *
 
-#Basic materials 
+# Basic materials 
 air = Material.Air() 
 m145 = Material.Fixed(1.45) 
 }}}
@@ -99,16 +108,15 @@ wl = 1.45
 for mat in [pmma, silica, sige]: 
 	ri = mat.index(wl) 
 	mat.info() 
+	mat.plot()
 	print "Refractive index at %gμm is %s\n" % (wl, ri)
 }}}
 
-Here we iterate over the materials `pmma`, `silica` and `sige` and print their refractive index at a wavelength `wl` in micrometers. You can get some information about the material, including a reference for where the data is derived using the `.info()` method for any material. You are now at a command prompt for python and can enter commands and explore the materials that have been defined.
-
-Try plotting the refractive index of polymer versus the wavelength by typing the command `pmma.plot()`
+Here we iterate over the materials `pmma`, `silica` and `sige` and print their refractive index at a wavelength `wl` in micrometers. You can get some information about the material, including a reference for where the data is derived using the `.info()` method for any material. You are now at a command prompt for python and can enter commands and explore the materials that have been defined. The refractive index of the material versus the wavelength is plotted with the command `mat.plot()`
 
 _Note that you may need the `draw()` and `show()` commands to refresh the plot window_
 
-http://polymode.googlecode.com/svn/wiki/figures/fig1_materials.png
+http://polymode.googlecode.com/svn/wiki/figures/ex1_materials.png
 
 === The Waveguide ===
 To construct an optical fiber we now need to create a waveguide and put different materials in it.
@@ -118,7 +126,7 @@ run ex1_the_waveguide
 }}}
 
 Try running the example, it should plot the waveguide and look like this:
-http://polymode.googlecode.com/svn/wiki/figures/fig2_waveguide.png
+http://polymode.googlecode.com/svn/wiki/figures/ex2_waveguide.png
 
 The different colors represent different materials, here the green is the doped core and the surrounding grey the undoped silica.
 
@@ -146,7 +154,8 @@ In this case we add the core as a circle at the origin with a radius of 2 μm. T
 wg.plot()
 }}}
 
-Try ploting the refractive index profile that will be used in the solver code by using the command `wg.plot_bitmap((200,1))`
+Tip: You can plot the refractive index profile that is used to numerically represent the structure by using the command `wg.plot_bitmap((N,,r,,,N,,ϕ,,))`
+where `N,,r,,` is the radial resolution and `N,,ϕ,,` is the azimuthal resolution.
 
 ----
 
@@ -177,31 +186,34 @@ Mode _#number_ `[`_iterations_:_time_`]`, neff=_effective index_, res: _approx e
 
 The iterations information is how many iterations is needed to refine the leakage loss of the mode to the stated accuracy; highly leaky modes require more iterations. The value of the residue gives an indication of the accuracy of the modes - clearly neff should not be quoted to more significant figures than indicated the residue.
 
-The code of `ex2_step_index_modes` is the same as the previous example for creating the waveguide, the only changes are the addition of the mode calculation:
+The code of `ex2_step_index_modes` is the same as the previous example where we created a step index fiber,
+however we now create a solver with the specified waveguide and resolution.
 
 {{{
-Nx = 100,1			#number of radial & azimuthal points 
-wl = 1.0				#wavelength 
+Nx = 100,1	#number of radial & azimuthal points
+wl = 1.0    #Wavelength
 
-solver = NLSolver.DefaultSolver(Nx, wg, modetype='bound') 
-modes = solver(0, wl, number=2) 
-modes += solver(1, wl, number=1) 
+solver = NLSolver.DefaultSolver(wg, Nx)
+modes = solver(wl, 0, number=2)
+modes += solver(wl, 1, number=1)
 }}}
 
-To solve for modes in our created waveguide we need to give the resolution of the numerical solution Nx. This is two numbers the first is the number of points in the radial direction and the second the number points in the azimuthal (ɸ) direction.
+To solve for modes in our created waveguide we need to give the resolution of the numerical solution Nx. This is a tuple of two numbers, (N,,r,,,N,,ϕ,,)) where N,,r,, is the radial resolution and N,,ϕ,, is the azimuthal resolution.
 
 Note that the number of radial and azimuthal points defines the resolution of the calculation. Increasing the number of radial points linearly increases the time taken for the calculation, but the increase in calculation time as you increase the azimuthal resolution is much more dramatic. That is unfortunate as features like thin bridges with require a lot of points to resolve them properly. You should always check for proper convergence of the solution by running at different resolutions (for example, doubling the number of points). You need to be even more careful about convergence when considering the imaginary part of n,,eff,,.
 
-The solver object is created with the wanted resolution and the waveguide as arguments. This solver can then be used to calculate any number of modes calling it with the wavenumber and  the symmetry class.
+The solver object is created with the wanted resolution and the waveguide as arguments. This solver can then be used to calculate any number of modes calling it with the wavenumber and  the symmetry class. By default the solver looks for modes with effective index near the highest refractive index in your structure; this may not always be the modes you are interested in, and different ways to specify which modes to look for will be detailed later.
 
 The modes are returned as a list, if we just type `modes` and hit enter the modes in the list are printed.
 Any mode in the list can be inspected interactively, let's investigate the first mode. It has some properties, the effective index, the loss, the symmetry class, the wavelength. Try these commands:
 {{{
-print modes[0].wavelength
+print modes[0].wl
 print modes[0].neff
 print modes[0].loss
 print modes[0].m0
 }}}
+
+They will print the wavelength, effective index, loss and symmetry mode class of the first mode in the list respectively.
 
 To go through each mode and print information on it we can use this command:
 
@@ -254,14 +266,12 @@ Look at this program file, the program is the same as the previous apart from th
 wg.plot_bitmap(Nx)
 }}}
 
-This structure gives rise to modes that are guided by the core and cladding, but energy from them can tunnel through the this air gap and this causes leakage loss.
-
-This loss can be modelled by the program. In the solver we specify we want to look for outward going modes (bound modes are not supported in this structure). Note that if we omit the _modetype_ argument it will default to 'outward'.
+This structure gives rise to modes that are guided by the core and cladding, but energy from them can tunnel through the this air gap and this causes leakage loss. This loss is found by the numerical solver as the imaginary part of the effective index.
 
 {{{
-solver = NLSolver.DefaultSolver(Nx, wg, modetype='outward') 
-modes = solver(0, wl, number=2) 
-modes += solver(1, wl, number=1) 
+solver = NLSolver.DefaultSolver(wg, Nx) 
+modes = solver(wl, 0, number=2) 
+modes += solver(wl, 0, number=1) 
 }}}
 
 We find modes in symmetry classes 0 and 1 just as previously. However the modes will now be lossy. The loss of each mode can be shown using the info() function:
@@ -276,9 +286,9 @@ VectorMode size: (100, 1), symmetry=1, m0=0, λ=1, rmax=3.15, vecs: RL {}
  | Numerical Aperture: 0.17061
 }}}
 
-The entire mode list is now plotted with the commands:
+The entire mode list is now plotted with the command:
 
-{{{Plotter.plot_modes_in_grid(modes, rmax=5) }}}
+{{{Plotter.plot_modes_in_grid(modes, rmax=5)}}}
 
 To plot a single mode we can use the command:
 
@@ -286,7 +296,7 @@ To plot a single mode we can use the command:
 
 Where the mode number is a number from 0 to _number of modes_ – 1.
 
-The plot will default to plotting the power, or precisely the z-component of the time-averaged Poynting vector. However other parts of the electromagnetic field can also be plotted. For example the command
+The plot will default to plotting the power, (the z-component of the time-averaged Poynting vector). However other parts of the electromagnetic field can also be plotted. For example the command
 `modes[0].plot('Hr')`
 plots the radial component of the magnetic fieldof the first mode. 
 
@@ -327,7 +337,7 @@ This tutorial file is `ex3_microstructured_fiber.py`.
 A microstructured fiber can be created in the same way as the fibers we have created so far, however we will now have much more flexibility of what shapes to create in the waveguide.
 Initially let's create a waveguide from PMMA polymer with six circular airholes. The structure we want looks like this:
 
-http://polymode.googlecode.com/svn/wiki/figures/fig3_sixholes.png
+http://polymode.googlecode.com/svn/wiki/figures/ex3_microstructured_fiber.png
 
 The waveguide can be created in the same way, but now we use the fact that it is six-fold symmetric and set the symmetry to be six. We then only need to add one circule and the rest will be created automatically by the symmetry. The code to do this is:
 
@@ -347,7 +357,7 @@ Try plotting the waveguide with the resolution N,,r,,=100, N,,ɸ,,=20 using the 
 There are many other shapes that can be used to create different geometries. Some of them with their options are:
 
  * Waveguide.Circle( material, center=(r,,0,,, ɸ,,0,,), radius=radius, zorder=0, xy=False) 
- * Waveguide.Ellipse( material, center=(r,,0,,, ɸ,,0,,), axes=(a,b), rot=0, sampling=100, zorder=0, xy=False) 
+ * Waveguide.Ellipse( material, center=(r,,0,,, ɸ,,0,,), axes=(a,b), rot=0, zorder=0, xy=False) 
  * Waveguide.Rectangle( material, center=(r,,0,,, ɸ,,0,,), axes=(a,b), rot=0, zorder=0, xy=False)
  * Waveguide.Polygon( material, nodes=`[` _list of node coords_ `]`,  zorder=0, xy=False)
  * Waveguide.Annulus( material,  r=(r,,min,,, r,,max,,, phi=(ɸ,,min,,, ɸ,,max,,), zorder=0)
@@ -355,7 +365,8 @@ There are many other shapes that can be used to create different geometries. Som
 
 The axes parameters for the ellipse and rectangle set the width and height of the objects relative to the coordinate system. They will be aligned along the radial and polar directions by default, however giving an argument to `rot` will change this.
 
-It is important  to note that the coordinate system defaults to polar, however setting the option xy to True enables the center to be given in cartesian coordinates and the axes to line up with the cartesian directions.
+It is important  to note that the coordinate system defaults to polar, however setting the option xy to True enables the center to be given in cartesian coordinates, and the major and minor axes or ellipses and rectangles to be in the cartesian directions.
+
 
 === Solving Modes in Microstructured Fibers ===
 This tutorial file is `ex3_finding_modes.py`.
@@ -366,20 +377,61 @@ The code to solve for modes in the waveguide in `ex3_finding_modes.py`is:
 
 {{{
 Nx = 100,11
-wl = 1.45
+wl = 1.0
 
-solver = NLSolver.DefaultSolver(Nx, wg) 
-modes = solver(0, wl, number=2) 
-modes += solver(1, wl, number=3) 
+# Create the solver
+solver = NLSolver.DefaultSolver(wg, Nx)
 
-save_data((modes, wg), "ex3_modes.dat") 
-Plotter.plot_modes_in_grid(modes) 
+#Solve for modes in different symmetry classes.
+#Notice the "modes +=" adds to the modes
+modes = solver(wl, 0, 1.45, number=2)
+modes += solver(wl, 1, 1.45, number=2)
+
+# Save the modes and the waveguide
+save_data((modes, wg), "ex3_modes.dat")
+
+#Create a new plot window
+figure()
+
+Plotter.plot_modes_in_grid(modes)
 }}}
 
-We now specify the number of radial and azimuthal points, generally the azimuthal number should be odd. We solver for 2 modes with a symmetry index of 0 and three for a symmetry index of 1. The modes as well as the waveguide are saved to the file 'ex3_modes.dat', note the use of brackets to group them together.
-The modes are plotted in a grid as before.
+We now specify the number of radial and azimuthal points. We solver for 2 modes with a symmetry index of 0
+and three for a symmetry index of 1. The modes as well as the waveguide are saved to the file 'ex3_modes.dat',
+note the use of brackets to group them together. The modes are plotted in a grid as before.
 
-http://polymode.googlecode.com/svn/wiki/figures/fig4_modes.png
+http://polymode.googlecode.com/svn/wiki/figures/ex3_finding_modes.png
+
+=== Hexagonal lattice ===
+This tutorial file is `ex3_hexagonal_lattice.py`.
+
+The `Waveguide` module contains a number of layout functions that can put shapes
+in common configurations such as hexagonal and square lattices. To create a hexagonal
+lattice we choose the symmetry of the waveguide, the number of layers and the layer
+spacing. You can also specify the offset of the layers, which is the number of layers
+to remove at the center to create the 'defect'.
+
+{{{
+sym = 6
+layers = 2
+D = 6.0
+d = 4.0
+
+circle = Waveguide.Circle(air, radius=d/2)
+shapes = Waveguide.create_hexagonal_tiling(circle, layers=layers, D=D, symmetry=sym)
+wg.add_shapes(shapes)
+
+solver = NLSolver.DefaultSolver(wg, Nx)
+modes = solver(wl, 0, nefflist=[1.48, 1.475,1.46])
+
+Plotter.figure()
+Plotter.plot_modes_in_grid(modes, wg=wg)
+Plotter.show()
+}}}
+
+Note here we use the `nefflist` option to the solver to solve for modes near to these
+approximate effective indices.
+
 
 === Square lattice ===
 This tutorial file is `ex3_square_lattice.py`.
@@ -392,58 +444,41 @@ We create this using a `for` loop to allow a variable number of rings of holes
 in the lattice. First we set up the standard parameters and materials. Notice
 the summetry of this waveguide is 4.
 {{{
-symmetry = 4
-Nx = (200,20)
-wl = 1.0
-
-air = Material.Air()
-si = Material.Silica()
-
-wg = Waveguide.Waveguide(material=si, symmetry=symmetry)
-}}}
-
-We now create circles of air as the holes in `Nrings` layers. with a distance apart
-of D=Λ and a diameter d. This gives an air-fill fraction of (π/2√3) (d/Λ)².
-We add the holes using Cartesian coordinates (the xy=1 parameter) in a grid
-for one quarter of the rotationally symmetric waveguide.
-{{{
-Nrings = 2
-D = 4.0
+sym = 4
+layers = 2
+D = 5.0
 d = 0.5*D
-for nr in range(1,Nrings+1):
-	for ii in range(Nrings+1):
-		wg.add_shape( Waveguide.Circle(air,center=(nr*D,ii*D),radius=d/2,xy=1) )
+
+c = Waveguide.Circle(air, radius=d/2)
+shapes = Waveguide.create_square_tiling(c, layers=layers, Dx=D, Dy=D, symmetry=sym)
+wg.add_shapes(shapes)
+
+#Find modes
+solver = NLSolver.DefaultSolver(wg, Nx)
+modes = solver(wl, 0, neffrange=[1.4,1.45], number=2)
+modes += solver(wl, 1, neffrange=[1.4,1.45], number=2)
+modes += solver(wl, 2, neffrange=[1.4,1.45], number=2)
 }}}
+
+Here we use the `neffrange` argument to the solver. This finds `number` modes within the effective index
+range specified by `neffrange`.
 
 The waveguide is shown below. The sector we have created is in black and the
 gray holes are created by the automatic rotational symmetry.
 
-http://polymode.googlecode.com/svn/wiki/figures/fig_squarelattice.png
-
-The solver code is the same and we search for 2 modes in the mode classes 0 and 1.
-We also pass a third argument to the solver command, which is the effective index
-to search for modes near - here we want to find modes which have n,,eff,, close to 1.44.
-{{{
-solver = NLSolver.DefaultSolver(Nx, wg)
-modes = solver(0, wl, 1.44, number=2)
-modes += solver(1, wl, 1.44, number=2)
-
-Plotter.plot_modes_in_grid(modes)
-}}}
+http://polymode.googlecode.com/svn/wiki/figures/ex3_square_lattice_wg.png
 
 === Spurious modes ===
 This tutorial file is `ex3_square_lattice.py`.
 
-Staying with the same file as last time, increase the number of modes to solver for
-to 10 in both mode classes, and do the same for the mode class m0=2.
+The solver will try and find all modes within the specified range
+but may not be able to do so, especially if there are not many modes supported
+in the structure or there are many spurious modes then the solver may
+not converge. This is a limitation of the current solver and will
+hopefully be improved soon, meanwhile don't be alarmed if 
+_Rejecting unconverged mode_ is printed while trying to find modes.
 
-The solver will try and find all modes but may not be able to do so, especially if there
-are not many modes supported in the structure or their n,,eff,, then the solver may
-not converge to these modes. This is a limitation of the current solver and will
-hopefully be improved soon, meanwhile don't be alarmed if you see
-_Rejecting unconverged mode_ while trying to find modes.
-
-Also even when a mode is found it is possible that it is not a real physical
+Even when a mode is found it is possible that it is not a real physical
 mode of the structure but a numerical artifact. These _spurious_ modes
 have the majority of their power trapped between the structure and the
 computational boundary. They are easy to spot and the solver tries to identify them
@@ -452,21 +487,20 @@ automatically.
 Typing `modes` to get a list of the modes solved we see some modes marked with an
 `[S]` at the end. These are the ones the solver has picked are spurious.
 {{{
-[<VectorMode: m₀=0 λ=1 neff=1.44006 + 1.63e-04i r:7.1e-13 []>,
- <VectorMode: m₀=0 λ=1 neff=1.44022 + 1.78e-04i r:1.5e-14 []>,
- <VectorMode: m₀=0 λ=1 neff=1.44125 + 8.76e-05i r:3.1e-11 []>,
- <VectorMode: m₀=0 λ=1 neff=1.44128 + 8.17e-05i r:1.6e-14 []>,
- <VectorMode: m₀=0 λ=1 neff=1.44195 + 5.32e-05i r:1.4e-14 []>,
- <VectorMode: m₀=0 λ=1 neff=1.44182 + 6.53e-05i r:1.8e-14 []>,
- <VectorMode: m₀=0 λ=1 neff=1.44288 + 8.26e-06i r:1e-13 []>,
- <VectorMode: m₀=0 λ=1 neff=1.44289 + 8.15e-06i r:1.1e-14 []>,
- <VectorMode: m₀=0 λ=1 neff=1.43686 + 1.46e-02i r:4.5e-13 [S]>,
- <VectorMode: m₀=0 λ=1 neff=1.43788 + 6.63e-03i r:4.1e-12 [S]>,
+ <VectorMode: m0=0 wl=1 neff=1.44663 + 2.66e-03i r:6.3e-11  [S]>
+ <VectorMode: m0=1 wl=1 neff=1.44816 + 4.44e-09i r:1e-10  []>
+ <VectorMode: m0=1 wl=1 neff=1.4472 + 2.36e-03i r:2.7e-13  [S]>
+ <VectorMode: m0=2 wl=1 neff=1.45018 + 2.37e-03i r:3.2e-11  [S]>
 }}}
-In this list the last two (we only show the modes in mode class 0).
+In this list all but the second mode are spurious. We can also see that the other three
+modes have very large imaginary parts of the effective indes, or large losses.
+This is due to them being artificially guided between the outside of the structure
+and the inexact boundary conditions. This structure has a large number of such modes as
+it has large gaps between the structure and the computational boundary.
+
 When we plot them we see they're highlighted with a red background.
 
-http://polymode.googlecode.com/svn/wiki/figures/fig_spuriousmodes.png
+http://polymode.googlecode.com/svn/wiki/figures/ex3_square_lattice.png
 
 After manually examining them we can automatically remove the spurious modes
 using the `Modes.filter_suprious_modes()` function. This removes all
@@ -483,6 +517,7 @@ For example we can set the 10th mode to be spurious by the command:
 {{{
 modes[10].is_spurious = True
 }}}
+
 
 === Plotting modes continued ===
 This tutorial file is `ex3_plotting_modes.py`.
@@ -510,7 +545,6 @@ There are many ways to plot the modes. Using the `Plotter.plot_modes_in_grid` al
 
 Issuing two different plot commands succesively will plot one plot over another:
 {{{
-#Plot the poynting vector and the H-polarization
 Plotter.plot_modes_in_grid(modes, plottype='sz')
 Plotter.plot_modes_in_grid(modes, plottype='ph', title='number')
 }}}
@@ -542,24 +576,28 @@ You can save a figure using the plot GUI or the `savefig` command
 savefig("fig_compressmodes.png")
 }}}
 
+http://polymode.googlecode.com/svn/wiki/figures/ex3_plotting_modes.png
+
 Documentation for more general plotting commands can be found at the
 [http://matplotlib.sourceforge.net Matplotlib website].
 
-=== More shapes ===
-The example `ex3_more_shapes.py` creates a waveguide with three different shapes and finds the fundamental mode in it.
-
-http://polymode.googlecode.com/svn/wiki/figures/fig5_moreshapes.png
 
 ----
 
 == Tutorial 4 - More advanced waveguides ==
+
+=== More shapes ===
+The example `ex4_more_shapes.py` creates a waveguide with three different shapes and finds the fundamental mode in it.
+
+http://polymode.googlecode.com/svn/wiki/figures/ex4_more_shapes.png
+
 
 === Coated holes ===
 This tutorial file is `ex4_coated_holes.py`.
 
 Shapes can be coated with another material of a specified thickness using the
 {{{
-Material.coated_shape(shape, coating material, thickness)
+    Material.coated_shape(shape, coating material, thickness)
 }}}
 function. This takes a previously created shape, a coating material and a thickness and returns a shape to use as the coating. Note that any shape can be coated, not just circular inclusions.
 This is seen in the `ex4_coated_holes.py` file. The relavant portion is shown here, a circle is created and coated with a material of higher refractive index and both shapes are added to the waveguide.
@@ -576,7 +614,7 @@ wg.add_shape(chole)
 
 The fundamental mode is found:
 
-http://polymode.googlecode.com/svn/wiki/figures/fig6_coatedhole.png
+http://polymode.googlecode.com/svn/wiki/figures/ex4_coated_holes.png
 
 === Waveguide from a bitmap image ===
 This tutorial file is `ex4_waveguide_from_image.py`.
@@ -589,25 +627,37 @@ Then the waveguide shape can be created using the command `Waveguide.Image(mater
 
 The image will take a while to be converted to work with the waveguide as the image is optimized for the waveguide symmetry and converted to polar coordinates.
 
-The code from the `ex4_waveguide_from_image.py` example file is
+Selected code from the `ex4_waveguide_from_image.py` example file is explained following:
 
 {{{
-image = Image.ImportBitmap(os.path.join("images","MOF_NRL.png"), size=(20,20), offset=pi/6, negative=True)
+image_filename1 = os.path.join("images","MOF_NRL.png")
+image_filename2 = os.path.join("images","hlfcollapsedKagome.png")
+}}}
+Note that the `os.path.join` function joins path names in a platform independent way so it will work on Linux and Windows. On Windows you can equivalently just write "images\MOF_NRL.png".
+
+{{{
+image = Image.ImportBitmap(image_filename1, size=(20,20), offset=pi/6, negative=True)
 image.contrast(scale=15, transition=0.45)
 wg.add_shape(Waveguide.Image(air, image))
 }}}
-
-Note that the `os.path.join` function joins path names in a platform independent way so it will work on Linux and Windows. On Windows you can equivalently just write "images\MOF_NRL.png".
+To load an image we use the `ImportBitmap` object to load the bitmap. The required arguments are the size of the 
+entire image in micrometers, the offset (to adjust the angle of the loaded bitmap appropriately) and weather
+the lightest colors should be interpreted as the substrate or as the shape material. If `negative` is False (the default)
+the lightest colors are converted to the shape's material, the darkest are assigned the backgrounsd index, for
+the case that `negative` is True the opposite holdes.
 
 Other actions can be applied to the image object, it may be necessary to apply some contrast to the image, in this case we adjust the contrast by changing the amount of contrast (scale) and the relative light/dark bias (transition).
 
-Also a new way to plot the waveguide is given, the plot_bitmap command gives the actual numerical values of the waveguide on a polar grid of 200x60 pixels (in this case), the sectors=1 specified plotting just one of the symmetric sectors and the cmap command chooses the colormap.
+The `plot_bitmap` member function gives the actual numerical values of the waveguide on a polar grid of
+200x60 pixels (in this case), the sectors=1 specified plotting just one of the symmetric sectors and the
+cmap command chooses the colormap.
 
 {{{
 wg.plot_bitmap((200,60), sectors=1, cmap=Plotter.cm.gray)
 }}}
 
-http://polymode.googlecode.com/svn/wiki/figures/fig7_image.png
+http://polymode.googlecode.com/svn/wiki/figures/ex4_waveguide_from_image.png
+
 
 === Merging Shapes ===
 This tutorial file is `ex4_merging_shapes.py`.
@@ -622,19 +672,19 @@ s1 = Waveguide.Circle(air, center=(3,pi/6), radius=1.5, zorder=1)
 wg.add_shapes(s0, s1)
 
 Plotter.subplot(121)
-wg.plot_bitmap(Nx)
+wg.plot()
 
 #Change orders around
 s0.zorder=1
 s1.zorder=0
 
 Plotter.subplot(122)
-wg.plot_bitmap(Nx)
+wg.plot()
 }}}
 
 The waveguide on the left should have the blue circles in front of the red ellipses.
 
-http://polymode.googlecode.com/svn/wiki/figures/fig8_mergeshapes.png
+http://polymode.googlecode.com/svn/wiki/figures/ex4_merging_shapes.png
 
 Note the oscillations near the sharp changes in refractive index. This is the [http://en.wikipedia.org/wiki/Gibbs_effect Gibb's effect] caused by the truncation of the Fourier series that is used internally.
 
@@ -683,7 +733,7 @@ wg.plot_bitmap(Nx, wl=1.0)
 
 The output of this example is shown below, the refractive index of Silica (1.4504) and Silica doped with 20% Germania (1.482) at a wavelength of λ=1.0μm is also plotted.
 
-http://polymode.googlecode.com/svn/wiki/figures/fig9_parabolic.png
+http://polymode.googlecode.com/svn/wiki/figures/ex4_parabolic_index.png
 
 
 === Solving modes in an image waveguide ===
@@ -708,8 +758,8 @@ Nx=100,81		#number of radial & azimuthal points
 wl=1.55			#Wavelength
 
 # Create the solver
-solver = NLSolver.DefaultSolver(Nx, wg)
-modes = solver(0, wl, number=4)
+solver = NLSolver.DefaultSolver(wg, Nx)
+modes = solver(wl, 0, number=4)
 
 Plotter.plot_modes_in_grid(modes)
 }}}
@@ -724,7 +774,7 @@ Loading an image only allows you to have two different materials in the waveguid
 
 Be aware that using waveguides without symmetry will be very slow to solve for modes as the number of azimuthal points needed is large.
 
-http://polymode.googlecode.com/svn/wiki/figures/fig_imagemodes.png
+http://polymode.googlecode.com/svn/wiki/figures/ex4_modes_with_a_image_waveguide
 
 ----
 
@@ -763,6 +813,8 @@ for m in modes:
 	print "Proportion of power in core:", real(m.mode_power(r=wg.guess_core_size())/m.mode_power())
 }}}
 
+
+
 === Convergence ===
 This tutorial file is `ex5_convergence_test.py`
 
@@ -778,7 +830,7 @@ Naz = 41
 solvers = []
 for Nr in [50,100,200,400,800]:
 	solver = NLSolver.DefaultSolver((Nr,Naz), wg)
-	solver.initialize(1, wl, 1.45, number=1)
+	solver.initialize(wl, 1, 1.45, number=1)
 	solvers.append(solver)
 
 modes = Solver.batch_solve(solvers, filename="convergencerun.solve")
@@ -817,7 +869,8 @@ ylabel(r'Error in $n_{eff}$')
 
 We then change the axes to be logarithmic and put some labels on the axes. Note the use of latex in the axis labels.
 
-http://polymode.googlecode.com/svn/wiki/figures/fig10_convergence.png
+http://polymode.googlecode.com/svn/wiki/figures/ex5_convergence_test.png
+
 
 === Eliptical polarization and degenerate modes ===
 This tutorial file is `ex5_uranus_fiber.py`.
@@ -833,23 +886,23 @@ r2 = 2
 Daz = 108*pi/180
 ring = Waveguide.Annulus(air, r=(r1,r2), phi=(-Daz/2,Daz/2))
 wg = Waveguide.Waveguide(material=silica, symmetry=3)
-wg.add_shape( ring )
+wg.add_shape(ring)
 }}}
 
 We then find modes near the effective index 1.4 in mode classes 0 and 1. The modes and the electric polarization
 are then plotted in a grid. Note we have sorted the modes in reverse order. Compare the effective indices to the modes in the Uranus paper. Increasing the resolution should improve the fit to the published effective indices.
 
 {{{
-vwe = NLSolver.DefaultSolver(Nx, wg)
-modes = vwe(0, wl, 1.4, number=2)
-modes += vwe(1, wl, 1.4, number=2)
+vwe = NLSolver.DefaultSolver(wg, Nx)
+modes = vwe(wl, 0, 1.4, number=2)
+modes += vwe(wl, 1, 1.4, number=2)
 
 modes.sort(reverse=True)
 
 Plotter.plot_modes_in_grid(modes, 'sz,pe')
 }}}
 
-http://polymode.googlecode.com/svn/wiki/figures/fig11_uranusmodes.png
+http://polymode.googlecode.com/svn/wiki/figures/ex5_uranus_fiber.png
 
 The modes in mode class 0 are linearly polarized however those in mode class 1 have a circular polarization.
 The modes in class 1 are degenerate modes, however the solver will find a single circularly polarized mode that is a combination of both of them.
@@ -857,43 +910,48 @@ Compare this to figure 5 in Uranus and notice that the modes with circular polar
 
 We'll look at extracting two degenerate linearly polarized modes from a circularly polarized mode in the next tutorial.
 
-=== Solving over a wavelength range ===
-This tutorial file is `ex5_uranus_wavelength.py`
 
-The wavelength properties of a mode or modes can be evaluated by calculating the mode over a range of wavelengths. The example does this with the same waveguide as the previous example. Compare this to Fig 7 of the Uranus paper.
+=== Solving over a wavelength range ===
+This tutorial file is `ex5_wavelength_scan.py`
+
+The wavelength properties of a mode or modes can be evaluated by calculating the mode over a range of wavelengths.
+There are two basic solvers for solving at a range of wavelengths, they are
+`Solver.WavelengthScan` and `Solver.WavelengthTrack`.
+
+The first one finds all modes with given search criteria at each wavelength. This can be quite slow
+and there is no guarantee that they same modes found at one wavelength will be found at the next wavelength
+step. If you are interested in the behaviour of many modes in the fiber and do not need the properties
+of specific modes this may be useful.
+
+The `Solver.WavelengthTrack` tracks specific modes across a range of wavelengths. This uses automatically selected 
+wavelength steps to speed the process. Here we show how to use this solver.
 
 {{{
-#Create solver instances for each wavelength in a range
-wlrange = arange(0.6,1.7,0.1)
-solvers = []
-for wl in wlrange:
-	solve = NLSolver.DefaultSolver(Nx, wg)
-	solve.initialize(m0, wl, 1.42, number=1)
-	solvers.append( solve )
+#Choose solver
+solver = NLSolver.DefaultSolver(wg, Nx)
 
-#Use this function to solve multiple solver objects (with different parameters)
-modes = Solver.batch_solve(solvers)
+#Create wavelength track solver
+wlsolver = Solver.WavelengthTrack(solver)
+
+wlrange=[1.0,1.5]
+modes = wlsolver(wlrange, 0, nefflist=[1.3])
 }}}
 
-Any odd modes found that aren't what we are looking for are discarded using the filter function and a _lambda_ function.
+Here the `Solver.WavelengthTrack` solver is created with the numerical mode solver as an argument.
+It is then called with the wavelength range specified as the minimum and maximum wavelengths in the
+range of interest.
 
 {{{
-#Discard spurious modes that have too large a loss
-modes = filter(lambda m: m.loss<5000, modes)
-
 subplot(121)
-Plotter.plot_parameters(modes, 'neff', 'wl', style='r.')
+Plotter.plot_mode_properties(modes, 'neff', 'wl')
 subplot(122)
-Plotter.plot_parameters(modes, 'loss', 'wl', style='r.')
+Plotter.plot_mode_properties(modes, 'loss', 'wl')
 }}}
 
 Finally the effective index and loss of the modes versus the wavelength, in this case for the HE11-like mode. Try plotting the wavelength parameters for other types of modes too.
 
-http://polymode.googlecode.com/svn/wiki/figures/fig12_uranus_wavelength.png
+http://polymode.googlecode.com/svn/wiki/figures/ex5_wavelength_scan.png
 
-=== Wavelength tracking ===
-
-Coming...
 
 ----
 
@@ -978,7 +1036,8 @@ print "Function integral on polar grid:", c1.int_dA(abs(f(x1,y1)))
 print "Function integral on cartesian grid:", c2.int_dA(abs(f(x2,y2)))
 }}}
 
-http://polymode.googlecode.com/svn/wiki/figures/fig14_coordinates.png
+http://polymode.googlecode.com/svn/wiki/figures/ex6_coordinates.png
+
 
 === Calculations with coordinates ===
 This tutorial file is `ex6_calculating_with_coordinates.py`
@@ -1002,7 +1061,7 @@ with the `border=1` parameter, try it again with `border=0`.
 Try plotting the _x_ and _y_ components of the electric and magnetic fields
 using both coordinates.
 
-http://polymode.googlecode.com/svn/wiki/figures/fig15_coordinate_fields.png
+http://polymode.googlecode.com/svn/wiki/figures/ex6_calculating_with_coordinates.png
 
 Also we can use the coord objects as options when we calculate properties of
 the mode, such as the group index.
@@ -1036,7 +1095,9 @@ n2 = m145.index(wl)**2
 beta = m.k0*c1.int_dA(n2*exhz)/c1.int_dA(n2*e2)
 }}}
 
+
 === Retreiving mode fields ===
+This tutorial file is `ex6_modal_fields.py`
 
 Now we can extract the electric and magnetic fields from the modes we can do a lot of calculation with them.
 
@@ -1096,7 +1157,8 @@ wg.plot(fill=0, boundary=0)
 
 We plot the real part of the three components of the Poynting vector as usual.
 
-http://polymode.googlecode.com/svn/wiki/figures/fig16_poynting.png
+http://polymode.googlecode.com/svn/wiki/figures/ex6_modal_fields.png
+
 
 === Degenerate modes ===
 This tutorial file is `ex6_degenerate_modes.py`
@@ -1124,10 +1186,12 @@ Plotter.plot_modes_in_grid([mc1,mc2,m1,m2], 'pe')
 
 Run this example to plot the electric polarizations of the two mode pairs, and note that the circularly polarized modes are orthogonal - the arrows on the circles point in opposite directions.
 
-http://polymode.googlecode.com/svn/wiki/figures/fig17_degenerate.png
+http://polymode.googlecode.com/svn/wiki/figures/ex6_degenerate_modes.png
 
 
 <wiki:comment>
+
+
 
 ----
 
