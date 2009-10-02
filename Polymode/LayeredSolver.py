@@ -24,7 +24,9 @@ import logging
 import pylab as pl
 import numpy as np
 import scipy as sp
+import numpy.linalg as la
 
+#To be depricated, should use above imports only
 from numpy import *
 
 from .Solver import *
@@ -97,11 +99,19 @@ class Layer(object):
         self.kp = k/(1-self.gammac*k)
         self.km = k/(1+self.gammac*k)
         self.Kpm = array([[-self.km, 0], [0, self.kp]])
-        self.V = array([[self.al, 1], [1, self.ar]])
+
+        #self.V = array([[self.al, 1], [1, self.ar]])
+        self.V = 0.5*array([[-self.ar, 1], [1, -self.al]])
+        
+        #Large Borhen's transform matrix
+        self.Vt = zeros((4,4), dtype=complex)
+        self.Vt[:2,:2] = self.V
+        self.Vt[2:,2:] = self.V
 
     def root(self, x):
         return branchsqrt(x)
 
+    @timer.time_function()
     def precalc(self, beta):
         Vm = self.km**2 - beta**2
         Vp = self.kp**2 - beta**2
@@ -118,6 +128,7 @@ class Layer(object):
         Vm, Vp, xim, xip, S = self.precalc_data
         return Vp
         
+    @timer.time_function()
     def calculate(self, beta, r, precalc=1):
         "Return the transfer matrix for this sinlge layer"
         kp, km = self.kp, self.km
@@ -133,6 +144,7 @@ class Layer(object):
         T = zeros(self.shape, dtype=complex_)
         T[:2, :Q.shape[1]] = dot(self.V, Q)*Vp
         T[2:, :Q.shape[1]] = -dot(dot(self.V, S), (beta*self.m*Q/r + dot(self.Kpm, dQ)))
+        #M = np.dot(self.Vt, self.M(beta, xim, xip, r))
         return T
 
     def field(self, beta, r, he=True, precalc=True):
@@ -168,6 +180,7 @@ class Layer(object):
         pass
 
 class HLayer(Layer):
+    @timer.time_function()
     def Q(self, xim, xip, r):
         m = self.m
         Z = zeros_like(r)
@@ -177,6 +190,40 @@ class HLayer(Layer):
         #Derivative of Q
         dQ = array([[xim*hankel1p(m, xim*r), Z, xim*hankel2p(m, xim*r), Z], 
                     [Z, xip*hankel1p(m, xip*r), Z, xip*hankel2p(m, xip*r)]])
+        return Q, dQ
+    @timer.time_function()
+    def M(self, beta, xim, xip, r):
+        km,kp,m = self.km,self.kp,self.m
+        Z = 0
+
+        Hm1 = hankel1(m, xim*r); Hm1p = hankel1p(m, xim*r)
+        Hm2 = hankel2(m, xim*r); Hm2p = hankel2p(m, xim*r)
+        Hp1 = hankel1(m, xip*r); Hp1p = hankel1p(m, xip*r)
+        Hp2 = hankel2(m, xip*r); Hp2p = hankel2p(m, xip*r)
+        
+        am=-m*beta/r/xim**2; ap=-m*beta/r/xip**2
+        bm=km/xim; bp=kp/xip
+        
+        M = array([[Hm1, Z, Hm2, Z], 
+                        [Z, Hp1, Z, Hp2],
+                        [am*Hm1+bm*Hm1p, Z, am*Hm2+bm*Hm2p, Z], 
+                        [Z, ap*Hp1-bp*Hp1p, Z, ap*Hp2-bp*Hp2p]])
+        return M
+
+class HLayerLargeR(Layer):
+    def Q(self, xim, xip, r):
+        m = self.m
+        Z = zeros_like(r)
+        
+        cfp = np.sqrt(2*pi/xip/r); cfm = np.sqrt(2*pi/xim/r)
+        ef1 = np.exp(-0.5j*(m+0.5)*np.pi); ef2 = np.exp(0.5j*(m+0.5)*np.pi)
+        
+        #Define the base Q
+        Q = array([[cfm*ef1*exp(1j*xim*r), Z, cfm*ef2*exp(-1j*xim*r), Z], 
+                    [Z, cfp*ef1*exp(1j*xip*r), Z, cfp*ef2*exp(-1j*xip*r)]])
+        #Derivative of Q
+        dQ = array([[1j*xim*cfm*ef1*exp(1j*xim*r), Z, -1j*xim*cfm*ef2*exp(-1j*xim*r), Z], 
+                    [Z, 1j*xip*cfp*ef1*exp(1j*xip*r), Z, -1j*xip*cfp*ef2*exp(-1j*xip*r)]])
         return Q, dQ
 
 class HLayerExterior(HLayer):
@@ -211,9 +258,9 @@ class JLayerInterior(Layer):
         dQ = array([[xim*jvp(m, xim*r), Z], [Z, xip*jvp(m, xip*r)]])
         return Q, dQ
 
-InteriorLayer=JLayerInterior
+InteriorLayer=HLayer
 MidLayer=HLayer
-ExteriorLayer=HLayerExterior
+ExteriorLayer=HLayer
 
 class LayeredMode(Mode):
     def normalize(self, by='power', wg=None, coord=None):
@@ -401,10 +448,44 @@ class LayeredSolver(Solve):
         self.C[:, 2:] = -Tn[:, :2]
         return self.C
 
+    @timer.time_function()
+    def reflection_matrix(self, beta, boundary_factors=True):
+        "Return a condition number for the matrix eigenvalue problem"
+
+        #Initial layer coefficient matrix
+        To = self.layers[0].calculate(beta, self.layers[0].r2)
+
+        #Final layer coefficient matrix
+        Tn = self.layers[-1].calculate(beta, self.layers[-1].r1)[:,:2]
+        
+        #Intermediate layers
+        for ii in range(self.Nlayer-2,0,-1):
+            layer = self.layers[ii]
+
+            M1 = layer.calculate(beta, layer.r1)
+            M2 = layer.calculate(beta, layer.r2, precalc=0)
+
+            Tn = np.dot(M1, la.solve(M2, Tn))
+
+        #V factor - better way to implement this?
+        if boundary_factors:
+            Tn /= self.layers[-1].multiplicative_factor()
+            To /= self.layers[0].multiplicative_factor()
+
+        Chi = linalg.solve(To, Tn)
+        C = eye(2) - np.dot(Chi[2:], la.inv(Chi[:2]))
+        
+        #Calculate the reduced reflection matrix so that
+        #The eigen problem becomes determining the
+        #problem (I - Chi21 Chi11^-1) R = 0
+        #Where R is the reflection coefficients
+        #C = To[2:] - np.dot(Tn[2:], la.solve(Tn[:2], To[:2]))
+        return C
+
     def get_jacobian(self, beta):
         pass
 
-    def det(self, betas, boundary_factors=False, remove_zeros=[]):
+    def condition(self, betas, boundary_factors=False, remove_zeros=[]):
         """Evaluate determinant of the eigenvalue matrix
         Zeros of the determinant indicate modes.
         multiply and divide by (k^2-beta^2) to give a better conditioned
@@ -412,26 +493,21 @@ class LayeredSolver(Solve):
         if iterable(betas):
             ans = zeros(shape(betas), complex)
             for inx in ndindex(*shape(betas)):
-                ans[inx] = self.det(betas[inx], boundary_factors, remove_zeros)
+                ans[inx] = self.condition(betas[inx], boundary_factors, remove_zeros)
 
         else:
-            ans = linalg.det(self.get_matrix(betas, boundary_factors))
-            for z in remove_zeros: ans /= (betas-z)
+            ans = la.det(self.reflection_matrix(betas, boundary_factors))
+            #for z in remove_zeros: ans /= (betas-z)
         return ans
 
-    def det_ri(self, bri):
+    def condition_ri(self, bri):
         "Interface for complex root finder"
         bf = self.boundary_factors
         prev_roots = self.found_roots
         
         beta = bri[0]+bri[1]*1j
-        #det = self.det(beta, boundary_factors=bf, remove_zeros=prev_roots)
-        det = self.det(beta, boundary_factors=bf)
+        det = self.condition(beta, boundary_factors=bf)
         return [det.real, det.imag]
-
-    def condition(self, betas):
-        cond = self.det(betas, boundary_factors=self.boundary_factors)
-        return absolute(cond)
 
     def calculate(self, number=inf):
         """
@@ -449,6 +525,7 @@ class LayeredSolver(Solve):
         #Put found roots to deflate from solution here
         #self.found_roots = list(unique1d([l.kp for l in self.layers]))
         self.found_roots = []
+        tixmean = 1
         
         #Iterate on list OR search over krange
         if self.nefflist is not None:
@@ -476,7 +553,8 @@ class LayeredSolver(Solve):
             logging.debug("Scanning %d points" % len(kscan.flat))
 
             #Calculate determinant of transfer matrix over range
-            tix = self.det(kscan, self.boundary_factors)
+            tix = self.condition(kscan, self.boundary_factors)
+            tixmean = mean(abs(tix))
             
             #Detect local minima/maxima
             possible_zc = find_sign_change(diff(absolute(tix)))[::-1]
@@ -486,20 +564,18 @@ class LayeredSolver(Solve):
         kk = 0
         for inx in possible_zc:
             inx = tuple(inx)
-            print "Possible neff:", kscan[inx]/k0
         
             #Try and locate closest root, if we fail go to the next in the list
-            logging.debug("Searching near: %s" % (kscan[inx]/k0))
             try:
-                bri  = sp.optimize.fsolve(self.det_ri, [kscan[inx].real, kscan[inx].imag], \
-                        warning=True, xtol=1e-12)
+                bri  = sp.optimize.fsolve(self.condition_ri, [kscan[inx].real, kscan[inx].imag], \
+                        warning=False, xtol=1e-12)
                 root = complex(*bri)
             except RuntimeError: #linalg.LinAlgError:
                 continue
             dkr = (krange[1]-krange[0])/100
             kr = arange(real(krange[0])+dkr, real(krange[1])-dkr, dkr)
 
-            logging.info("Found possible mode neff: %s" % (root/k0))
+            logging.debug("Found possible mode neff: %s" % (root/k0))
             
             #ignore those outside the range
             if real(root)<krange[0] or real(root)>krange[1]:
@@ -507,7 +583,7 @@ class LayeredSolver(Solve):
                 continue
 
             #Ignore those with a large residue
-            res = abs(self.det(root))
+            res = abs(self.condition(root))
             if res>self.tolerance:
                 logging.info("Rejecting inaccurate solution %.6g" % res)
                 continue
@@ -534,10 +610,10 @@ class LayeredSolver(Solve):
             kr = arange(real(krange[0])+dkr, real(krange[1])-dkr, dkr)
             
             #Calculate determinant of transfer matrix over range
-            tix = self.det(kr, self.boundary_factors)
+            tix = self.condition(kr, self.boundary_factors)
             pl.plot(real(kr/k0), abs(tix), 'g-')
-            tix = self.det(kr, self.boundary_factors, self.found_roots)
-            pl.plot(real(kr/k0), abs(tix), 'b--')
+            #tix = self.det(kr, self.boundary_factors, self.found_roots)
+            #pl.plot(real(kr/k0), abs(tix), 'b--')
 
             for m in self.modes:
                 pl.plot([real(m.neff)]*2, [min(abs(tix)), max(abs(tix))], 'k:')
@@ -602,9 +678,6 @@ class LayeredSolverCauchy(LayeredSolver):
         self.default_calc_size = (Ncoord, 1)
         self.debug_plot=debug_plot
         
-    def det_cauchy(self, betas):
-        return self.det(betas, self.boundary_factors)
-
     def calculate(self, number=inf):
         from .mathlink.cauchy_findzero import findzero_carpentier as findzero
         
@@ -649,7 +722,7 @@ class LayeredSolverCauchy(LayeredSolver):
             R=min(Rscan, abs(krange[1]-kcenter), abs(krange[0]-kcenter))*(1-1e-8)
             
             #Try and locate closest root, if we fail go to the next in the list
-            curr_roots  = findzero(self.det_cauchy, z0=kcenter, N=self.Ncalculate, R=R, maxiter=5, tol=self.tolerance, quiet=False)
+            curr_roots  = findzero(self.condition, z0=kcenter, N=self.Ncalculate, R=R, maxiter=5, tol=self.tolerance, quiet=False)
 
             for root in curr_roots:
                 logging.info("Found possible root")
@@ -660,7 +733,7 @@ class LayeredSolverCauchy(LayeredSolver):
                     continue
 
                 #Ignore those with a large residue
-                res = abs(self.det(root))
+                res = abs(self.condition(root))
                 if res>self.tolerance:
                     logging.info("Rejecting inaccurate solution")
                     continue
@@ -685,7 +758,7 @@ class LayeredSolverCauchy(LayeredSolver):
             kr = arange(real(krange[0])+dkr, real(krange[1])-dkr, dkr)
 
             #Calculate determinant of transfer matrix over range
-            tix = self.det_cauchy(kr)
+            tix = self.condition(kr)
             pl.plot(real(kr), abs(tix), 'b--')\
             
             for m in self.modes:

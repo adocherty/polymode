@@ -48,6 +48,8 @@ from __future__ import division
 import logging
 
 import numpy as np
+
+#To be depricated, should use above imports only
 from numpy import *
 
 from . import Material, Waveguide, Equation, Modes
@@ -331,9 +333,16 @@ class WavelengthTrack(Solve):
         
         #Tracking modes
         Nm = len(modes)
+
+        #Bail if we can't find any modes to start with
+        if Nm<1:
+            logging.error("No modes found with intial solver parameters, wavelength track aborted")
+            return []
+        else:
+            logging.info("Now tracking %d modes" % Nm)
+
         dneffdwl = zeros(Nm, complex_)
         modes_track = [m.copy() for m in modes]
-
         num_eval_backtrack = num_eval = 0
         do_update=True
 
@@ -537,7 +546,7 @@ class WavelengthScan(Solve):
             neffs = np.arange(neffrange[0], neffrange[1], dneff)
             
             #Scan over beta range
-            self.Cscan[ii] = self.solver.condition(neffs*self.solver.k0)
+            self.Cscan[ii] = np.abs(self.solver.condition(neffs*self.solver.k0))
             self.neffscan[ii] = neffs
 
         return self.Cscan
