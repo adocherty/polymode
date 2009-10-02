@@ -45,9 +45,11 @@ export_to_nader(solver, prefix="")
  - Export waveguide.in and input_paramters.in to be read by Nader's solver
 """
 from __future__ import division
-
 import logging
+
+import numpy as np
 from numpy import *
+
 from . import Material, Waveguide, Equation, Modes
 
 # Cached random functions
@@ -97,6 +99,7 @@ class Solve(object):
         self.dependancies = []              #Don't run this solver until these are true
         self.label = label                          #Custom label to identify the solver
         self.dtype = complex128
+        self.modes = []
 
         #Setup equation with default parameters, can call it to customize
         #Solver specific paramters
@@ -288,7 +291,7 @@ class Solve(object):
         self.is_finalized = True
 
 
-class WavelengthTrackingSolver(Solve):
+class WavelengthTrack(Solve):
     '''
     Track modes over a wavelength range with adaptive step size
     '''
@@ -483,6 +486,74 @@ class WavelengthTrackingSolver(Solve):
             
             #plot([(m1.wavelength+m2.wavelength)/2], [dneffm], 'rs')
             #plot([m1.wavelength], [dneffc], 'bo')
+
+
+class WavelengthScan(Solve):
+    '''
+    Scan over a wavelength range and plot a condition number for the modal
+    eigenvalue problem. The exact nature of this condition number depends
+    upon the nature of the algorithm in the supplied solver
+    '''
+    def __init__(self, solver, Nscan=(20,100)):
+        self.solver = solver
+        self.Nscan = Nscan
+
+        #The condition number scan is stored here
+        self.Cscan = np.zeros(self.Nscan, dtype=float)
+        self.neffscan = np.zeros(self.Nscan, dtype=float)
+        
+        Solve.__init__(self, solver.wg, compress_to_size=solver.compress_to_size)
+    
+    def initialize(self, wl_range, m0=0, **kwargs):
+        self.wl_range = wl_range
+        
+        self.m0 = m0
+        self.solver.initialize(wl_range[0], m0, **kwargs)
+
+        if 'neffrange' in kwargs:
+            self.neffrange = kwargs['neffrange']
+        else:
+            self.neffrange = None
+
+    def calculate(self, number=inf):
+        import pylab as pl
+        solver = self.solver
+
+        #Setup wavelengths
+        dwl = (self.wl_range[1]-self.wl_range[0])/self.Nscan[0]
+        wls = np.arange(self.wl_range[0], self.wl_range[1], dwl)
+
+        for ii,wl in enumerate(wls):
+           #Update wavelength
+            self.solver.initialize(wl, self.m0)
+
+            #Range to scan
+            if self.neffrange is None:
+                neffrange=self.wg.index_range(wl)
+            else:
+                neffrange=self.neffrange
+
+            dneff = (neffrange[1]-neffrange[0])/self.Nscan[1]
+            neffs = np.arange(neffrange[0], neffrange[1], dneff)
+            
+            #Scan over beta range
+            self.Cscan[ii] = self.solver.condition(neffs*self.solver.k0)
+            self.neffscan[ii] = neffs
+
+        return self.Cscan
+        
+    def plot(self, style={}):
+        import pylab as pl
+
+        dwl = (self.wl_range[1]-self.wl_range[0])/self.Nscan[0]
+        wls = np.arange(self.wl_range[0], self.wl_range[1], dwl)
+        wlscan = wls[:,newaxis] + 0*self.neffscan
+        
+        pl.pcolor(wlscan, self.neffscan, np.log10(self.Cscan), **style)
+
+        if 0:
+            pl.plot(betascan/self.solver.k0, self.Cscan[ii])
+
 
 
 def batch_file_save(solvers, filename=None):

@@ -332,6 +332,11 @@ class LayeredSolver(Solve):
         self.default_calc_size = (Ncoord, 1)
         self.debug_plot=debug_plot
 
+    def initialize(self, wl, *args, **kwargs):
+        Solve.initialize(self, wl, *args, **kwargs)
+        
+        self.setup_layers()
+
     def setup_layers(self):
         #Construct layers
         self.layers = self.wg.calculate_radial_layers(self.wl)
@@ -410,10 +415,8 @@ class LayeredSolver(Solve):
                 ans[inx] = self.det(betas[inx], boundary_factors, remove_zeros)
 
         else:
-            A = self.get_matrix(betas, boundary_factors)
-            ans = linalg.det(A)
-            for z in remove_zeros:
-              ans /= (betas-z)
+            ans = linalg.det(self.get_matrix(betas, boundary_factors))
+            for z in remove_zeros: ans /= (betas-z)
         return ans
 
     def det_ri(self, bri):
@@ -422,8 +425,13 @@ class LayeredSolver(Solve):
         prev_roots = self.found_roots
         
         beta = bri[0]+bri[1]*1j
-        det = self.det(beta, boundary_factors=bf, remove_zeros=prev_roots)
+        #det = self.det(beta, boundary_factors=bf, remove_zeros=prev_roots)
+        det = self.det(beta, boundary_factors=bf)
         return [det.real, det.imag]
+
+    def condition(self, betas):
+        cond = self.det(betas, boundary_factors=self.boundary_factors)
+        return absolute(cond)
 
     def calculate(self, number=inf):
         """
@@ -435,7 +443,6 @@ class LayeredSolver(Solve):
         logging.info("Searching range of neffs: %.5g -> %.5g" % (krange[0]/k0, krange[1]/k0))
 
         #Create layers from waveguide
-        self.setup_layers()
         modecoord = coordinates.PolarCoord(N=self.default_calc_size, \
                     rrange=(0, self.layers[-1].r1), arange=(-pi, pi))
         
@@ -479,16 +486,18 @@ class LayeredSolver(Solve):
         kk = 0
         for inx in possible_zc:
             inx = tuple(inx)
-            print "Possible zc:", kscan[inx]
+            print "Possible neff:", kscan[inx]/k0
         
             #Try and locate closest root, if we fail go to the next in the list
             logging.debug("Searching near: %s" % (kscan[inx]/k0))
             try:
                 bri  = sp.optimize.fsolve(self.det_ri, [kscan[inx].real, kscan[inx].imag], \
-                        warning=False, xtol=1e-12)
+                        warning=True, xtol=1e-12)
                 root = complex(*bri)
-            except linalg.LinAlgError:
+            except RuntimeError: #linalg.LinAlgError:
                 continue
+            dkr = (krange[1]-krange[0])/100
+            kr = arange(real(krange[0])+dkr, real(krange[1])-dkr, dkr)
 
             logging.info("Found possible mode neff: %s" % (root/k0))
             
@@ -521,16 +530,17 @@ class LayeredSolver(Solve):
                 break
 
         if self.debug_plot:
-            print self.found_roots
+            dkr = (krange[1]-krange[0])/100
+            kr = arange(real(krange[0])+dkr, real(krange[1])-dkr, dkr)
             
             #Calculate determinant of transfer matrix over range
-            tix = self.det(kscan, self.boundary_factors)
-            pl.plot(real(kscan), abs(tix), 'g-')
-            tix = self.det(kscan, self.boundary_factors, self.found_roots)
-            pl.plot(real(kscan), abs(tix), 'b--')
+            tix = self.det(kr, self.boundary_factors)
+            pl.plot(real(kr/k0), abs(tix), 'g-')
+            tix = self.det(kr, self.boundary_factors, self.found_roots)
+            pl.plot(real(kr/k0), abs(tix), 'b--')
 
             for m in self.modes:
-                pl.plot([real(m.beta)]*2, [min(abs(tix)), max(abs(tix))], 'k:')
+                pl.plot([real(m.neff)]*2, [min(abs(tix)), max(abs(tix))], 'k:')
 
         #Sort modes in finalization method
         self.modes.sort()
@@ -592,6 +602,9 @@ class LayeredSolverCauchy(LayeredSolver):
         self.default_calc_size = (Ncoord, 1)
         self.debug_plot=debug_plot
         
+    def det_cauchy(self, betas):
+        return self.det(betas, self.boundary_factors)
+
     def calculate(self, number=inf):
         from .mathlink.cauchy_findzero import findzero_carpentier as findzero
         
@@ -636,7 +649,7 @@ class LayeredSolverCauchy(LayeredSolver):
             R=min(Rscan, abs(krange[1]-kcenter), abs(krange[0]-kcenter))*(1-1e-8)
             
             #Try and locate closest root, if we fail go to the next in the list
-            curr_roots  = findzero(self.det, z0=kcenter, N=self.Ncalculate, R=R, maxiter=5, tol=self.tolerance, quiet=False)
+            curr_roots  = findzero(self.det_cauchy, z0=kcenter, N=self.Ncalculate, R=R, maxiter=5, tol=self.tolerance, quiet=False)
 
             for root in curr_roots:
                 logging.info("Found possible root")
@@ -668,11 +681,11 @@ class LayeredSolverCauchy(LayeredSolver):
                 break
 
         if self.debug_plot:
-            dkr = (krange[1]-krange[0])/1000
+            dkr = (krange[1]-krange[0])/100
             kr = arange(real(krange[0])+dkr, real(krange[1])-dkr, dkr)
 
             #Calculate determinant of transfer matrix over range
-            tix = self.det(kr)
+            tix = self.det_cauchy(kr)
             pl.plot(real(kr), abs(tix), 'b--')\
             
             for m in self.modes:
