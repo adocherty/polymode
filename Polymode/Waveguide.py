@@ -2010,7 +2010,7 @@ class Waveguide(object):
 
         #Final exterior layer - also check for chirality!
         if last.n==next:
-            new_layers[-1] = ExteriorLayer(last.r1,last.r2,last.n,zorder=last.zorder)
+            new_layers[-1] = ExteriorLayer(last.r1,inf,last.n,zorder=last.zorder)
         else:
             new_layers.append(ExteriorLayer(layer.r2,inf,next))
         return new_layers
