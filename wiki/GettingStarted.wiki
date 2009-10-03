@@ -1,4 +1,5 @@
 #summary Installing and running the Polymode software
+#labels Phase-Deploy
 
 = Running Polymode on Windows =
 
@@ -109,28 +110,67 @@ download them or build them according to the [http://www.scipy.org/Installing_Sc
 
 Finally, build Polymode using the command:
 {{{
-	python.exe setup.py config --compiler=mingw32 build --compiler=mingw32 bdist_wininst
+python.exe setup.py config --compiler=mingw32 build --compiler=mingw32 bdist_wininst
 }}}
 
 _This currently doesn't work as the block lu solver requires Boost, it will be fixed soon hopefully!_
 
 == Installing on Linux/Mac OSX ==
 
+For Ubuntu Jaunty Jackalope (9.04) and later with Python 2.6 installed there are binary downloads available on the `downloads` page.
+
 Some prerequisites are required before Polymode can be installed. These are the python interpreter, an interactive python shell (IPython), numerical python (numpy and scipy) and the Matplotlib plotting library (matplotlib). These can be installed automatically on most linux distributions.
 
 On Ubuntu execute the command:
 {{{
-sudo aptitude install ipython python-matplotlib python-numpy python-scipy
+sudo aptitude install ipython python-matplotlib python-numpy python-scipy python-setuptools
 }}}
 
-For Mac OS X the website http://trichech.us/?page_id=5 hosts an all-in one installer for all of the dependencies.
-
-If these install correctly then Polymode can be installed using the command:
+To enable the block LU solver on Ubuntu Karmic (9.10) install the boost libraries:
 {{{
-python setup_numpy.py install
+sudo aptitude install libboost-python1.38-0
+}}}
+
+Finally, download the appropriate egg file for your distribution (32 bit or 64 bit) and install with Setuptools:
+{{{
+sudo easy_install [name of egg file]
+}}}
+
+=== Building from source ===
+
+To compile the code from source, you'll need to install some development packages. In particular a fortran compiler, Atlas libraries, numpy and Python development packages and boost c++ development libraries.
+
+On Ubuntu these requirements can be installed with the command:
+{{{
+sudo aptitude install build-essential gfortran libatlas-sse-dev subversion python-dev
+                      libboost-dev
+}}}
+
+Get the software source from the repository:
+{{{
+cd <path_to_source_dir>
+svn checkout http://polymode.googlecode.com/svn/trunk/ polymode
+}}}
+
+And now you can compile the package using:
+{{{
+cd <path_to_source_dir>/polymode
+python setup.py build
+sudo python setup.py install
 }}}
 
 This should build and install the package for you, if the prerequisites are also installed.
+
+Alternatively an Setuptools egg package can be built with the command:
+{{{
+python setup.py bdist_egg
+}}}
+
+=== Installing on Mac OS X ===
+
+Currently there is no compiled package for OS X. Numpy, scipy and matplotlib are available in the form of an all-in one installer on the website http://trichech.us/?page_id=5.
+
+At this time the package needs to be compiled from source.
 
 === Installing on the APAC Altix Cluster computers ===
 Precompiled versions of the prerequisites for running computing jobs on the APAC Alitx cluster computers are available. Copy these files and the install file to the APAC computers and run the "install.sh" file. It will ask you for a directory and install the required files to it. You will need to add the some commands to your profile file to complete the installation, the installer will tell you what to add.
