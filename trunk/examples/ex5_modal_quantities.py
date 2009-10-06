@@ -33,5 +33,5 @@ for m in modes:
     print "Wavelength:", m.wl
 
     print "Group index:", m.group_index(wg)
-    print "Propagation contant from integral:", m.integral_propagation_lossless(wg)
+    print "Propagation contant from integral:", m.integral_propagation(wg)
     print "Proportion of power in core:", real(m.mode_power(r=wg.core_size)/m.mode_power())
