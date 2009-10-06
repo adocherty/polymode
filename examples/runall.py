@@ -69,3 +69,5 @@ runtut('ex7_birefringent_fiber')
 runtut('ex7_birefringent_fiber_2')
 
 runtut('ex8_kagome_fiber')
+runtut('ex8_bragg_fiber')
+

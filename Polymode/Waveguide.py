@@ -1816,7 +1816,7 @@ class Waveguide(object):
 
         # Use a pretty high value for the calculation bandwidth to give good
         # accuracy in the mode calculations
-        dbw = 7
+        dbw = 5
         
         return WgCoord(rmax, rmin, symmetry=self.symmetry,
                 reflect=self.reflect, Nshape=Nshape, border=border, bandwidth=dbw)

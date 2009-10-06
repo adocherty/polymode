@@ -281,7 +281,7 @@ class Solve(object):
                 mode.store_calculated_electric_field(wg=self.wg, force=self.force_electric_calculation)
 
                 if self.compress_to_size is not None:
-                    mode.compress(self.wg, self.compress_to_size)
+                    mode.compress(self.compress_to_size, self.wg)
 
                 #Add extension for behaviour outside the computational domain
                 mode.normalize(wg=self.wg)
@@ -516,6 +516,11 @@ class WavelengthTrack(Solve):
         """
         Plotter.plot_mode_properties(self.modes, 'neff', 'wl', style=style)
 
+    def finalize(self):
+        #Modes should be already finalized by the subordinate solver,
+        #Here we should just sort them by wavelength
+        self.modes.sort(cmp=lambda x,y: cmp(x.wl,y.wl))
+
 
 class WavelengthScan(Solve):
     '''
@@ -564,6 +569,11 @@ class WavelengthScan(Solve):
         """
         Plotter.plot_mode_properties(self.modes, 'neff', 'wl', style=style)
 
+    def finalize(self):
+        #Modes should be already finalized by the subordinate solver,
+        #Here we should just sort them by wavelength
+        self.modes.sort(cmp=lambda x,y: cmp(x.wl,y.wl))
+
 
 class WavelengthConditionScan(Solve):
     '''
@@ -602,7 +612,7 @@ class WavelengthConditionScan(Solve):
         dwl = (self.wl_range[1]-self.wl_range[0])/self.Nscan[0]
         for ii in range(self.Nscan[0]):
             wl = self.wl_range[0] + ii*dwl
-            print "Calculating scan at %d of %d points" % (ii, self.Nscan[0])
+            logging.info("Calculating scan at %d of %d points" % (ii+1, self.Nscan[0]))
             
             #Update wavelength
             self.solver.initialize(wl, *self.solver_args)
@@ -631,13 +641,15 @@ class WavelengthConditionScan(Solve):
         wlscan = self.wlscan[:,newaxis] + 0*self.neffscan
         
         #We need to plot it twice otherwise it introduces odd lines
-        pl.contourf(wlscan, self.neffscan, np.log10(self.Cscan), 50, **style)
-        pl.contourf(wlscan, self.neffscan, np.log10(self.Cscan), 50, **style)
+        pl.contourf(wlscan, self.neffscan, np.log10(self.Cscan), 100, **style)
+        pl.contourf(wlscan, self.neffscan, np.log10(self.Cscan), 100, **style)
 
         if 0:
             pl.plot(betascan/self.solver.k0, self.Cscan[ii])
             pl.pcolor(wlscan, self.neffscan, np.log10(self.Cscan), **style)
 
+    def finalize(self):
+        pass
 
 def batch_file_save(solvers, filename=None):
     "Save solvers in batch file for later solution"

@@ -4,7 +4,7 @@ from Polymode import *
 
 ## Parameters:
 sym = 6
-Nx = (300,21)
+Nx = (300,31)
 
 ## Materials
 air = Material.Air()
@@ -12,7 +12,7 @@ pmma = Material.PMMA()
 
 wg = Waveguide.Waveguide(material=pmma, symmetry=sym)
 
-layers = 3
+layers = 2
 D = 6.0
 d = 4.0
 
@@ -27,7 +27,7 @@ solver = NLSolver.DefaultSolver(wg, Nx)
 wlsolver = Solver.WavelengthTrack(solver)
 
 wlrange=[1.0,1.5]
-modes = wlsolver(wlrange, 0, nefflist=[1.3])
+modes = wlsolver(wlrange, 1, number=1)
 
 subplot(121)
 Plotter.plot_mode_properties(modes, 'neff', 'wl')

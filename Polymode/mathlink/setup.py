@@ -5,10 +5,12 @@ from numpy.distutils.core import setup
 from numpy.distutils.misc_util import Configuration
 
 #Misc compilation flags
-_ublock_compile = False
+_ublock_compile = True
 _ublock_compile_with_openmp = True
-_ublock_boost_prefix = "/opt/boost"
-_ublock_boost_lib = "boost_python-gcc43-mt"
+_ublock_boost_prefix = None
+
+#_ublock_boost_prefix = "/opt/boost"
+#_ublock_boost_lib = "boost_python-gcc43-mt"
 
 try:
     import Cython.Compiler.Main
@@ -79,7 +81,7 @@ def configuration(parent_package='', top_path=None):
         ublock_libraries += boost_src['libraries']
     elif _ublock_boost_prefix:
         print "Using user configured boost-python"
-        boost_include_dir = join(_ublock_boost_prefix,'inlcude')
+        boost_include_dir = join(_ublock_boost_prefix,'include')
         boost_library_dir = join(_ublock_boost_prefix,'lib')
         ublock_library_dirs=[boost_library_dir]
         ublock_include_dirs=['ublas_block_lu', boost_include_dir]
