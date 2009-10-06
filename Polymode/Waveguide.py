@@ -1385,10 +1385,13 @@ class AnnularCombine(Combine):
         minphi = min([min(shape.extents()[2:]) for shape in shapes])
         maxphi = max([max(shape.extents()[2:]) for shape in shapes])
     
+        #The width of the annuli, note that this is 2pi/symm if the
+        #number of azimuthal points is one (ie the entire sector)
+        dphi = self.coord.dphi
+
         #Calculate azimuthal coordinates, calculate annuli over 2*pi range to
         #automatically wrap the shapes to the symmetry sector or just in one
         #sector to discard bits of shapes outside the sector
-        dphi = self.coord.dphi
         if self.limit_to_sector:
             phiv = self.coord.calc_phiv()
         else:
@@ -1403,7 +1406,7 @@ class AnnularCombine(Combine):
         new_annuli = self.annuli
         for shape in shapes:
             shape_annuli = shape.get_annuli(phiv, dphi)
-    
+            
             ai=0
             while ai<len(shape_annuli):
                 a = shape_annuli[ai]
@@ -1490,8 +1493,7 @@ class AnnularCombine(Combine):
     def generate(self, ri):
         """
         After all shapes have given their annuli
-        * calculate the index with mesh averaging
-        * calcualte the differences with mesh averaging
+        calculate the refractive index with mesh averaging
         """
         Nr,Naz = self.coord.rv.shape[0], self.coord.phiv.shape[0]
         dm = self.coord.symmetry; dr = self.coord.dr
@@ -1645,18 +1647,17 @@ class Waveguide(object):
     """
     A waveguide object representing the crossectional fiber structure.
     
-    Optional arguments are:
-        rmin:       minimum radius of the computation (default is currently zero)
-        rmax:       maximum radius of the computation (default is automatic)
+    Paramters
+    ---------
+    rmin : minimum radius of the computation (default is currently zero)
+    rmax : maximum radius of the computation (default is automatic)
 
-        material:   a Material object giving the substrate material for the waveguide
-        interior:       interior material (defaults to material)
-        exterior:       exterior material (defaults to material)
-        symmetry:   rotational symmetry of the waveguide
+    material : a Material object giving the substrate material for the waveguide
+    interior : interior material (defaults to material)
+    exterior : exterior material (defaults to material)
+    symmetry : rotational symmetry of the waveguide
     
-        oversample:     how finely sliced the objects are in the azimuthal direction
-        reflect:            (Currently not used)
-    
+    oversample : how finely sliced the objects are in the azimuthal direction
     """
     #Proportion of radius to leave between last object and waveguide boundary
     #Defaults the maximum of 2% or 2 computational nodes
@@ -1767,6 +1768,7 @@ class Waveguide(object):
                 core_material = s.material
 
         return core_material
+
     def _set_interior_material(self, mat):
         self.interior_material_manual = mat
     interior_material = property(_calc_interior_material, _set_interior_material)
@@ -1880,7 +1882,7 @@ class Waveguide(object):
     # +-----------------------------------------------------------------------+
     # | Index functions
     # +-----------------------------------------------------------------------+
-    def calculate(self, coord, wl, mask=None, resample=None):
+    def calculate(self, coord, wl, mask=None, resample=None, oversample=None):
         '''
         Calculates the refractive index for the grid of shape Nshape iterating
         over all included shapes. Returns a combined index object.
@@ -1901,6 +1903,10 @@ class Waveguide(object):
         if not self.quiet:
             logging.info( "Generating Waveguide from %d object%s; rmax:%.2g, Nr:%d, Naz:%d" \
                 % (misc.numands(len(self.shapes)) + (self.rmax, coord.Nr, coord.Naz)) )
+
+        #Override oversampling
+        if oversample is None:
+            oversample = self.oversample
 
         #Check boundary padding
         rshapes = self.get_rmax(boundary_padding=0)
@@ -1923,7 +1929,7 @@ class Waveguide(object):
         dmerge = DirectCombine(coord)
         for shape in self.shapes:
             if hasattr(shape, "get_annuli"):
-                amerge.merge_shapes([shape], oversample = self.oversample)
+                amerge.merge_shapes([shape], oversample = oversample)
         
             elif hasattr(shape, "get_index"):
                 #Does not yet support oversampling
@@ -2083,7 +2089,7 @@ class Waveguide(object):
     # +-----------------------------------------------------------------------+
 
     ## Plot the waveguide .. must provide resolution
-    def plot_bitmap(self, Nx=(200,21), coord=None, average=False, sectors=None, wl=1, **opts):
+    def plot_bitmap(self, Nx=(200,21), wl=1, coord=None, average=False, sectors=None,**opts):
         '''
         Plots the refractive index of the waveguide and included shapes at the
         given wavelength. The wavelength defaults to 1.
@@ -2108,7 +2114,8 @@ class Waveguide(object):
         if coord is None: coord = self.get_coord(Nx, border=0)
 
         #Calculate the refractive index
-        inx = fft.fftshift(self.index(wl, coord=coord), axes=[1])
+        nix = self.calculate(coord, wl)
+        inx = fft.fftshift(sqrt(nix.ni2), axes=[1])
 
         #Refractive index of all materials in waveguide
         materials = [shape.material for shape in self.shapes] + [self.material]
