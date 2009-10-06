@@ -38,7 +38,7 @@ for i in range(Nrings):
 solver = NLSolver.DefaultSolver(wg, Nx)
 
 #Solve at difference wavelengths
-wls=arange(1.1,1.5,0.0025)
+wls=arange(1.18,1.6,0.005)
 
 modes=[]
 allmodes=[]
@@ -49,7 +49,7 @@ for wl in wls:
         modes = solver(wl, m0, modelist=modes)
     else:
         neffapprox=silica.index(wl)
-        modes = solver(wl, m0, neffapprox, number=4)
+        modes = solver(wl, m0, neffapprox, number=2)
 
     if len(modes)>1:
         #Find x polarized mode:

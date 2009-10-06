@@ -888,7 +888,7 @@ class SiO2GeO2(ClassiusMorlotti):
     __doc__ = utf8out(u"Silica (SiO₂) doped with a molar fraction f of Germania (GeO₂)")
     name = "Silica doped with Germania"
     citation = "Sunak, H.R.D.; Bastien, S.P., Photonics Technology Letters V1 N6 142-145, 1989"
-    color = 'lawngreen'
+    color = 'lightgreen'
     wl_limits = (0.6,1.8)
     
     B = aa_([0.2045154578, 0.06451676258, 0.1311583151])
@@ -903,7 +903,7 @@ class SiO2Fl(ClassiusMorlotti):
     __doc__ = utf8out(u"Silica (SiO₂) doped with a molar fraction f of Flourine")
     name = "Silica doped with Flourine"
     citation = "Sunak, H.R.D.; Bastien, S.P., Photonics Technology Letters V1 N6 142-145, 1989"
-    color = 'lawngreen'
+    color = 'cornsilk'
     wl_limits = (0.6,1.8)
     
     B = aa_([0.2045154578, 0.06451676258, 0.1311583151])

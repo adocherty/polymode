@@ -2,43 +2,50 @@ from numpy import *
 from Polymode import *
 
 ## Waveguide Parameters:
-Nx=200,41               #number of radial & azimuthal points
+Nx=300,61               #number of radial & azimuthal points
 wl = 1.2
 m0 = 1
 
 ## Materials
 silica = Material.Silica()
-high = Material.SiO2GeO2(0.2)   #Silica with 20% Germania
-clad = Material.SiO2Fl(0.011)           #Silica with 1.1% Flourine
+mhigh = Material.SiO2GeO2(0.25)           #Silica with 20% Germania
+mlow = Material.SiO2Fl(0.011)           #Silica with 1.1% Flourine
 
 ## Create waveguide
-wg = Waveguide.Waveguide(material=clad, symmetry=2)
+wg = Waveguide.Waveguide(material=silica, symmetry=2)
 
 #Construct some shapes to put in the waveguide
-radius1 = 3.5
-radius2 = 3
-D = 6.8
-Nrings = 2
+D = 8.0
+radius1 = D/2
+radius2 = D/4
+Nrings = 4
+
+rcladding = (2*Nrings+1)*radius1
 
 #Refractive index function
 fn_parabolic = lambda d: 1-(d/3)**2
 
-#Construct the waveguide
+#The low index cladding - put it below other shapes
+cladding = Waveguide.Circle(mlow, center=(0,0), radius=rcladding, zorder=-1)
+
+#The high index core
 core = Waveguide.Circle(silica, center=(0,0), radius=radius1)
+
+#The high index inclusions
 rings = []
 for i in range(Nrings):
     rings += [ Waveguide.Circle(silica, center=((i+1)*D,0), radius=radius1) ]
-    inclusion = Waveguide.Circle(high, center=((i+1)*D,0), radius=radius2, zorder=1)
+    inclusion = Waveguide.Circle(mhigh, center=((i+1)*D,0), radius=radius2, zorder=1)
     inclusion.set_index_function(fn_parabolic, background=silica)
     rings += [ inclusion ]
 
-wg.add_shapes(core, rings)
+wg.add_shapes(core, cladding, rings)
 
 #Create the solver
 solver = NLSolver.DefaultSolver(wg, Nx)
 
 #Find the two modes closest to the RI of the core
-modes = solver(wl, m0, silica.index(wl),  number=2)
+modes = solver(wl, m0, 1.446,  number=2)
 
 Plotter.plot_modes_in_grid(modes, 'sz', cartesian=1)
 Plotter.plot_modes_in_grid(modes, 'vectore', wg=wg)
