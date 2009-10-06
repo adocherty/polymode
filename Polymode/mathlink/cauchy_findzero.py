@@ -3,6 +3,7 @@ from __future__ import division
 
 import numpy as np
 import pylab as pl
+import numpy.linalg as la
 
 from numpy import pi, exp, arange, zeros, ones, real, imag, dot, roots, absolute, inf, roll, log, unwrap, linalg
 from numpy import array, angle
@@ -29,17 +30,17 @@ def findzero_delves(f, fprime, z0=0, R=1, N=None, alpha=1, trange=None, tol=1e-6
     while (residue>tol) and (niter<maxiter):
         #Evaluate function on circle radius R
         dt = 2*pi/Nt
-        thetas = arange(trange[0], trange[1], dt)
+        thetas = np.arange(trange[0], trange[1], dt)
 
         #Calculate Phi'(t)/Phi(t)
-        zs = R*exp(1j*thetas)
+        zs = R*np.exp(1j*thetas)
         phi = fprime(zs+z0)/f(zs+z0)*1j*zs/alpha
 
         if _CROOT_PLOTRESULTS>1:
-            pl.plot(thetas, unwrap(angle(phi)), 'r--')
+            pl.plot(thetas, np.unwrap(np.angle(phi)), 'r--')
 
         #Estimate number of zeros
-        I0 = real(1/(2*pi*1j)*sum(phi)*dt)
+        I0 = np.real(1/(2*pi*1j)*np.sum(phi)*dt)
         K = int(round(I0))
 
         #Reject K too large or too small
@@ -48,23 +49,23 @@ def findzero_delves(f, fprime, z0=0, R=1, N=None, alpha=1, trange=None, tol=1e-6
             return array([])
 
         #Evaluate integral by trapezoidal rule
-        I = zeros(K, complex)
+        I = np.zeros(K, np.complex_)
         for k in range(K):
-            I[k] = 1/(2*pi*1j)*sum(zs**(k+1)*(phi))*dt
+            I[k] = 1/(2*pi*1j)*np.sum(zs**(k+1)*(phi))*dt
 
         #Solve for the coefficients
-        ac = zeros(K+1, complex)
+        ac = np.zeros(K+1, np.complex_)
         ac[0] = 1.0
         for k in range(K):
-            ac[k+1] = - dot(ac[k::-1], I[:k+1])/(k+1)
+            ac[k+1] = - np.dot(ac[k::-1], I[:k+1])/(k+1)
 
-        calc_roots = roots(ac)
+        calc_roots = np.roots(ac)
 
         if _CROOT_PLOTRESULTS>0:
             pl.plot(calc_roots.real, calc_roots.imag, 'b.')
 
         #Check error
-        residue = absolute(f(calc_roots+z0)).max()
+        residue = np.absolute(f(calc_roots+z0)).max()
 
         #Increase resolution
         Nt = 2*Nt
@@ -95,21 +96,21 @@ def findzero_adr(f, z0=0, R=1, N=None, nroot=None, tol=1e-6, alpha=1, quiet=Fals
     while (residue>tol) and (niter<maxiter):
         #Evaluate function on circle radius R
         dt = T/Nt
-        thetas = arange(trange[0],trange[1],dt)
+        thetas = np.arange(trange[0],trange[1],dt)
 
         #Careful to 'unwrap' the phase
-        zs = R*exp(1j*thetas)
+        zs = R*np.exp(1j*thetas)
         fz = f(zs+z0)
         #fz = abs(fz)*exp(1j*unwrap(angle(fz)/alpha)*alpha)
 
         if _CROOT_PLOTRESULTS>1:
-            pl.plot(thetas, unwrap(angle(1/fz)), 'r--')
+            pl.plot(thetas, np.unwrap(np.angle(1/fz)), 'r--')
 
         #Check for zeros close to the boundary
 
         #Number of roots enclosed
         if nroot is None:
-            I0 = (unwrap(angle(fz))[-1]-unwrap(angle(fz))[0])/(2*pi)
+            I0 = (np.unwrap(np.angle(fz))[-1]-np.unwrap(np.angle(fz))[0])/(2*pi)
             K = int(round(I0))
         else:
             I0 = K = nroot
@@ -121,18 +122,18 @@ def findzero_adr(f, z0=0, R=1, N=None, nroot=None, tol=1e-6, alpha=1, quiet=Fals
 
         #Construct companion matrix for the polynomial equation
         #and the truncated matrix of Newton's equations.
-        Ic = zeros(K, complex)
-        XC = zeros((K,K), complex)
+        Ic = np.zeros(K, complex)
+        XC = np.zeros((K,K), complex)
         for k in range(K):
-            Ic[k] = R**(k+K+1)*sum(exp(1j*(k+K+1)*thetas)/fz)*dt
+            Ic[k] = R**(k+K+1)*np.sum(np.exp(1j*(k+K+1)*thetas)/fz)*dt
             for m in range(K):
-                XC[k,m] = R**(k+m+1)*sum(exp(1j*(k+m+1)*thetas)/fz)*dt
+                XC[k,m] = R**(k+m+1)*np.sum(np.exp(1j*(k+m+1)*thetas)/fz)*dt
 
         #Solve for the coefficients
-        ac = ones(K+1, complex)
-        ac[1:] = linalg.solve(XC,-Ic)[::-1]
+        ac = np.ones(K+1, complex)
+        ac[1:] = la.solve(XC,-Ic)[::-1]
 
-        calc_roots = roots(ac)
+        calc_roots = np.roots(ac)
 
         if _CROOT_PLOTRESULTS>0:
             pl.plot(calc_roots.real, calc_roots.imag, 'kx')
@@ -167,49 +168,50 @@ def findzero_carpentier(f, z0=0, R=1, N=None, tol=1e-6, alpha=1, trange=None, qu
 
         #Evaluate function on circle radius R
         dt = T/Nt
-        thetas = arange(trange[0],trange[1],dt)
+        thetas = np.arange(trange[0],trange[1],dt)
 
-        zs = R*exp(1j*thetas)
-        zshift = R*exp(1j*(thetas-dt))
+        zs = R*np.exp(1j*thetas)
+        zshift = R*np.exp(1j*(thetas-dt))
 
         #Careful to 'unwrap' the phase of the root
         fz = f(zs+z0)
         #fz_dt = f(zshift+z0)
-        fz_dt = roll(fz,1)
+        fz_dt = np.roll(fz,1)
 
         #Take the correct branch of the log function
-        g = log(fz/fz_dt)
-        g = real(g) + unwrap(imag(g))*1j
-
+        g = np.log(fz/fz_dt)
+        g = np.real(g) + np.unwrap(np.imag(g))*1j
+        
         if _CROOT_PLOTRESULTS==2:
-            pl.plot(real(zs+z0)/f.k0, abs(fz), 'b--')
+            pl.plot(np.real(zs+z0)/f.k0, np.abs(fz), 'b--')
 
         if _CROOT_PLOTRESULTS==3:
-            pl.plot(thetas, unwrap(angle(g)), 'b--')
-            pl.plot(thetas, angle(fz), 'g-')
+            pl.plot(thetas, np.unwrap(np.angle(g)), 'b--')
+            pl.plot(thetas, np.angle(fz), 'g-')
 
         #Check for zeros close to the boundary
 
         #Number of roots enclosed
-        I0 = real(sum(g)/(T*1j))/alpha
-        K = int(round(I0))
+        I0 = np.real(np.sum(g)/(T*1j))/alpha
 
-        #Reject K too large or too small
-        if not force and (I0<0.999 or I0>50):
-            if not quiet: print "Warning, no roots found", I0
-            return array([])
-        
         if not quiet: print "Roots found:", I0
+
+        if not np.isfinite(I0) or (not force and (I0<0.999 or I0>50)):
+            if not quiet: print "No roots were found."
+            return array([])
+
+        K = int(round(I0))
         
         #Calculate the contour integrals
-        Ic = zeros(K+1, complex)
+        Ic = np.zeros(K+1, complex)
         for k in range(1,K+1):
-            Ic[k] = (R**k)*sum(g*exp(1j*k*thetas))*k/(exp(1j*k*T/Nt)-1)/Nt/alpha
+            Ic[k] = (R**k)*np.sum(g*np.exp(1j*k*thetas))*k \
+                     /(np.exp(1j*k*T/Nt)-1)/Nt/alpha
 
         #Construct companion matrix for the polynomial equation
         #and the truncated matrix of Newton's equations.
-        XC = zeros((K,K), complex)
-        X = zeros((K,K), complex)
+        XC = np.zeros((K,K), np.complex_)
+        X = np.zeros((K,K), np.complex_)
         for k in range(0,K):
             X[k,k] = K-k
             XC[k,k:] = Ic[1:K+1-k]
@@ -218,14 +220,14 @@ def findzero_carpentier(f, z0=0, R=1, N=None, tol=1e-6, alpha=1, trange=None, qu
                 XC[k,k-1] = K-k
 
         #Find eigenvalues - the roots of the equation
-        calc_roots = linalg.eigvals(dot(XC,linalg.inv(X)))
+        calc_roots = la.eigvals(dot(XC,linalg.inv(X)))
         #calc_roots = linalg.eigvals(dot(linalg.inv(X),XC))
 
         if _CROOT_PLOTRESULTS>0:
             pl.plot(calc_roots.real, calc_roots.imag, 'kx')
 
         #Check error
-        residue = absolute(f(calc_roots+z0)).max()
+        residue = np.absolute(f(calc_roots+z0)).max()
 
         if not quiet: print "Roots:", calc_roots+z0
         if not quiet: print "Res:", residue, "at N=", Nt
@@ -234,7 +236,8 @@ def findzero_carpentier(f, z0=0, R=1, N=None, tol=1e-6, alpha=1, trange=None, qu
         Nt = 2*Nt
         niter += 1
 
-    if not quiet: print "Calculated %d roots in %d iterations with approximate error %.2g" % (K, niter, residue)
+    if not quiet:
+        print "Calculated %d roots in %d iterations with approximate error %.2g" % (K, niter, residue)
     return calc_roots+z0
 
 

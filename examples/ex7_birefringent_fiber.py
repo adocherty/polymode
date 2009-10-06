@@ -3,7 +3,7 @@ from Polymode import *
 
 ## Waveguide Parameters:
 Nx=300,61               #number of radial & azimuthal points
-wl = 1.2
+wl = 1.1
 m0 = 1
 
 ## Materials
@@ -45,7 +45,7 @@ wg.add_shapes(core, cladding, rings)
 solver = NLSolver.DefaultSolver(wg, Nx)
 
 #Find the two modes closest to the RI of the core
-modes = solver(wl, m0, 1.446,  number=2)
+modes = solver(wl, m0, 1.447,  number=10)
 
 Plotter.plot_modes_in_grid(modes, 'sz', cartesian=1)
 Plotter.plot_modes_in_grid(modes, 'vectore', wg=wg)

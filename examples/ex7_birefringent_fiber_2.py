@@ -3,7 +3,7 @@ from numpy import *
 from Polymode import *
 
 ## Solver parameters
-Nx=400,61
+Nx=300,61
 m0 = 1
 
 ## Materials
@@ -45,19 +45,19 @@ wg.add_shapes(core, cladding, rings)
 solver = NLSolver.DefaultSolver(wg, Nx)
 
 #Solve at difference wavelengths
-wls=arange(1.18,1.6,0.005)
-neffapprox = 1.44628
+wls=arange(1.12,1.6,0.005)
+neffapprox = 1.4467
 
 modes=[]
 allmodes=[]
 birefringence=[]
-bifi=0
 for wl in wls:
+    bifi = nan
+
     if len(modes)>1:
         modes = solver(wl, m0, modelist=modes)
     else:
-        neffapprox=silica.index(wl)
-        modes = solver(wl, m0, neffapprox, number=2)
+        modes = solver(wl, m0, nefflist=[neffapprox, neffapprox])
 
     if len(modes)>1:
         #Find x polarized mode:

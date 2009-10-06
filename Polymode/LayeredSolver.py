@@ -184,12 +184,13 @@ class HLayer(Layer):
     @timer.time_function()
     def Q(self, xim, xip, r):
         m = self.m
-        Z = zeros_like(r)
+        Z = np.zeros_like(r)
+        
         #Define the base Q
-        Q = array([[hankel1(m, xim*r), Z, hankel2(m, xim*r), Z], 
+        Q = np.array([[hankel1(m, xim*r), Z, hankel2(m, xim*r), Z], 
                     [Z, hankel1(m, xip*r), Z, hankel2(m, xip*r)]])
         #Derivative of Q
-        dQ = array([[xim*hankel1p(m, xim*r), Z, xim*hankel2p(m, xim*r), Z], 
+        dQ = np.array([[xim*hankel1p(m, xim*r), Z, xim*hankel2p(m, xim*r), Z], 
                     [Z, xip*hankel1p(m, xip*r), Z, xip*hankel2p(m, xip*r)]])
         return Q, dQ
     @timer.time_function()
@@ -205,7 +206,7 @@ class HLayer(Layer):
         am=-m*beta/r/xim**2; ap=-m*beta/r/xip**2
         bm=km/xim; bp=kp/xip
         
-        M = array([[Hm1, Z, Hm2, Z], 
+        M = np.array([[Hm1, Z, Hm2, Z], 
                         [Z, Hp1, Z, Hp2],
                         [am*Hm1+bm*Hm1p, Z, am*Hm2+bm*Hm2p, Z], 
                         [Z, ap*Hp1-bp*Hp1p, Z, ap*Hp2-bp*Hp2p]])
@@ -214,27 +215,27 @@ class HLayer(Layer):
 class HLayerLargeR(Layer):
     def Q(self, xim, xip, r):
         m = self.m
-        Z = zeros_like(r)
+        Z = np.zeros_like(r)
         
         cfp = np.sqrt(2*pi/xip/r); cfm = np.sqrt(2*pi/xim/r)
         ef1 = np.exp(-0.5j*(m+0.5)*np.pi); ef2 = np.exp(0.5j*(m+0.5)*np.pi)
         
         #Define the base Q
-        Q = array([[cfm*ef1*exp(1j*xim*r), Z, cfm*ef2*exp(-1j*xim*r), Z], 
+        Q = np.array([[cfm*ef1*exp(1j*xim*r), Z, cfm*ef2*exp(-1j*xim*r), Z], 
                     [Z, cfp*ef1*exp(1j*xip*r), Z, cfp*ef2*exp(-1j*xip*r)]])
         #Derivative of Q
-        dQ = array([[1j*xim*cfm*ef1*exp(1j*xim*r), Z, -1j*xim*cfm*ef2*exp(-1j*xim*r), Z], 
+        dQ = np.array([[1j*xim*cfm*ef1*exp(1j*xim*r), Z, -1j*xim*cfm*ef2*exp(-1j*xim*r), Z], 
                     [Z, 1j*xip*cfp*ef1*exp(1j*xip*r), Z, -1j*xip*cfp*ef2*exp(-1j*xip*r)]])
         return Q, dQ
 
 class HLayerExterior(HLayer):
     def Q(self, xim, xip, r):
         m = self.m
-        Z = zeros_like(r)
+        Z = np.zeros_like(r)
         #Define the base Q
-        Q = array([[hankel1(m, xim*r), Z], [Z, hankel1(m, xip*r)]])
+        Q = np.array([[hankel1(m, xim*r), Z], [Z, hankel1(m, xip*r)]])
         #Derivative of Q
-        dQ = array([[xim*hankel1p(m, xim*r), Z], [Z, xip*hankel1p(m, xip*r)]])
+        dQ = np.array([[xim*hankel1p(m, xim*r), Z], [Z, xip*hankel1p(m, xip*r)]])
         return Q, dQ
 
 class KLayerExterior(Layer):
@@ -495,10 +496,11 @@ class LayeredSolver(Solve):
                 ans = nan
         return ans
 
-    def local_root_search(self, bguess):
+    def local_root_search(self, bguess, number=1):
         """
         This is the function used to locate roots close to the
         given guess for beta.
+        Should find number of roots close to solution
         """
         def fs_min_ri(bri):
             beta = complex(*bri)
@@ -508,10 +510,10 @@ class LayeredSolver(Solve):
         #If the condition number behaves badly, then the root finder can wander
         #the complex plane out of the numerical sesibility of the transfer matrices
         bri  = sp.optimize.fsolve(fs_min_ri, [bguess.real, bguess.imag], \
-                                            warning=False, xtol=1e-12)
+                                warning=False, xtol=1e-12)
         root = complex(*bri)
 
-        return root
+        return [root]
 
     def global_root_search(self, Nscan):
         k0 = self.k0
@@ -555,9 +557,11 @@ class LayeredSolver(Solve):
         self.found_roots = []
         
         #Iterate on list OR search over krange
+        local_number = 1
         if self.nefflist is not None:
             possible_roots = np.atleast_1d(self.nefflist)*self.k0 + 0j
-        
+            local_number = self.totalnumber
+            
         #Note: we don't use modal data yet, would be nice to
         elif self.modelist is not None:
             nefflist = [m.neff for m in self.modelist]
@@ -573,49 +577,48 @@ class LayeredSolver(Solve):
         logging.info("Searching for %d possible modes" % len(possible_roots))
 
         for kk,bguess in enumerate(possible_roots):
-            #Try and locate closest root, if we fail go to the next in the list
-            root = self.local_root_search(bguess)
-            logging.debug("Found possible mode neff: %s" % (root/self.k0))
-            
-            #ignore those outside the range
-            if np.real(root)<krange[0] or np.real(root)>krange[1]:
-                logging.debug("Rejecting out of range solution")
-                continue
+            #Try and locate closest roots, if we fail go to the next in the list
+            local_roots = self.local_root_search(bguess, number=local_number)
+            for root in local_roots:
+                logging.debug("Found possible mode neff: %s" % (root/self.k0))
+                
+                #ignore those outside the range
+                if np.real(root)<krange[0] or np.real(root)>krange[1]:
+                    logging.debug("Rejecting out of range solution")
+                    continue
 
-            #Ignore those with a large residue
-            res = np.abs(self.condition(root))
-            if res>self.tolerance:
-                logging.debug("Rejecting inaccurate solution")
-                continue
-            
-            #Ignore those already found
-            if np.any(np.abs(root-np.array(self.found_roots))<1e-12):
-                logging.debug("Rejecting previously found solution")
-                continue
-            
-            #Find eigenvector(s)
-            A = self.reflection_matrix(root)
-            Sw, Sv = la.eig(A)
+                #Ignore those with a large residue
+                res = np.abs(self.condition(root))
+                if res>self.tolerance:
+                    logging.debug("Rejecting inaccurate solution")
+                    continue
+                
+                #Ignore those already found
+                if np.any(np.abs(root-np.array(self.found_roots))<1e-12):
+                    logging.debug("Rejecting previously found solution")
+                    continue
+                
+                #Find eigenvector(s)
+                A = self.reflection_matrix(root)
+                Sw, Sv = la.eig(A)
 
-            #Find the correct eigensolution
-            mode_inx = np.nonzero(Sw<self.tolerance)[0]
-            if len(mode_inx)>1:
+                #Find the correct eigensolution
+                mode_inx = np.nonzero(Sw<self.tolerance)[0]
+                if len(mode_inx)==0:
+                   logging.error("Strange, no mode vectors")
+                   continue
+                inx = mode_inx[0]
 
-               logging.debug("Found %d degenerate or near degenerate modes" % len(mode_inx))
-            elif len(mode_inx)==0:
-               logging.debug("Strange, no mode vectors")
-
-            #Finally add the root if not already in the list
-            for inx in mode_inx:
+                #Finally add the root if not already in the list
                 logging.info("Mode #%d: neff=%s, res: %.2e\n" % (kk, root/self.k0, res))
                 mode = LayeredMode(m0=self.m0, wl=self.wl, coord=modecoord, \
                         right = Sv[:,inx], symmetry=1, evalue=root**2)
                 
                 mode.layers = self.calculate_mode_layers(mode.beta, mode.right)
                 mode.residue = res
-                self.modes += [mode]
 
                 self.found_roots.append(root)
+                self.modes += [mode]
                 self.numbercalculated+=1
                 kk+=1
                 
@@ -661,6 +664,7 @@ class LayeredSolverCauchy(LayeredSolver):
         self.tolerance = tol
         self.default_calc_size = (1e3, 1)
         self.debug_plot=debug_plot
+        self.rscan_local = 1e-2
 
     def global_root_search(self, Nscan):
         from .mathlink.cauchy_findzero import findzero_carpentier as findzero
@@ -681,6 +685,9 @@ class LayeredSolverCauchy(LayeredSolver):
         kscan = arange(real(krange[1])-dscan/2, real(krange[0]), -dscan) + 0j
         kscan += 1j*iscan/2
 
+        #List of RI in system
+        klist = np.array([l.kp for l in self.layers])
+
         logging.debug("Scanning %d intervals" % len(kscan))
         logging.debug("Max imag excursion is %g" % (iscan))
         
@@ -690,14 +697,30 @@ class LayeredSolverCauchy(LayeredSolver):
             kcenter = kscan[ii]
             
             #Ensure we don't cross a branch point
-            R=min(Rscan, abs(krange[1]-kcenter), abs(krange[0]-kcenter))*(1-1e-10)
+            R = np.min(self.rscan_local, np.min(np.abs(klist-bguess)))*(1-1e-8)
             
             #Try and locate closest root, if we fail go to the next in the list
             roots = findzero(self.condition, z0=kcenter, N=self.Nintegral, \
-                                R=R, maxiter=1, quiet=False)
+                                R=R, maxiter=1, quiet=True)
             possible_roots = np.append(possible_roots, roots)
             
         return possible_roots
 
+    def local_root_search(self, bguess, number=1):
+        """
+        Return the unrefined root, for the moment
+        """
+        from .mathlink.cauchy_findzero import findzero_carpentier as findzero
+
+        Rscan = self.rscan_local
+        
+        #Ensure we don't cross a branch point
+        klist = np.array([l.kp for l in self.layers])
+        R = np.min(self.rscan_local, np.min(np.abs(klist-bguess)))*(1-1e-8)
+        print "Local search:", bguess+R, np.min(klist), np.max(klist)
+        
+        roots = findzero(self.condition, z0=bguess, N=self.Nintegral, \
+                            R=R, maxiter=4, quiet=False)
+        return roots[:number]
 
 DefaultSolver = LayeredSolver
