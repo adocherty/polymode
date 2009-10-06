@@ -29,7 +29,7 @@ import numpy.linalg as la
 #To be depricated, should use above imports only
 from numpy import *
 
-from .Solver import *
+from .Solver import Solve
 from .Modes import Mode, branchsqrt
 from .mathlink import hankel1, hankel2, hankel1p, hankel2p, jv, jvp, kv, kvp
 from .mathlink import coordinates, timer
