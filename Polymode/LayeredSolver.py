@@ -492,7 +492,7 @@ class LayeredSolver(Solve):
         else:
             try:
                 ans = la.det(self.reflection_matrix(betas))
-            except:
+            except la.LinAlgError:
                 ans = nan
         return ans
 
@@ -697,7 +697,7 @@ class LayeredSolverCauchy(LayeredSolver):
             kcenter = kscan[ii]
             
             #Ensure we don't cross a branch point
-            R = np.min(self.rscan_local, np.min(np.abs(klist-bguess)))*(1-1e-8)
+            R = np.min(self.rscan_local, np.min(np.abs(klist-kcenter)))*(1-1e-8)
             
             #Try and locate closest root, if we fail go to the next in the list
             roots = findzero(self.condition, z0=kcenter, N=self.Nintegral, \

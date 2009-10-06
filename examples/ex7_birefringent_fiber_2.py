@@ -45,8 +45,8 @@ wg.add_shapes(core, cladding, rings)
 solver = NLSolver.DefaultSolver(wg, Nx)
 
 #Solve at difference wavelengths
-wls=arange(1.12,1.6,0.005)
-neffapprox = 1.4467
+wls=arange(1.06,1.6,0.005)
+neffapprox = 1.4481
 
 modes=[]
 allmodes=[]
