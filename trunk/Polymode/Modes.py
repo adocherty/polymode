@@ -17,16 +17,45 @@
 #You should have received a copy of the GNU General Public License
 #along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #---------------------------------------------------------------------------------
-'''
-Base class for the storage and manipulation of mode data
+"""
+This module contains the Mode class and and different helper functions
+that manipulate the modes.
 
-'''
+Functions in this module
+------------------------
+
+ - branchsqrt
+   Take the correct branch of the sqrt.
+
+ - compress_modes
+   Compress modes to given shape
+
+ - filter_suprious_modes
+   Select those modes that are converged and not spurious
+
+ - filter_unique_modes
+   Select those modes that are unique
+
+ - construct_degenerate_pair
+   Constrcut degenerate mode pair from circularly polarized mode
+    
+ - construct_lp_degenerate_pair
+   Construct linearly polarized mode pair
+
+ - construct_combined_mode
+   Construct a mode from a linear combination of other modes.
+"""
 
 from __future__ import division
 import sys, time, logging
 
-from numpy import *
-from numpy.lib.scimath import sqrt
+import numpy as np
+import scipy as sp
+from numpy import linalg as la
+from scipy import fftpack as fft
+
+#Import certain special cases
+from numpy import pi, newaxis
 
 from .mathlink  import utf8out, misc, timer, coordinates, constants, hankel1, hankel1p, jv
 from .difflounge import finitedifference
@@ -38,12 +67,11 @@ def branchsqrt(x):
     The branchcut is along the -ve imaginary axis
     see: M. Nevière, "Electrodynamic theory of gratings", Chap 5., 1980.
     '''
-    argx = remainder(angle(x)+pi/2,2*pi)-pi/2
-    f = absolute(x)**0.5*exp(0.5j*argx)
+    argx = np.remainder(np.angle(x)+pi/2,2*pi)-pi/2
+    f = np.absolute(x)**0.5*np.exp(0.5j*argx)
     return f
 
-def swap_vector(v, axis=-1, shift=0):
-    "invert fourier frequencies"
+def _swap_vector(v, axis=-1, shift=0):
     v = v.swapaxes(axis,0)
     if shift:
         #Flip the +/- frequency components in standard fft ordering
@@ -53,7 +81,7 @@ def swap_vector(v, axis=-1, shift=0):
         if mod(v.shape[0],2)==1:
             v = fft.ifftshift(fftflip,axes=[0])
         else:
-            v = fft.fftshift(roll(fftflip,1,axis=0),axes=[0])
+            v = fft.fftshift(np.roll(fftflip,1,axis=0),axes=[0])
     else:
         #Standard flip
         v = v[::-1]
@@ -64,46 +92,65 @@ def swap_vector(v, axis=-1, shift=0):
 # | Utility Functions
 # +-----------------------------------------------------------------------+
 
-def compress_modes(modes, Nshape=None, coord=None):
+def compress_modes(modes, Nshape, wg):
     """
-    Compress modes to given shape or coord
+    Compress modes to given size
+    
+    Parameters
+    ----------
+    modes : list
+        List of modes to compress
+    
+    Nshape : (Nr, Nphi)
+        The size to compress the mode to
+    
+    wg : Waveguide
+        The waveguide on which the modes
+        were solved
     """
     for m in modes:
-        if coord is None:
-            coord = m.coord.new(Nshape=Nshape)
-        m.compress(coord)
-        m.add_extensions()
+        if np.iterable(m):
+            compress_modes(m, Nshape, wg)
+        else:
+            m.compress(Nshape, wg)
+            m.add_extensions()
     return modes
 
 def filter_suprious_modes(modes):
-    """Select those modes that are converged and not spurious"""
-    notspurious = nonzero([not md.is_spurious for md in modes])[0]
-    converged = nonzero([md.is_converged() for md in modes])[0]
-    wanted = intersect1d(notspurious, converged)
+    """
+    Select those modes that are converged and not spurious
+    """
+    notspurious = np.nonzero([not md.is_spurious for md in modes])[0]
+    converged = np.nonzero([md.is_converged() for md in modes])[0]
+    wanted = np.intersect1d(notspurious, converged)
     
     modes = [modes[ii] for ii in wanted]
     return modes
 
 def filter_unique_modes(modes, cutoff=1e-8):
-    """Select those modes that are unique"""
-    unique = ones(len(modes))
+    """
+    Select those modes that are unique
+    """
+    unique = np.ones(len(modes))
     smodes = sorted(modes)
 
     for ii in range(len(smodes)-1):
         m1 = smodes[ii]
         m2 = smodes[ii+1]
-        if abs(m1.evalue-m2.evalue)<abs(m1.evalue)*cutoff:
-            ip = dot(conj(m1.left), m2.right)
-            if abs(ip)>1e-8:
+        if np.abs(m1.evalue-m2.evalue)<abs(m1.evalue)*cutoff:
+            ip = np.dot(np.conj(m1.left), m2.right)
+            if np.abs(ip)>1e-8:
                 print "Repeated:",m1.neff,m2.neff
                 unique[ii+1] = 0
     
-    modes = [smodes[ii] for ii in transpose(nonzero(unique))]
+    modes = [smodes[ii] for ii in np.transpose(np.nonzero(unique))]
     logging.info("Filtered %d repeated modes" % (len(smodes)-len(modes)))
     return modes
 
 def construct_degenerate_pair(m1):
-    """Constrcut degenerate mode pair from circularly polarized mode"""
+    """
+    Constrcut degenerate mode pair from circularly polarized mode
+    """
     if m1.m0==0:
         logging.warning("Mode class 0 is non-degenerate.")
 
@@ -118,8 +165,8 @@ def construct_degenerate_pair(m1):
     ls = conj(m1.shape_vector(m1.left)[...,::-1])
 
     #Conjugation flips fourier coefficients
-    m2.right = swap_vector(rs,1,1).ravel()
-    m2.left = -swap_vector(ls,1,1).ravel()
+    m2.right = _swap_vector(rs,1,1).ravel()
+    m2.left = -_swap_vector(ls,1,1).ravel()
 
     #Remember to add extensions
     m2.add_extensions()
@@ -127,7 +174,9 @@ def construct_degenerate_pair(m1):
     return m1,m2
     
 def construct_lp_degenerate_pair(m):
-    """Construct linearly polarized mode pair"""
+    """
+    Construct linearly polarized mode pair
+    """
     m1c,m2c = construct_degenerate_pair(m)
 
     #Construct LP modes as a combined vector
@@ -152,6 +201,24 @@ def construct_combined_mode(modes, coeffs, neff=None, wl=None):
         F = Σᵢ aᵢ Fᵢ
     Where F is the field Fᵢ is the field of the ith mode and aᵢ the
     ith coefficient.
+    
+    Parameters
+    ----------
+    modes : list of Mode
+        List of modes to combine
+        
+    coeffs : list of float
+        List of the same length as `modes` giving the coefficient
+        for the corresponding mode a_i
+    
+    neff : complex
+        (optional) Effective index of the new mode, otherwise taken
+        from the first mode of `modes`
+        
+    wl : float
+        (optional) Wavelength of new mode, otherwise taken
+        from the first mode of `modes`
+
     """
     assert len(modes)==len(coeffs), "Number of modes and coefficients must be equal"
     assert len(modes)>0, "At least one mode is required"
@@ -181,14 +248,15 @@ class Mode(object):
     Base class for a mode, to construct a mode all paramters are optional
     and the mdoe information can be added later.
     
-    Paramters:
-     coord: internal coordinate object
-     wl: the wavelength of the mode solution
-     m0: the mode class
-     evalue: the eigenvalue, automatically converted to beta and neff
-     wg: the waveguide used to solve. not stored, just used to extract info
-     left: the left eigenvector
-     right: the right eigenvector
+    Parameters
+    ---------
+    coord: internal coordinate object
+    wl: the wavelength of the mode solution
+    m0: the mode class
+    evalue: the eigenvalue, automatically converted to beta and neff
+    wg: the waveguide used to solve. not stored, just used to extract info
+    left: the left eigenvector
+    right: the right eigenvector
     """
     def __init__(self, coord=None, wl=1, m0=1, evalue=0, wg=None,
             symmetry=1, left=None, right=None):
@@ -221,8 +289,12 @@ class Mode(object):
     def copy(self, link_fields=False):
         """
         Create new copy of mode.
-        link_vectors: share the mode information between modes
-            to save memory
+        
+        Parameters
+        ---------
+        link_vectors : {True, False}
+            share the mode information between modes to save memory
+
         """
         newmode = self.__class__()
         newmode.m0 = self.m0
@@ -247,9 +319,9 @@ class Mode(object):
         m0 = self.m0 if m0 is None else m0
 
         if coord is None:
-            return exp(1j*m0*self.coord.phiv)
+            return np.exp(1j*m0*self.coord.phiv)
         else:
-            return exp(1j*m0*coord.phiv)
+            return np.exp(1j*m0*coord.phiv)
 
     # -------------------------------------------------------------------
     # Numerical properties of the Mode
@@ -281,7 +353,7 @@ class Mode(object):
     #@property
     def get_neff(self):
         "Return the effective index of the mode"
-        return sqrt(self.evalue)/self.k0
+        return sp.sqrt(self.evalue)/self.k0
     #@neff.setter
     def set_neff(self, value):
         "Return the effective index of the mode"
@@ -291,7 +363,7 @@ class Mode(object):
     #@property
     def get_beta(self):
         "Return the modal eigenvalue, β"
-        return sqrt(self.evalue)
+        return sp.sqrt(self.evalue)
     #@beta.setter
     def set_beta(self, value):
         "Return the modal eigenvalue, β"
@@ -301,7 +373,7 @@ class Mode(object):
     @property
     def loss(self):
         "Calculate the confinement loss of the mode as loss = 2×10⁷ Im{β}/ln(10) db/m"
-        return 2e7*imag(self.beta)/log(10)
+        return 2e7*np.imag(self.beta)/np.log(10)
 
     def is_converged(self):
         return self.residue<self.tolerance
@@ -327,8 +399,10 @@ class Mode(object):
 
         #All mode classes <>0 or symmetry/2 are degenerate
         if self.m0==0 or self.m0==self.symmetry/2.0:
-            tm_factor = sqrt(abs(h[0])**2+abs(h[1])**2).sum()/median(abs(h[2]))
-            te_factor = sqrt(abs(e[0])**2+abs(e[1])**2).sum()/median(abs(e[2]))
+            tm_factor = sp.sqrt(np.abs(h[0])**2+np.abs(h[1])**2).sum() \
+                            /np.median(abs(h[2]))
+            te_factor = sp.sqrt(np.abs(e[0])**2+np.abs(e[1])**2).sum() \
+                            /np.median(abs(e[2]))
         
             if tm_factor/te_factor > cutoff:
                 modeclass = 'TM_(0,j)'
@@ -343,7 +417,17 @@ class Mode(object):
         return modeclass
 
     def polarization_angle(self, wg=None, core_size=None):
-        "Approximate polarization angle of the mode (if linearly polarized)"
+        """
+        Approximate polarization angle of the mode (if linearly polarized)
+        
+        Parameters
+        ----------
+        wg : Waveguide
+            (optional) Specify the waveguide for accurate field calculations
+            
+        core_size : float
+            (optional) Specify the radius to limit the calcuation to
+        """
         if core_size is None:
             if wg is None:
                 core_size = 0.75*self.coord.rmax
@@ -355,10 +439,10 @@ class Mode(object):
         #Look at the mode fields in the core
         hx,hy,hz = self.magnetic_field(cartesian=1, coord=ec)
 
-        xpol = linalg.norm(hx)
-        ypol = linalg.norm(hy)
+        xpol = la.norm(hx)
+        ypol = la.norm(hy)
         
-        return arctan2(xpol,ypol)
+        return np.arctan2(xpol,ypol)
 
     # -------------------------------------------------------------------
     # Overloadable methods
@@ -369,7 +453,7 @@ class Mode(object):
         pass
     def add_extensions(self, bc_ext=-3, bc_int=2):
         pass
-    def compress(self, size=None, astype=complex64):
+    def compress(self, size, wg=None):
         pass
     def normalize(self, wg=None, coord=None):
         pass
@@ -384,7 +468,7 @@ class Mode(object):
         '''
         ht = self.magnetic_transverse_field(**kwargs)
         et = self.electric_transverse_field(**kwargs)
-        Sz = 0.5*cross(et,conj(ht),axis=0)
+        Sz = 0.5*np.real(np.cross(et,np.conj(ht),axis=0))
         return Sz
 
     def _convert_polar_vector(self, v, coord, cartesian=None):
@@ -401,22 +485,25 @@ class Mode(object):
         
         #Take a new maximum radius
         if r is not None and r<self.coord.rmax:
-            Nshapenew = (int(r*coord.Nr/coord.rmax), coord.Naz)
+            Nshapenew = (np.int(r*coord.Nr/coord.rmax), coord.Naz)
             coord = coord.new(rmax=r, Nshape=Nshapenew)
         
         Sint = coord.int_dA(self.poynting(coord=coord))
         return Sint
 
-    def mode_unconjugated_integral(self, fourier=True, r=None, extend=0, coord=None):
+    def mode_unconjugated_integral(self, fourier=True, coord=None):
         '''
         I = ∫ (e×h)∙ẑ dA
+        
+        Parameters
+        ---------
+        coord : Coordinate
+            (optional) Perform calculations with this coordinate
+
+        fourier : {True, False}
+            Calculate integrals in the Fourier domain
         '''
         if coord is None: coord = self.coord
-        
-        #Take a new maximum radius
-        if r is not None and r<self.coord.rmax:
-            Nshapenew = (int(r*coord.Nr/coord.rmax), coord.Naz)
-            coord = coord.new(rmax=r, Nshape=Nshapenew)
         
         ht = self.magnetic_transverse_field(fourier=fourier, coord=coord)
         et = self.electric_transverse_field(fourier=fourier, coord=coord)
@@ -425,6 +512,7 @@ class Mode(object):
         
         #Add contibution from external fields
         #Does not accound for coord.symmetry currently - fix this!
+        extend = 0
         Sext = 0
         if extend or r>self.coord.rmax:
             Sext = -0.5j*iprod_extend(self.aleft_ext, self.aright_ext)
@@ -441,33 +529,48 @@ class Mode(object):
         Nonlinear effective area of mode in um²
         Aeff = [∫ |Sz|² dA]² / ∫ |Sz|⁴ dA
         See Agrawal pg.
+
+        Parameters
+        ---------
+        coord : Coordinate
+            (optional) Perform calculations with this coordinate
         '''
         if coord is None:   coord = self.coord
         
-        Sz2 = real(self.poynting(coord=coord))**2
+        Sz2 = self.poynting(coord=coord)**2
         Aeff = coord.int_dA(Sz2)**2 / coord.int_dA(Sz2**2)
         return Aeff
     
     def numerical_aperture(self, coord=None):
         '''
         Numerical aperture from the Gaussian approximation for a single moded MOF.
-        See" Mortensen et al, "Numerical Aperture of a Single Mode Photonic Crystal Fiber"
+        See "Mortensen et al, "Numerical Aperture of a Single Mode Photonic Crystal Fiber"
         PTL, Vol. 14, No. 8, 2002, pp 1094-1096
+
+        Parameters
+        ---------
+        coord : Coordinate
+            (optional) Perform calculations with this coordinate
         '''
-        NA = 1/sqrt(1+pi*self.effective_area(coord=coord)/self.wl**2)
+        NA = 1/sp.sqrt(1+pi*self.effective_area(coord=coord)/self.wl**2)
         return NA
 
     def spot_size(self, coord=None):
         '''
         Caculate the Petersen II spot size calculated as
         spot size = [∫ Sz² dA]² / ∫ (∇Sz)² dA
+
+        Parameters
+        ---------
+        coord : Coordinate
+            (optional) Perform calculations with this coordinate
         '''
         if coord is None: coord=self.coord
         
         Sz = self.poynting(coord=coord)
         DSzr, DSzphi = coord.grad_t(Sz, m0=0, fourier=False) 
         p2 = coord.int_dA(Sz**2)/coord.int_dA(DSzr**2 + DSzphi**2)
-        return sqrt(p2)
+        return sp.sqrt(p2)
 
     def phase_velocity(self):
         '''
@@ -482,19 +585,27 @@ class Mode(object):
         '''
         Caculate the group index (m/s) of the mode based on the profile
         See Snyder and Love pg. 608
+
+        Parameters
+        ---------
+        wg : Waveguide
+            (optional) Use this waveguide for the refractive index
+            
+        coord : Coordinate
+            (optional) Perform calculations with this coordinate
         '''
         if wg is None:      
-                            logging.warning("Calculation being approximated as no waveguide available")
-                            n2 = self.interior_index**2
-                            dn2dl = 0
+            logging.warning("Calculation being approximated as no waveguide available")
+            n2 = self.interior_index**2
+            dn2dl = 0
         else:
             n2 = wg.index2(wl=self.wl, coord=self.coord, resample=coord)
             dn2dl = wg.material.wavelength_derivative(self.wl, units='wl')
 
         h = self.magnetic_field(fourier=False, coord=coord)
         e = self.electric_field(wg, fourier=False, coord=coord)
-        exh = cross(e[:2], conj(h[:2]), axis=0)
-        e2abs = e*conj(e); h2abs = h*conj(h)
+        exh = np.cross(e[:2], np.conj(h[:2]), axis=0)
+        e2abs = e*np.conj(e); h2abs = h*np.conj(h)
         
         if coord is None: coord=self.coord
         ng = coord.int_dA(h2abs + (n2-self.wl*dn2dl)*e2abs)/coord.int_dA(exh)/2
@@ -504,42 +615,31 @@ class Mode(object):
         '''
         Caculate the propagation constant beta of the mode based on the
         mode profile, requires the waveguide
+
+        Parameters
+        ---------
+        wg : Waveguide
+            (optional) Use this waveguide for the refractive index
+            
+        coord : Coordinate
+            (optional) Perform calculations with this coordinate
         '''
         if wg is None:      
-                            logging.warning("Calculation being approximated as no waveguide available")
-                            n2 = self.interior_index**2
+            logging.warning("Calculation being approximated as no waveguide available")
+            n2 = self.interior_index**2
         else:
             n2 = wg.index2(wl=self.wl, coord=self.coord, resample=coord)
 
         hr,hphi,hz = self.magnetic_field(fourier=0, coord=coord)
         er,ephi,ez = self.electric_field(wg, fourier=0, coord=coord)
-        exh = cross((er,ephi), conj((hr,hphi)), axis=0)
+        exh = np.cross((er,ephi), np.conj((hr,hphi)), axis=0)
 
-        e2abs = er*conj(er)+ephi*conj(ephi)+ez*conj(ez)
-        h2abs = hr*conj(hr)+hphi*conj(hphi)+hz*conj(hz)
+        e2abs = er*np.conj(er)+ephi*np.conj(ephi)+ez*np.conj(ez)
+        h2abs = hr*np.conj(hr)+hphi*np.conj(hphi)+hz*np.conj(hz)
 
         if coord is None: coord=self.coord
-        beta = (2*self.k0)*coord.int_dA(n2*exh)/coord.int_dA(h2abs + conj(n2)*e2abs)
+        beta = (2*self.k0)*coord.int_dA(n2*exh)/coord.int_dA(h2abs + np.conj(n2)*e2abs)
         return beta
-        
-    def integral_propagation_lossless(self, wg=None, coord=None):
-        '''
-        Caculate the propagation constant beta of the mode based on the
-        mode profile, requires the waveguide
-        '''
-        if wg is None:      
-                            logging.warning("Calculation being approximated as no waveguide available")
-                            n2 = self.interior_index**2
-        else:
-            n2 = wg.index2(wl=self.wl, coord=self.coord, resample=coord)
-
-        hr,hphi,hz = self.magnetic_field(coord=coord)
-        er,ephi,ez = self.electric_field(wg, coord=coord)
-
-        e2abs = er*conj(er)+ephi*conj(ephi)+ez*conj(ez)
-        h2abs = hr*conj(hr)+hphi*conj(hphi)+hz*conj(hz)
-        exh = er*conj(hphi)-ephi*conj(hr)
-
 
     # -------------------------------------------------------------------
     # Plotting
@@ -548,19 +648,36 @@ class Mode(object):
     def plot(self, plottype='Sz', style='pcolor', part='real', cartesian=None, wg=None,
                 Nx=None, sectors=None , rmin=None, rmax=None, cmap=None, coord=None, style1d='-',
                 title=r"%(type)s, $n_{\mathrm{eff}}=%(tneff)s$"):
-        """
-        Plot the mode.
-        
-        Paramters:
-         plottype: 'vector', 'Sz'*, 'Hz', 'Ez, 'Hr, 'Ha', 'Er, 'Ea', 'Ex', 'Ey', 'Hx', 'Hy'
-         style: 'contour', 'pcolor'*, 'line'
-         style1d: line style for 1d plotting
-         part: one of 'real'*, 'imag', 'abs', 'phase' and optionally 'log'
-         rmax: maxiumum plot radius
-         Nx: plot sampling
-         cmap: color map (from pylab.cm)
-         wg: waveguide (for plotting Ez)
-         title: custom title for the plot
+        """Plot the mode.
+
+            Paramters
+            ---------
+            plottype : {'vector', 'Sz', 'Hz', 'Ez, 'Hr, 'Ha', 'Er, 'Ea', 'Ex', 'Ey', 'Hx', 'Hy'}
+                Specify what to plot, default is 'Sz'
+            
+            style : {'contour', 'pcolor', 'line', '3d'}
+                The plot style to use
+            
+            part : {'real'*, 'imag', 'abs', 'phase', 'log'}
+                Plot a specific part of the `plottype` data
+            
+            rmax : float
+                Maxiumum plot radius
+            
+            Nx : (Nr, Nphi) or (Nx, Ny)
+                Plot at this resolution
+            
+            style1d : matplotlib style
+                Line style for 1d plotting
+            
+            cmap : color map
+                Colour map to plot (from pylab.cm)
+            
+            wg : Waveguide
+                Used if Hz, Ez is plotted.
+            
+            title : string
+                Custom title for the plot
         """
         plottype = plottype.lower()
         plotstyle={}
@@ -646,11 +763,11 @@ class Mode(object):
 
         #Select real, imag or abs parts
         parts = part.replace(',',' ').split()
-        if 'abs' in parts: plotdata = abs(plotdata)
-        elif 'phase' in parts: plotdata = arctan2(real(plotdata),imag(plotdata))
-        elif 'imag' in parts: plotdata = imag(plotdata)
-        elif 'real' in parts: plotdata = real(plotdata)
-        if 'log' in parts: plotdata = log(abs(plotdata))
+        if 'abs' in parts: plotdata = np.abs(plotdata)
+        elif 'phase' in parts: plotdata = np.arctan2(np.real(plotdata),np.imag(plotdata))
+        elif 'imag' in parts: plotdata = np.imag(plotdata)
+        elif 'real' in parts: plotdata = np.real(plotdata)
+        if 'log' in parts: plotdata = np.log(np.abs(plotdata))
         
         #2D or 1D plot
         if 'vector' in style or plotdata.shape[1]>1:
@@ -660,13 +777,21 @@ class Mode(object):
             Plotter.plot(plotcoord.rv, plotdata.squeeze(), style1d)
             Plotter.xlabel('Radial distance, r')
 
-        tdata = {'type':plottype, 'rneff':real(self.neff), 'ineff':imag(self.neff), 'loss':self.loss, 'm0':self.m0}
+        #Format the title
+        tdata = {'type':plottype,
+                 'rneff':np.real(self.neff),
+                 'ineff':np.imag(self.neff),
+                 'loss':self.loss,
+                 'm0':self.m0}
         tdata['tneff'] = misc.format_complex_latex(self.neff)
     
         Plotter.title( title % tdata )
         return plotcoord
 
     def info(self, wg=None):
+        """Print information about the current mode, if the waveguide
+            is given as an argument more information will be given
+        """
         info_str = self.__str__().decode('utf8') + "\n"
         info_str += u" | Effective area: %.5g μm²\n" % self.effective_area()
         info_str += u" | Spot size: %.5g μm\n" %(self.spot_size())
@@ -674,15 +799,13 @@ class Mode(object):
         if self.is_spurious:
             info_str += " | Possible spurious mode\n"
 
+        #Print extra information if wg given
         if wg:
-            quiet = wg.quiet; wg.quiet = True
             rc = wg.core_size
 
             info_str += " | Group index: %s m/s\n" % self.group_index(wg)
             info_str += " | Mode class: %s\n" % self.estimate_class(wg)
             info_str += " | Power in core: %.5g%%\n" % (100*self.mode_power(r=rc)/self.mode_power())
-
-            wg.quiet = quiet
         print utf8out(info_str)
 
     # -------------------------------------------------------------------
@@ -706,7 +829,7 @@ class Mode(object):
     def __str__(self):
         info_dict = {}
 
-        info_dict['res'] = max(atleast_1d(self.residue))
+        info_dict['res'] = np.max(np.atleast_1d(self.residue))
         info_dict['userlab'] = ", ".join(["%s: %s" % (x,self.label[x]) for x in self.label])
         info_dict['m0'] = self.m0
         info_dict['wl'] = self.wl
@@ -725,7 +848,7 @@ class Mode(object):
         return utf8out(info_str)
 
     def __repr__(self):
-        res = max(atleast_1d(self.residue))
+        res = np.max(np.atleast_1d(self.residue))
         slab = ("","S")[self.is_spurious]
         clab = ("E","")[self.is_converged()]
         userlab = ", ".join(["%s: %s" % (x,self.label[x]) for x in self.label])
@@ -752,7 +875,7 @@ class VectorMode(Mode):
     pmax = 2
     r_axis=-2
     az_axis=-1
-    pv = array([1, -1])
+    pv = np.array([1, -1])
 
     reverse_left = False
     reverse_right = False
@@ -823,13 +946,15 @@ class VectorMode(Mode):
             self.aleft_ext.set_extension_mode(self)
             self.aleft_int.set_extension_mode(self)
 
-    def compress(self, wg, size, astype=complex64):
+    def compress(self, size, wg=None):
         "Replace the calculated vectors with resampled versions"
+        astype = np.complex64
+        
         if size is None or size==self.coord.shape:
             logging.warning("Compressing to same size as mode, doing nothing")
             return
         
-        newcoord = wg.get_coord(size)
+        newcoord = wg.get_coord(size, border=1)
         newshape = (newcoord.Nr, newcoord.Naz, self.pmax)
         
         #Resample the right mode vector if there is one
@@ -860,10 +985,10 @@ class VectorMode(Mode):
             raise RuntimeError, "No right eigenvector is available!"
 
         #Shape the vector correctly
-        mdata = rollaxis(self.shape_vector(self.right),2)
+        mdata = np.rollaxis(self.shape_vector(self.right),2)
 
         if swap:
-            mdata = swap_vector(mdata, self.az_axis, 1)
+            mdata = _swap_vector(mdata, self.az_axis, 1)
         return mdata
 
     def get_left(self, field=True, swap=False):
@@ -876,7 +1001,7 @@ class VectorMode(Mode):
             raise RuntimeError, "No left eigenvector is available!"
 
         #Shape the vector correctly
-        mdata = rollaxis(self.shape_vector(self.left),2)
+        mdata = np.rollaxis(self.shape_vector(self.left),2)
         
         #'Fix' up left field as electric field
         # so E+ = L+/r, E- = -L-/r
@@ -885,16 +1010,16 @@ class VectorMode(Mode):
             mdata *= self.pv[:,newaxis,newaxis]
 
         if self.reverse_p:
-            mdata = conj(mdata)
+            mdata = np.conj(mdata)
             mdata = mdata[::-1]
         
         if swap:
-            mdata = swap_vector(mdata, self.az_axis, 1)
+            mdata = _swap_vector(mdata, self.az_axis, 1)
         return mdata
 
     def transform_left(self, factor=1):
         if self.reverse_p:
-            self.left *= conj(factor)
+            self.left *= np.conj(factor)
         else:
             self.left *= factor
 
@@ -906,9 +1031,11 @@ class VectorMode(Mode):
         shape = self.coord.shape+(2,)
         v = v.reshape(shape)
         return v
+
     def unshape_vector(self,v):
         "Return vector shaped for storage"
         return v.ravel()
+
     @property
     def shape(self):
         shape = self.coord.shape+(self.pmax,)
@@ -939,7 +1066,7 @@ class VectorMode(Mode):
         P0 = self.mode_power(coord=coord)
         enorm = None
         if by=='poynting':
-            enorm = conj(misc.absmax(self.poynting(coord=coord)))
+            enorm = np.conj(misc.absmax(self.poynting(coord=coord)))
         elif by=='ext':
             self.add_extensions()
             enorm = self._normalize_electric_field_extension()
@@ -947,20 +1074,20 @@ class VectorMode(Mode):
             enorm = self._normalize_electric_field(wg=wg,coord=coord)
 
         #Otherwise just use the power
-        if enorm is None or isnan(enorm):
+        if enorm is None or not np.isfinite(enorm):
             enorm = 1./P0
         
         #Normalize absolute power so |P|=1
         #Can't normalize power phase and field relationship simultaneously
-        b = sqrt(abs(P0*enorm))
+        b = sp.sqrt(np.abs(P0*enorm))
         self.transform_right(1/b)
         self.transform_left(enorm/b)
-
+        
         #Update analytic extensions
         self.add_extensions()
 
         #Recalulate power & field for information
-        Pang = angle(self.mode_power(coord=coord))
+        Pang = np.angle(self.mode_power(coord=coord))
         logging.debug(u"Normalized mode to power angle ∠%.3gπ" % (Pang/pi))
         return enorm
         
@@ -975,8 +1102,8 @@ class VectorMode(Mode):
         E = self.electric_transverse_field(fourier=fourier, coord=coord)[:,2:-2]
         Ec = self.calculated_electric_field(wg=wg, fourier=fourier, coord=coord)[:2,2:-2]
 
-        xselect = absolute(E).argmax()
-        enorm = array(Ec).flat[xselect]/array(E).flat[xselect]
+        xselect = np.absolute(E).argmax()
+        enorm = np.array(Ec).flat[xselect]/np.array(E).flat[xselect]
         return enorm
 
     def _normalize_electric_field_extension(self):
@@ -1000,8 +1127,8 @@ class VectorMode(Mode):
         #Calculate the weighted average if more than one Fourier component
         if shape(w)[0]>1:
             #Select only low frequency components
-            msl = absolute(self.aright_ext.msx).max(axis=0)<20
-            bnorm = trapz(chi[msl]*w[msl])/trapz(w[msl])
+            msl = np.absolute(self.aright_ext.msx).max(axis=0)<20
+            bnorm = np.trapz(chi[msl]*w[msl])/np.trapz(w[msl])
         else:
             bnorm = chi
         return bnorm
@@ -1034,7 +1161,7 @@ class VectorMode(Mode):
         er = fft.ifft(self.beta*hphi+1j*Dhzphi, axis=1)/(self.k0*n2)
         ephi = -fft.ifft(self.beta*hr+1j*Dhzr, axis=1)/(self.k0*n2)
         ez = fft.ifft(1j*self.coord.curl_t((hr,hphi), fourier=1, m0=self.m0))/(self.k0*n2)
-        e = array([er,ephi,ez])
+        e = np.array([er,ephi,ez])
         
         e = self._resample_vector(fft.fft(e,axis=-1), fourier=fourier, cartesian=cartesian, coord=coord)
         return e
@@ -1062,12 +1189,12 @@ class VectorMode(Mode):
         ephi = -fft.ifft(self.beta*hr+1j*Dhzr, axis=1)/(self.k0*n2)
 
         #Calculate vector
-        ev = array([er+ephi*1j,er-ephi*1j])*self.coord.rv[:,newaxis]/self.pv[:,newaxis,newaxis]
+        ev = np.array([er+ephi*1j,er-ephi*1j])*self.coord.rv[:,newaxis]/self.pv[:,newaxis,newaxis]
         ev = fft.fft(ev,axis=-1)
 
         #Reverse if called for
         if self.reverse_left:
-            ev = swap_vector(ev, -1, 1)
+            ev = _swap_vector(ev, -1, 1)
             
         self.left = self.unshape_vector(ev.transpose((1,2,0)))
 
@@ -1078,7 +1205,7 @@ class VectorMode(Mode):
         cartesian=True returns h_t=(h_x,h_y)
         '''
         hp,hm = self.get_right(swap=self.reverse_right)
-        ht = asarray([(hp+hm)/2, (hp-hm)/2j])
+        ht = np.asarray([(hp+hm)/2, (hp-hm)/2j])
 
         ext = (self.aright_int, self.aright_ext)
         ht = self._resample_vector(ht, ext, fourier, cartesian, coord)
@@ -1090,7 +1217,7 @@ class VectorMode(Mode):
         """
         hr,ha = self.magnetic_transverse_field(fourier=1)
         hz = 1j/self.beta * self.coord.div_t((hr,ha), fourier=1, m0=self.m0)
-        h =asarray([hr,ha,hz])
+        h = np.asarray([hr,ha,hz])
         
         ext = (self.aright_int, self.aright_ext)
         h = self._resample_vector(h, ext, fourier, cartesian, coord)
@@ -1109,7 +1236,7 @@ class VectorMode(Mode):
             self.left = self._calculate_electric_vector(wg)
 
         ep,em = self.get_left(field=1, swap=self.reverse_left)
-        et = asarray([(ep+em)/2, (ep-em)/2j])
+        et = np.asarray([(ep+em)/2, (ep-em)/2j])
         
         ext = (self.aleft_int, self.aleft_ext)
         et = self._resample_vector(et, ext, fourier, cartesian, coord)
@@ -1133,7 +1260,7 @@ class VectorMode(Mode):
         hr,ha = self.magnetic_transverse_field(fourier=1)
         er,ea = self.electric_transverse_field(fourier=1)
         ez = fft.fft(1j/(self.k0*n2) * fft.ifft(self.coord.curl_t((hr,ha), fourier=1, m0=self.m0), axis=1),axis=1)
-        e = asarray([er,ea,ez])
+        e = np.asarray([er,ea,ez])
         
         ext = (self.aleft_int, self.aleft_ext)
         e = self._resample_vector(e, ext, fourier, cartesian, coord)
@@ -1235,7 +1362,7 @@ class AnalyticExtension:
             y += self.bcoeffs[2]*jv(m,x)
         
         #Make sure we don't get NaN's for large orders
-        place(y, isnan(y), 0)
+        np.place(y, np.isnan(y), 0)
         return y
         
     def set_extension_mode(self, mode):
@@ -1265,7 +1392,7 @@ class AnalyticExtension:
         b = self.bessel(self.msx, gamma*self.rc)
         bsel = abs(b)>1e-12
         
-        alphac = zeros_like(self.mdata)
+        alphac = np.zeros_like(self.mdata)
         alphac[bsel] = self.mdata[bsel]/b[bsel]
         return alphac
     alphac = property(calc_alphac)
@@ -1274,13 +1401,13 @@ class AnalyticExtension:
         "Return external fields calculated at r radial coordinates"
         ms = self.msx[...,newaxis]
         ext = self.alphac[...,newaxis]*self.bessel(ms,self.gamma*rext)
-        ext = rollaxis(ext,2)
+        ext = np.rollaxis(ext,2)
         
         if fourier:
             return ext
         else:
             extp = fft.ifft(ext, axis=-1)
-            return extp*exp(1j*self.m0*self.phi)
+            return extp*np.exp(1j*self.m0*self.phi)
 
     def vector(self, rext, fourier=True):
         "Return r,phi,z vectors reconstructed from +/- coefficients, factor=beta"
@@ -1291,7 +1418,7 @@ class AnalyticExtension:
         hp = -0.5j*(ap*self.bessel(msp, self.gamma*rext) - am*self.bessel(msm, self.gamma*rext))
         hz = 1j*self.gamma/self.factor/2*(ap-am)*self.bessel(self.ms, self.gamma*rext)
         
-        return asarray([hr,hp,hz])
+        return np.asarray([hr,hp,hz])
 
 class AnalyticExtensionLeft(AnalyticExtension):
     def set_extension_mode(self, mode):
@@ -1314,6 +1441,6 @@ class AnalyticExtensionLeft(AnalyticExtension):
         ep = -0.5j*(ap*self.bessel(msp, self.gamma*rext) - am*self.bessel(msm, self.gamma*rext))
         ez = 1j*self.gamma/self.factor/2*(ap-am)*self.bessel(self.ms, self.gamma*rext)
         
-        return asarray([er,ep,ez])
+        return np.asarray([er,ep,ez])
 
 

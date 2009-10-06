@@ -3,7 +3,7 @@ from numpy import *
 from Polymode import *
 
 ## Solver parameters
-Nx=200,80
+Nx=200,41
 m0 = 1
 
 ## Waveguide Parameters
@@ -38,7 +38,7 @@ for i in range(Nrings):
 solver = NLSolver.DefaultSolver(wg, Nx)
 
 #Solve at difference wavelengths
-wls=arange(1.05,1.1,0.0025)
+wls=arange(1.1,1.5,0.0025)
 
 modes=[]
 allmodes=[]
@@ -48,7 +48,7 @@ for wl in wls:
     if len(modes)>1:
         modes = solver(wl, m0, modelist=modes)
     else:
-        neffapprox=wg.shapes[0].material.index(wls[0])-1e-3
+        neffapprox=silica.index(wl)
         modes = solver(wl, m0, neffapprox, number=4)
 
     if len(modes)>1:
@@ -56,13 +56,22 @@ for wl in wls:
         pa = modes[0].polarization_angle()
 
         if abs(pa)<pi/4:        #x-polarized
-            bifi = modes[1].beta-modes[0].beta
-        else:   #y-polarized
             bifi = modes[0].beta-modes[1].beta
+        else:   #y-polarized
+            bifi = modes[1].beta-modes[0].beta
         neffapprox = modes[0].neff
 
     print "B:",bifi
     birefringence.append(bifi)
-    allmodes+=[modes]
+    allmodes.extend(modes)
 
-save_data((birefringence, allmodes), "ex7_bifi.dat")
+#Compress modes
+allmodes = Modes.compress_modes(allmodes, (20,11), wg)
+
+#Save all data
+save_data((wls, birefringence, allmodes), "ex7_bifi.dat")
+
+plot(wls, birefringence)
+xlabel(r'Wavelength, $\mu$m')
+ylabel(r'Birefringence, $\beta_x-\beta_y$')
+

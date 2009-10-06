@@ -28,7 +28,7 @@ modes = solver(wl, 0, neffstart, number=2)
 solver = NLSolver.DefaultSolver(wg, Nx, compress_to_size = (10,5))
 modes_comp = solver(wl, 0, neffstart, number=2)
 
-#set compress_mode flag to size of mode information to store
+#set store option to false and throw away calulated vectors
 solver = NLSolver.DefaultSolver(wg, Nx, store = False)
 modes_novec = solver(wl, 0, neffstart, number=2)
 
