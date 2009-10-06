@@ -15,7 +15,7 @@ image_filename2 = os.path.join("images","hlfcollapsedKagome.png")
 wg = Waveguide.Waveguide(rmax=5, material=polymer, symmetry=6)
 
 ## Load a png image to put into the waveguide
-image = Image.ImportBitmap(, size=(20,20), offset = pi/6, negative=True)
+image = Image.ImportBitmap(image_filename1, size=(20,20), offset = pi/6, negative=True)
 image.contrast(scale=15, transition=0.45)
 wg.add_shape(Waveguide.Image(air, image))
 print wg

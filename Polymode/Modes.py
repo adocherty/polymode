@@ -52,7 +52,7 @@ import sys, time, logging
 import numpy as np
 import scipy as sp
 from numpy import linalg as la
-from scipy import fftpack as fft
+from numpy import fft as fft
 
 #Import certain special cases
 from numpy import pi, newaxis
@@ -78,7 +78,7 @@ def _swap_vector(v, axis=-1, shift=0):
         fftflip = fft.fftshift(v,axes=[0])[::-1]
 
         #We need to roll the array by 1 is it's even
-        if mod(v.shape[0],2)==1:
+        if np.mod(v.shape[0],2)==1:
             v = fft.ifftshift(fftflip,axes=[0])
         else:
             v = fft.fftshift(np.roll(fftflip,1,axis=0),axes=[0])
@@ -161,8 +161,8 @@ def construct_degenerate_pair(m1):
     m2.interior_index = m1.interior_index
 
     #Form new fields as hcalculated_electric_fielde+=conj(he-), he+=conj(he-)
-    rs = conj(m1.shape_vector(m1.right)[...,::-1])
-    ls = conj(m1.shape_vector(m1.left)[...,::-1])
+    rs = np.conj(m1.shape_vector(m1.right)[...,::-1])
+    ls = np.conj(m1.shape_vector(m1.left)[...,::-1])
 
     #Conjugation flips fourier coefficients
     m2.right = _swap_vector(rs,1,1).ravel()
@@ -1117,15 +1117,15 @@ class VectorMode(Mode):
         
         #The field coefficients should be such that this is one
         chi = (bp-bm)/(am+ap)/(1j*self.beta/self.k0)
-        w = abs(bp-bm)**2+abs(am+ap)**2
+        w = np.abs(bp-bm)**2+np.abs(am+ap)**2
 
         #Check that we aren't comparing two zero numbers
-        if mean(w)<1e-10:
-            print "Extension norm failed!"
+        if np.mean(w)<1e-10:
+            logging.error("Extension norm failed!")
             return None
             
         #Calculate the weighted average if more than one Fourier component
-        if shape(w)[0]>1:
+        if np.shape(w)[0]>1:
             #Select only low frequency components
             msl = np.absolute(self.aright_ext.msx).max(axis=0)<20
             bnorm = np.trapz(chi[msl]*w[msl])/np.trapz(w[msl])
