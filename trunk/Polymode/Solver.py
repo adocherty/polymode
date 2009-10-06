@@ -356,7 +356,6 @@ class WavelengthTrack(Solve):
         while wl<wl_stop:
             #Update wavelength
             wl += dwl
-            logging.info("")
             logging.info("WL %.6g, step size: %.4g" % (wl,dwl))
 
             #Find new modes
@@ -383,10 +382,10 @@ class WavelengthTrack(Solve):
             elif Nm_current<Nm:  #Find a replacement mode?
                 if self.dont_lose_modes:
                     wl -= dwl/2
-                    logging.info("Lost %d modes: Retracking" % (Nm - Nm_current))
+                    logging.warning("Lost %d modes: Retracking" % (Nm - Nm_current))
                     continue
                 else:
-                    logging.info("Lost %d modes" % (Nm - Nm_current))
+                    logging.warning("Lost %d modes" % (Nm - Nm_current))
 
             elif Nm_current>Nm:
                 logging.warning("Found more modes than requested!")
@@ -450,8 +449,8 @@ class WavelengthTrack(Solve):
             for ii in range(Nm):
                 modes_track[ii].neff = (modes[ii].neff + dneffdwl[ii]*dwl)
 
-            logging.info("Dispersion: %s " % dneffdwl)
-            logging.info("Guess accuracy: %0.4g -> %0.4g" % (ga_max, ga_min))
+            logging.debug("Dispersion: %s " % dneffdwl)
+            logging.debug("Guess accuracy: %0.4g -> %0.4g" % (ga_max, ga_min))
 
         logging.info("Total points: %d, number of backtracks: %d" % (num_eval, num_eval_backtrack))
         return self.modes
