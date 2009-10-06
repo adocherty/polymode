@@ -5,12 +5,15 @@ from numpy.distutils.core import setup
 from numpy.distutils.misc_util import Configuration
 
 #Misc compilation flags
-_ublock_compile = True
+_ublock_compile = False
 _ublock_compile_with_openmp = True
 _ublock_boost_prefix = None
 
 #_ublock_boost_prefix = "/opt/boost"
 #_ublock_boost_lib = "boost_python-gcc43-mt"
+
+_ublock_boost_prefix = "c:\Boost"
+_ublock_boost_lib = "boost_python-gcc43-mt"
 
 try:
     import Cython.Compiler.Main
@@ -42,10 +45,9 @@ def configuration(parent_package='', top_path=None):
         
         if fc_type=='gnu95':
             ext.libraries.append('gfortran')
-        elif fc_type=='gnu77':
+        elif fc_type=='gnu':
             ext.libraries.append('g2c')
-
-        print "extend libraries:", ext.libraries
+        print "Compiler: %s,  Extend libraries: %s" % (fc_type, ext.libraries)
         return None
 
     config.add_extension('bessel_ratios',

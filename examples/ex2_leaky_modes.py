@@ -1,6 +1,5 @@
 from numpy import *
 from Polymode import *
-from Polymode import LayeredSolver
 
 # Materials
 core = Material.SiO2GeO2(0.2)
