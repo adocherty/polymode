@@ -297,8 +297,10 @@ class TriDiBlockSolve(Solve):
     def clear_data(self):
         self.modes = []
 
-    def clean_up(self):
-        self.modes = []
+    def _clean_up_temporary_data(self):
+        """
+        Remove temporary matrices
+        """
         self.matrix = None
         self.si = None
 

@@ -716,11 +716,9 @@ class LayeredSolverCauchy(LayeredSolver):
         
         #Ensure we don't cross a branch point
         klist = np.array([l.kp for l in self.layers])
-        R = np.min(self.rscan_local, np.min(np.abs(klist-bguess)))*(1-1e-8)
-        print "Local search:", bguess+R, np.min(klist), np.max(klist)
-        
+        R = min(self.rscan_local, np.min(np.abs(klist-bguess)))*(1-1e-8)
         roots = findzero(self.condition, z0=bguess, N=self.Nintegral, \
                             R=R, maxiter=4, quiet=False)
-        return roots[:number]
+        return roots
 
 DefaultSolver = LayeredSolver

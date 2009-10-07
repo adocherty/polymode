@@ -3,7 +3,7 @@ from numpy import *
 from Polymode import *
 
 ## Solver parameters
-Nx=300,61
+Nx=400,60
 m0 = 1
 
 ## Materials
@@ -23,7 +23,7 @@ Nrings = 4
 rcladding = (2*Nrings+1)*radius1
 
 #Refractive index function
-fn_parabolic = lambda d: 1-(d/3)**2
+fn_index = lambda d: 1-(d/2)**4.25
 
 #The low index cladding - put it below other shapes
 cladding = Waveguide.Circle(mlow, center=(0,0), radius=rcladding, zorder=-1)
@@ -36,7 +36,7 @@ rings = []
 for i in range(Nrings):
     rings += [ Waveguide.Circle(silica, center=((i+1)*D,0), radius=radius1) ]
     inclusion = Waveguide.Circle(mhigh, center=((i+1)*D,0), radius=radius2, zorder=1)
-    inclusion.set_index_function(fn_parabolic, background=silica)
+    inclusion.set_index_function(fn_index, background=silica)
     rings += [ inclusion ]
 
 wg.add_shapes(core, cladding, rings)
@@ -45,7 +45,7 @@ wg.add_shapes(core, cladding, rings)
 solver = NLSolver.DefaultSolver(wg, Nx)
 
 #Solve at difference wavelengths
-wls=arange(1.06,1.6,0.005)
+wls=arange(1.06,1.6,0.01)
 neffapprox = 1.4481
 
 modes=[]
