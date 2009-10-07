@@ -1758,14 +1758,21 @@ class Waveguide(object):
         
         #Default to waveguide material
         core_material = self.material
+        core_zorder = -inf
         
         #Find any shapes enclosing the origin
         #or shapes touching minimum radius
         for s in self.shapes:
-            rmin, rmax, phimin, phimax = s.extents()
+            #Ignore images for now
+            if isinstance(s, Image):
+                continue
             
-            if rmin<=0 and not isinstance(s, Image):
+            #Find any objects overlapping the origin
+            #and use them to guess the interior material        
+            rmin, rmax, phimin, phimax = s.extents()
+            if (rmin<=0) and (s.zorder>core_zorder):
                 core_material = s.material
+                core_zorder = s.zorder
 
         return core_material
 

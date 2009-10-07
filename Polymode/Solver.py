@@ -180,23 +180,25 @@ class Solve(object):
     def residue(self, x, l=None):
         pass
 
-    ##
-    ## Interface to MPI solver commands
-    ##
+    ## Interface to generic solver commands
     def get_data(self):
         return self.modes
 
     def clear_data(self):
         self.modes = []
 
-    def clean_up(self):
-        self.modes = []
-
+    def _clean_up_temporary_data(self):
+        """
+        Remove and clean up any temporary matrices
+        or other data used
+        """
+        pass
+        
     def calculate(self, number=inf):
         pass
 
     def __call__(self, *args, **kwargs):
-        '''
+        """
         Solve the constructed problem with
         m0: the waveguide symmetry index
         wl: wavelength
@@ -204,7 +206,7 @@ class Solve(object):
         nefflist: Find modes near these effective indices
         modelist: Find modes near these modes
         totalnumber: total number of modes to find
-        '''
+        """
         self.initialize(*args, **kwargs)
         self.calculate()
         self.finalize()
@@ -244,14 +246,15 @@ class Solve(object):
             else:
                 self.bracket = (self.wg.index_range(wl)[0], neffrange)
 
-        self.clean_up()
+        #Clear modes
+        self.clear_data()
 
         #Mode/neff lists if any
         self.nefflist = nefflist
         self.modelist = modelist
         self.is_finalized = False
 
-    def estimate_complete_fraction(self):
+    def _estimate_complete_fraction(self):
         "Return a number between 0 (started) and 1 (finished)"
         return float(len(self.modes))/self.totalnumber
 
@@ -264,6 +267,9 @@ class Solve(object):
          - Delete or compress mode vectors is required
          - Remove debug information if not in debugging mode
         """
+        #Clean up temprorary data
+        self._clean_up_temporary_data()
+
         logging.info("Finalizing calculated modes")
         for ii,mode in enumerate(self.modes):
             #Label the mode
@@ -291,8 +297,7 @@ class Solve(object):
         #Sort modes
         self.modes.sort(reverse=True)
         self.is_finalized = True
-
-
+        
 class WavelengthTrack(Solve):
     '''
     Track modes over a wavelength range with adaptive step size
