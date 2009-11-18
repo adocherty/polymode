@@ -994,6 +994,7 @@ class ChannelAnnulus(Polygon):
     name = "Annulus with Channel"
     def __init__(self, material, r=(0,1.0), phi=(1,0), sampling=50, d=0, zorder=0):
         center = (average(r), average(phi))
+        self.nodes = []
         WgShape.__init__(self, material, center, zorder=zorder)
 
         if d==0 or r[0]==0 or r[1]==0:
