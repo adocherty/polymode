@@ -212,19 +212,22 @@ class Worker:
         """
         #Receive first job from master
         sts = MPI.Status()
-        item = self.comm.Recv(buf=None, source=self.master, tag=MPI.ANY_TAG, status=sts)
+        
+        item = self.comm.recv(source=self.master, tag=MPI.ANY_TAG, status=sts)
 
         #Until we're sent a termination message
-        while sts.tag <> MPI.TAG_UB:
+        tag_terminate = MPI.COMM_WORLD.Get_attr(MPI.TAG_UB)
+        logging.info("%d: %s, %s, %s" % (self.comm.Get_rank(), item, sts.tag, tag_terminate))
+        while sts.tag <> tag_terminate:
             #Calculate item and send back to master with the same tag
             item.calculate()
-            logging.debug("Finished calculation .. sending to master")
-            self.comm.Send(buf=item, dest=self.master, tag=sts.tag)
+            logging.info("Finished calculation .. sending to master")
+            self.comm.send(item, dest=self.master, tag=sts.tag)
 
             #If the item is finished then flag to wait for new job
             #Otherwise skip receiving a new job and continue with this one              
             if item.isfinished():
-                item = self.comm.Recv(buf=None, source=self.master, tag=MPI.ANY_TAG, status=sts)
+                item = self.comm.recv(source=self.master, tag=MPI.ANY_TAG, status=sts)
         
 class Master:
     def __init__(self, comm, queue, savename):
@@ -243,6 +246,7 @@ class Master:
         
     def save_state(self, force_save=False):
         logging.info("Saving state")
+
         #Don't save to often
         if (not force_save) and (self.last_saved is not None):
             if (datetime.datetime.now()-self.last_saved).seconds<self.min_save_interval:
@@ -260,6 +264,7 @@ class Master:
             os.remove(self.save_filename)
         except OSError:
             pass
+
         #Copy the new queue to the true name
         os.rename(save_filename_temp, self.save_filename)
         logging.debug("Now moved %s->%s" % (save_filename_temp, self.save_filename))
@@ -274,9 +279,12 @@ class Master:
     
     def receive(self):
         sts = MPI.Status()
-        self.comm.Probe(MPI.ANY_SOURCE, MPI.ANY_TAG, sts)           #Blocking probe
-        data = self.comm.Recv(buf=None, source=sts.source, tag=sts.tag, status=sts)
-        #self.mpi_calls += mpi_log_info("receive", sts.source, data)
+        #Blocking probe
+        self.comm.Probe(MPI.ANY_SOURCE, MPI.ANY_TAG, sts)
+        
+        #Receive object data - note this uses 'comm.recv' to get a pickled
+        #object, not the fast 'comm.Recv' which works on nump arrays
+        data = self.comm.recv(source=sts.source, tag=sts.tag, status=sts)
         return sts.source, sts.tag, data
 
     def send_next(self):
@@ -298,7 +306,7 @@ class Master:
             sent_job = True
 
             #Send job to node
-            self.comm.Send(buf=item, dest=dest, tag=tag)
+            self.comm.send(item, dest=dest, tag=tag)
             #self.mpi_calls += mpi_log_info("send", dest, item)
             sent_job = True
             
@@ -306,7 +314,7 @@ class Master:
             #Note:  the worker will seperately tag it as running so it knows
             #       that the job is new
             item.status = Status.running
-            logging.debug( "Sent job %d to node %d" % (tag, dest) )
+            logging.info( "Sent job %d to node %d" % (tag, dest) )
         return jobs_pending, sent_job
 
     def item_dependancies_fulfilled(self, item):
@@ -332,17 +340,19 @@ class Master:
     
     #Send signal to all workers to terminate
     def terminate_running_workers(self):
+        print "Terminate running workers:", self.running_workers
         logging.info( "Terminating workers still running: %s" % (self.running_workers) )
 
         sts = MPI.Status()
+        tag_terminate = MPI.COMM_WORLD.Get_attr(MPI.TAG_UB)
         while len(self.running_workers)>0:
             self.comm.Probe(MPI.ANY_SOURCE, MPI.ANY_TAG, sts)
             worker = sts.source
 
             logging.info( "Terminating node %d" % (worker) )
             
-            self.comm.Recv(buf=None, source=worker, tag=sts.tag, status=sts) #Do we need this?
-            self.comm.Send(buf=None, dest=worker, tag=MPI.TAG_UB)
+            self.comm.recv(source=worker, tag=sts.tag, status=sts) #Do we need this?
+            self.comm.send(dest=worker, tag=tag_terminate)
             
             if worker in self.running_workers:
                 self.running_workers.remove(worker)
@@ -351,15 +361,15 @@ class Master:
     def terminate_waiting_workers(self):
         logging.info( "Terminating waiting workers: %s" % (self.available_workers) )
 
+        tag_terminate = MPI.COMM_WORLD.Get_attr(MPI.TAG_UB)
         while len(self.available_workers)>0:
             worker = self.available_workers.pop()
             logging.debug( "Terminating node %d" % (worker) )
-            self.comm.Send(buf=None, dest=worker, tag=MPI.TAG_UB)
+            self.comm.send(dest=worker, tag=tag_terminate)
             
             if worker in self.running_workers:
                 self.running_workers.remove(worker)
         logging.info( "Finished terminating available nodes")
-
 
     def run(self):
         """
@@ -398,22 +408,23 @@ class Master:
                 logging.error( "No jobs are running .. bailing master process" )
                 break
             
-            worker_id, tag, item_update = self.receive()    #wait for any node to send us data
+            logging.info( "Waiting for response from %d workers" % len(self.running_workers) )
+            worker_id, tag, item_update = self.receive()              #wait for any node to send us data
             self.queue[tag] = item_update                                   #Update the queue
             logging.info( "Received job %d from node %d" % (tag, worker_id) )
             
             if item_update.isfinished():        #Is the job complete? .. used for checkpointing
-                                            number_calculated+=1
-                                            logging.info( "Completed %d of %d jobs" % (number_calculated, number_of_jobs) )
-                                            self.available_workers.append(worker_id)
-                                            checkpoint = False
+                number_calculated+=1
+                logging.info( "Completed %d of %d jobs" % (number_calculated, number_of_jobs) )
+                self.available_workers.append(worker_id)
+                checkpoint = False
             else:                                                       #Just checkpointing
-                                            #Check how long the job has been running
-                                            runtime = item_update.current_job_runtime()
-                                            if runtime>datetime.timedelta(5,0,0):
-                                                logging.warning("Job has been running for a long time .. is there a problem?")
-                                            logging.info( "Checkpointing job %d at X%%" % (tag) )
-                                            checkpoint = True
+                #Check how long the job has been running
+                runtime = item_update.current_job_runtime()
+                if runtime>datetime.timedelta(5,0,0):
+                    logging.warning("Job has been running for a long time .. is there a problem?")
+                logging.info( "Checkpointing job %d at X%%" % (tag) )
+                checkpoint = True
         
         if jobs_pending and number_calculated>=number_of_jobs:
             logging.error("All jobs calculated but jobs still pending?")
@@ -422,7 +433,8 @@ class Master:
             self.update_job_queue(autocancel=True)
             logging.info("Jobs must have unfulfilled dependencies")
 
-        self.save_state(True)                   #Force save the queue
+        #Final save of the queue, ensure we save it all
+        self.save_state(True)
         
         #Terminate all waiting workers
         self.terminate_waiting_workers()
@@ -501,9 +513,9 @@ def mpi_batch_solve(solvers, filename=None, savenumber=100, restart=False, try_a
     #Note .. although solvers are supplied to all processes
     #the worker node doesn't and shouldn't use it
     if comm.Get_rank() <> master_id:
-        logging.debug( "Running worker on node %d." % comm.Get_rank() )
+        logging.info( "Running worker on node %d." % comm.Get_rank() )
         Worker(comm, master_id).run()
-        logging.debug( "Worker %d Finished." % comm.Get_rank() )
+        logging.info( "Worker %d Finished *" % comm.Get_rank() )
         return None
     
     #The master plan

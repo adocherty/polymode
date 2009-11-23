@@ -5,15 +5,17 @@ from numpy.distutils.core import setup
 from numpy.distutils.misc_util import Configuration
 
 #Misc compilation flags
-_ublock_compile = False
+_ublock_compile = True
 _ublock_compile_with_openmp = True
 _ublock_boost_prefix = None
 
-#_ublock_boost_prefix = "/opt/boost"
-#_ublock_boost_lib = "boost_python-gcc43-mt"
+#USYD
+_ublock_boost_prefix = "/users/amstaff/andrewd/usr"
+_ublock_boost_lib = "boost_python-gcc41-mt"
 
-_ublock_boost_prefix = "c:\Boost"
-_ublock_boost_lib = "boost_python-gcc43-mt"
+#Windows:
+#_ublock_boost_prefix = "c:\Boost"
+#_ublock_boost_lib = "boost_python-gcc43-mt"
 
 try:
     import Cython.Compiler.Main
