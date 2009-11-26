@@ -2,10 +2,8 @@
 # _*_ coding=utf-8 _*_
 
 from numpy import *
-from scipyext import physcon
-from ABCSolver import MPISolver, Solver, Waveguide, Material, Modes
-
-from CustomStructures import *
+from Polymode import *
+from Polymode import MPISolver
 
 def choose_results_file():
 	import re, os

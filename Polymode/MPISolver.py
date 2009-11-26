@@ -23,8 +23,10 @@ Classes for solving on MPI systems with mpi4py
 """
 
 from __future__ import division
-import os, sys, datetime, traceback, logging
-import pickle
+import os, sys, traceback, logging, pickle
+
+import datetime as dt
+import numpy as np
 
 from numpy import *
 from numpy.lib.scimath import sqrt
@@ -107,7 +109,7 @@ class QueueItem(object):
         if self.started_at is None:
             self.set_current_start_time()
             self.status = Status.running
-            self.started_at = datetime.datetime.now()
+            self.started_at = dt.datetime.now()
             self.initialize_external_data()
 
         #Wrap in try/except so we can continue with other jobs if one fails
@@ -118,10 +120,10 @@ class QueueItem(object):
             if self.solver.isfinished():
                 #Update status if finished
                 self.status = Status.complete
-                self.finished_at = datetime.datetime.now()
+                self.finished_at = dt.datetime.now()
             else:
                 #This is a checkpoint save otherwise
-                self.checkpoints += [ datetime.datetime.now() ]
+                self.checkpoints += [ dt.datetime.now() ]
 
             #Save item data externally, if supported
             self.save_external_data()
@@ -180,10 +182,10 @@ class QueueItem(object):
             print self.result
 
     def current_job_runtime(self):
-        return datetime.datetime.now() - self.current_run_start_time
+        return dt.datetime.now() - self.current_run_start_time
     
     def set_current_start_time(self):
-        self.current_run_start_time = datetime.datetime.now()
+        self.current_run_start_time = dt.datetime.now()
     
     def isfinished(self):
         return self.status in [Status.complete, Status.failed,
@@ -249,8 +251,8 @@ class Master:
 
         #Don't save to often
         if (not force_save) and (self.last_saved is not None):
-            if (datetime.datetime.now()-self.last_saved).seconds<self.min_save_interval:
-                logging.info("Not saving, time since last save: %d" % (datetime.datetime.now()-self.last_saved).seconds)
+            if (dt.datetime.now()-self.last_saved).seconds<self.min_save_interval:
+                logging.info("Not saving, time since last save: %d" % (dt.datetime.now()-self.last_saved).seconds)
                 return
 
         #Save the queue as a whole to a new file
@@ -269,7 +271,7 @@ class Master:
         os.rename(save_filename_temp, self.save_filename)
         logging.debug("Now moved %s->%s" % (save_filename_temp, self.save_filename))
         
-        self.last_saved = datetime.datetime.now()
+        self.last_saved = dt.datetime.now()
 
         #Save profiling info
         #pickle.dump(self.mpi_calls, open('mpi_call_info.prof','w'))
@@ -421,7 +423,7 @@ class Master:
             else:                                                       #Just checkpointing
                 #Check how long the job has been running
                 runtime = item_update.current_job_runtime()
-                if runtime>datetime.timedelta(5,0,0):
+                if runtime>dt.timedelta(5,0,0):
                     logging.warning("Job has been running for a long time .. is there a problem?")
                 logging.info( "Checkpointing job %d at X%%" % (tag) )
                 checkpoint = True
@@ -472,9 +474,9 @@ def mpi_batch_continue(filename, **args):
     mpi_batch_solve(None, filename, restart=True, **args)
 
 def mpi_direct_run_if_worker():
-    '''
+    """
     Run worker node directly, do not pass go if MPI is detected and not the master node
-    '''
+    """
     load_mpi()
     if MPI is None:
         logging.error("Error loading MPI: Cannot run MPI batch solve")
@@ -490,6 +492,20 @@ def mpi_direct_run_if_worker():
         return True
     else:
         return False
+
+def mpi_is_master():
+    """
+    Simple test to check if we are running on the master node
+    """
+    load_mpi()
+    if MPI is None:
+        return True
+
+    master_id = 0
+    comm = MPI.COMM_WORLD
+    if comm.Get_rank() == master_id:
+        return True
+    return False
 
 
 def mpi_batch_solve(solvers, filename=None, savenumber=100, restart=False, try_again=False, comment=None):
@@ -521,7 +537,7 @@ def mpi_batch_solve(solvers, filename=None, savenumber=100, restart=False, try_a
     #The master plan
     else:
         if filename is None:
-            filename = "mpi_solve_%s.queue" % datetime.date.today()
+            filename = "mpi_solve_%s.queue" % dt.date.today()
         logging.warning("Master node will save queue to '%s'" % filename)
 
         #if restart, check if an old queue exists
@@ -635,8 +651,11 @@ def queue_load_solvers(filename):
         solvers += [item.solver]
     return solvers
 
-def queue_load_modes(filename, return_wg=False):
-    "Load preexisting queue and return modes"
+def queue_load_modes(filename, groups=False):
+    """
+    Load saved queue file and return modes
+    optionally wgs are returned if groups is true
+    """
     try:
         queue = pickle.load(open(filename,'rb'))
     except:
@@ -647,11 +666,14 @@ def queue_load_modes(filename, return_wg=False):
     modes = []
     wgs = []
     for item in queue:
-        modes += item.solver.get_data()
-        wgs.append( item.solver.wg )
+        if groups:
+            modes.append([item.solver.get_data()])
+            wgs.append(item.solver.wg)
+        else:
+            modes.append(item.solver.get_data())
 
     #Return waveguides if requested
-    if return_wg:
+    if groups:
         return modes, wgs
     else:
         return modes
