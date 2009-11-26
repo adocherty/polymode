@@ -11,7 +11,7 @@ _ublock_boost_prefix = None
 
 #USYD
 _ublock_boost_prefix = "/users/amstaff/andrewd/usr"
-_ublock_boost_lib = "boost_python-gcc41-mt"
+_ublock_boost_lib = "boost_python-py26"
 
 #Windows:
 #_ublock_boost_prefix = "c:\Boost"

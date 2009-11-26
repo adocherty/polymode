@@ -20,30 +20,31 @@ wedge1 = Waveguide.ChannelAnnulus(air, r=(rcore,rcore+w), phi=(-pi/symmetry,pi/s
 wg1 = Waveguide.Waveguide(material=poly, symmetry=symmetry)
 wg1.add_shape(wedge1)
 
-Nx = 100,11
-#Create solvers
+Nx = 400,15
 
-#number_of_jobs could be dependent upon
-#the number of processors available
-if 1:
-    number_of_jobs = 5
-    totalnumber = 20
+#Create queue only if we are on the master node
+if MPISolver.mpi_is_master():
+    #number_of_jobs could be dependent upon
+    #the number of processors available
+    number_of_jobs = 20
+    number_of_modes = 400
+    number_of_modes_per_job = number_of_modes//number_of_jobs
     fullneffrange = poly.index(wl), 1.2
     dneff = (fullneffrange[1]-fullneffrange[0])/number_of_jobs
 
     solvers = []
     for ii in range(number_of_jobs):
-        m0=0
+        m0 = 0
 
         #Specify search range
         neffrange = fullneffrange[0] + dneff*ii, fullneffrange[0] + dneff*(ii+1)
 
         #Create new solver object
-        solver = NLSolver.DefaultSolver(wg1, Nx)
-        solver.initialize(wl, m0, neffrange, number=totalnumber//number_of_jobs)
+        solver = NLSolver.DefaultSolver(wg1, Nx, store=False)
+        solver.initialize(wl, m0, neffrange, number=number_of_modes_per_job)
 
         solvers += [ solver ]
 
     queue_save_filename = 'mpi_test.queue'
-    MPISolver.mpi_batch_solve(solvers, queue_save_filename)
 
+MPISolver.mpi_batch_solve(solvers, queue_save_filename)

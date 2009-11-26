@@ -37,7 +37,7 @@ Functions in this module
    Select those modes that are unique
 
  - construct_degenerate_pair
-   Constrcut degenerate mode pair from circularly polarized mode
+   Construct degenerate mode pair from circularly polarized mode
     
  - construct_lp_degenerate_pair
    Construct linearly polarized mode pair
@@ -610,6 +610,39 @@ class Mode(object):
         if coord is None: coord=self.coord
         ng = coord.int_dA(h2abs + (n2-self.wl*dn2dl)*e2abs)/coord.int_dA(exh)/2
         return ng
+
+    def group_index_solver(self, solver, dwl=1e-5):
+        '''
+        Caculate the group index (m/s) of the mode using the solver
+
+        Parameters
+        ---------
+        solver
+        '''
+        wl1 = self.wl + dwl
+        wl2 = self.wl - dwl
+
+        #Approximate wavelength derivative        
+        solver.equation.setup(solver.base_shape,solver.wg,self.m0, wl1)
+        solver.equation.set_lambda(self.evalue)
+        yTx1 = np.dot(np.conj(self.left),solver.equation.matvec(self.right))
+        
+        solver.equation.setup(solver.base_shape,solver.wg,self.m0, wl2)
+        solver.equation.set_lambda(self.evalue)
+        yTx2 = np.dot(np.conj(self.left),solver.equation.matvec(self.right))
+
+        #Beta derivative
+        solver.jacobian.setup(solver.base_shape,solver.wg,self.m0,self.wl)
+        solver.jacobian.set_lambda(self.evalue)
+
+        dTdb = 2*self.beta*np.dot(np.conj(self.left),solver.jacobian.matvec(self.right) - self.right)
+        dTdwl = 0.5*(yTx1-yTx2)/dwl
+        
+        #The dispersion
+        dbdwl = -dTdwl/dTdb
+        
+        return -dbdwl*self.wl**2/(2*pi)
+
 
     def integral_propagation(self, wg=None, coord=None):
         '''

@@ -24,7 +24,25 @@ Solver.py
 
 Main solve class for Polymode
 
-Utility functions:
+Solvers
+-------
+
+AdaptiveWavelengthTrack
+ - Solver for calculating modes over a range of wavelengths
+   with an adaptive wavelength step
+
+WavelengthScan
+ - Solver for calculating modes over a range of wavelengths
+   specifying each wavelength to solve at
+
+WavelengthConditionScan
+ - Solver that returns a map of the condition number over
+   effective index versus the wavelength. No mode solving
+   is performed.
+
+
+Utility functions
+-----------------
 
 batch_file_save(solvers, filename=None)
  - Save solvers in batch file for later solution
@@ -298,7 +316,7 @@ class Solve(object):
         self.modes.sort(reverse=True)
         self.is_finalized = True
         
-class WavelengthTrack(Solve):
+class AdaptiveWavelengthTrack(Solve):
     '''
     Track modes over a wavelength range with adaptive step size
     '''
