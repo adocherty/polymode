@@ -17,7 +17,6 @@ if __name__ == '__main__':
         name = package_name,
         version = version,
         configuration = configuration,
-        install_requires = ['numpy >= 1.0.0', 'scipy>=0.7.0', 'matplotlib>0.90',],
         zip_safe = True,
         )
 

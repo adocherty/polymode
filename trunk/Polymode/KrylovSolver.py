@@ -737,11 +737,11 @@ class NLBiArnoldiSolver(KrylovIteration):
             v_next = self.construct_ritz_vector(self.rsubspace, x_next)
             w_next = self.construct_ritz_vector(self.lsubspace, y_next)
 
-                            #Add converged vector to orthogonalized list
-                            self.rorthogonalize.append(self.normalize_vector(v))
-                            self.lorthogonalize.append(self.normalize_vector(w))
-                            self.Northogonalize += 1
-                            ii+=1
+            #Add converged vector to orthogonalized list
+            self.rorthogonalize.append(self.normalize_vector(v))
+            self.lorthogonalize.append(self.normalize_vector(w))
+            self.Northogonalize += 1
+            ii+=1
         return self.modes       
 
     def check_ip(self, mu1, mu2, y, v):

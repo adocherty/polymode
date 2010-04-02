@@ -5,8 +5,10 @@ from os.path import join
 import setuptools
 from numpy.distutils.core import setup, Command
 
+from Polymode import __version__
+
 package_name = 'Polymode'
-package_version = '0.1.1'
+package_version = __version__
 package_description ="A package for the modal analysis of microstructured optical fibers"
 
 class generate_api_docs(Command):
@@ -56,7 +58,7 @@ def setup_package():
         url='http://polymode.googlecode.com',
         license='GPL3',
         configuration = configuration,
-        install_requires = ['numpy >= 1.0.1', 'scipy>=0.5.2', 'matplotlib>=0.92',],
+#        install_requires = ['numpy >= 1.0.1', 'scipy>=0.5.2', 'matplotlib>=0.92',],
         zip_safe = True,
         cmdclass = {'doc' : generate_api_docs}
         )

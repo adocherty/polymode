@@ -16,6 +16,7 @@ namespace besselratio
 	typedef complex<double> complex_t;
 
 	double RATIO_MMAX = 10;
+	int MAXITER = 100;
 	
 	//Series expansion for the bessel ration J_{m+1}(x)/J_{m-1}(x)
 	template<typename T>
@@ -32,7 +33,7 @@ namespace besselratio
 		double tol = 1e-10;
 		double s = 0;
 		T correction = 1;
-		while( (abs(correction)>tol) && (s<1e3) )
+		while( (abs(correction)>tol) && (s<MAXITER) )
 		{
 			Gns *= (v+s-1.0);
 			S = sign * pow(0.5*z,2*s)/(Gs*Gns);
@@ -63,7 +64,8 @@ namespace besselratio
 
 		double tol = 1e-12;
 		T correction = 0;
-		while( abs(correction-1.0)>tol )
+		int niter = 0;
+		while( abs(correction-1.0)>tol && (niter<MAXITER) )
 		{
 			v += 1;
 			s *= -1;
@@ -72,6 +74,7 @@ namespace besselratio
 			
 			correction = C0/C1;
 			fn *= correction;
+			niter += 1;
 		}
 
 		return fn/(2*m/z-fn);

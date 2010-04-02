@@ -18,7 +18,7 @@ with extentions in C++. Matplotlib is required for the plotting functionality.
 
 -----
 
-Copyright © 2009 Andrew Docherty
+Copyright © 2010 Andrew Docherty
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-__version__ = '0.1'
+__version__ = '0.1.2'
 
 # Other modules that should be loaded for 'from Polymode import *':
 __all__ = ['Modes', 'Image', 'Solver', 'NLSolver', 'Waveguide', 'Material', 'Plotter', 'Equation']

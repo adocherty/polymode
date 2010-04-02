@@ -1969,33 +1969,38 @@ class Waveguide(object):
         for shape in self.shapes:
             r1,r2 = shape.extents()[:2]
             n = shape.material.index(wl)
+            gc = shape.material.chiral_gamma(wl)
             z = shape.zorder
 
-            layer_list.append(MidLayer(r1,r2,n,zorder=z))
+            layer_list.append(MidLayer(r1,r2,n,gc,zorder=z))
         
         #Sort on rstart for each layer
         layer_list.sort()
-        
-        #Process the list and create true layers
-        nint = self.interior_material.index(wl)
-        n0 = self.material.index(wl)
-        next = self.exterior_material.index(wl)
 
+        #Starting materials
+        nint = self.interior_material.index(wl)
+        gcint = self.interior_material.chiral_gamma(wl)
+        n0 = self.material.index(wl)
+        gc0 = self.material.chiral_gamma(wl)
+        next = self.exterior_material.index(wl)
+        gcext = self.exterior_material.chiral_gamma(wl)
+
+        #Process the list and create true layers
         new_layers=[]
         last=None
         for layer in layer_list:
             #Add first layer from wg or shape
             if last is None:
                 if layer.r1>0:
-                    new_layers.append(InteriorLayer(0,layer.r1,nint))
+                    new_layers.append(InteriorLayer(0,layer.r1,nint,gcint))
                 else:
-                    layer = InteriorLayer(0,layer.r2,layer.n,zorder=layer.zorder)
+                    layer = InteriorLayer(0,layer.r2,layer.n,layer.gammac,zorder=layer.zorder)
 
             #Add internal layer
             else:
                 #If there is a gap insert a new layer
                 if layer.r1>last.r2:
-                    new_layers.append(MidLayer(last.r2,layer.r1,n0))
+                    new_layers.append(MidLayer(last.r2,layer.r1,n0,gc0))
                 
                 #Fix overlapping annulii
                 elif layer.r1<last.r2 and layer.r2>=last.r2:
@@ -2008,9 +2013,9 @@ class Waveguide(object):
                 elif layer.r1<last.r2 and layer.r2<last.r2:
                     #Fix the layer transition appropriately
                     if layer.zorder>=last.zorder:
-                        last.r2=layer.r1                            #Fix last layer
-                        new_layers.append(layer)        #Add this layer
-                        layer = MidLayer(layer.r2,last.r2,last.n,zorder=last.zorder)
+                        last.r2=layer.r1                           #Fix last layer
+                        new_layers.append(layer)                   #Add this layer
+                        layer = MidLayer(layer.r2,last.r2,last.n,last,gammac,zorder=last.zorder)
                     else:
                         layer=None
             
@@ -2021,9 +2026,9 @@ class Waveguide(object):
 
         #Final exterior layer - also check for chirality!
         if last.n==next:
-            new_layers[-1] = ExteriorLayer(last.r1,inf,last.n,zorder=last.zorder)
+            new_layers[-1] = ExteriorLayer(last.r1,inf,last.n,last.gammac,zorder=last.zorder)
         else:
-            new_layers.append(ExteriorLayer(layer.r2,inf,next))
+            new_layers.append(ExteriorLayer(layer.r2,inf,next,gcext))
         return new_layers
 
     def mask(self, Nshape=None, mat=None, coord=None, resample=None, border=0):

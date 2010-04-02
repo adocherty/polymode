@@ -229,6 +229,7 @@ class Worker:
             #If the item is finished then flag to wait for new job
             #Otherwise skip receiving a new job and continue with this one              
             if item.isfinished():
+                item.finalize()
                 item = self.comm.recv(source=self.master, tag=MPI.ANY_TAG, status=sts)
         
 class Master:

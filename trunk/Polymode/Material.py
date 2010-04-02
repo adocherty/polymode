@@ -84,7 +84,7 @@ class Material:
 
     def index(self, x, units='wl'):
         '''
-        Get the refractive index for this material at a specific wavenumber.
+        Returns the refractive index for this material at a specific wavenumber.
         '''
         wavelength = self.convertwavelength(x, units)
         
@@ -112,6 +112,12 @@ class Material:
             ifunction = self.index_function
         ans = ifunction(wavelength)
         return ans
+
+    def chiral_gamma(self, x, units='wl'):
+        """
+        Returns the optional chirality of the material.
+        """
+        return 0
 
     def convertwavelength(self, x, wlunits='um'):
         '''
@@ -165,10 +171,13 @@ class Material:
 #----------------------------------- Base Material Classes  ------------------------------------#
 
 class Fixed(Material):
-    def __init__(self,ni):
+    def __init__(self, ni, chiral_gamma=0):
         self.ni = ni
+        self.gammac = chiral_gamma
     def index_function(self, wavelength):
         return self.ni
+    def chiral_gamma(self, x, units='wl'):
+        return self.gammac
     def __str__(self):
         return "Fixed Index (n=%s)" % self.ni
 
