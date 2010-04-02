@@ -33,8 +33,6 @@ cdef extern from "bessel_function_ratios.h":
     c_double c_bessel_ratio "besselratio::besselj_ratio"(double nu, c_double x)
     c_double c_hankel_ratio "besselratio::hankel1_ratio"(double nu, c_double x)
 
-
-
 def besselj(double m, complex x):
     cdef c_double *cxp = new_ccomplex(x.cval.real, x.cval.imag)
     cdef c_double cy = c_besselj(m, cxp[0])

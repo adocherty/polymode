@@ -17,7 +17,6 @@
 #You should have received a copy of the GNU General Public License
 #along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #---------------------------------------------------------------------------------
-
 from __future__ import division
 import logging
 
@@ -26,7 +25,7 @@ import numpy as np
 import scipy as sp
 import numpy.linalg as la
 
-#To be depricated, should use above imports only
+#To be deprecated, should use above imports only
 from numpy import *
 
 from .Solver import Solve
@@ -271,6 +270,9 @@ class LayeredMode(Mode):
         correspondance, including the intrinsic impedence of free space:
         H = Htrue, E = (e0/mu0)^1/2 Etrue
         """
+        #Currently has P0 = nan!
+        return 1
+        
         if coord is None:
             coord = coordinates.PolarCoord(rrange=(0, self.layers[-1].r1*1.5), N=(100, 1))
             
@@ -280,8 +282,8 @@ class LayeredMode(Mode):
         
         #Normalize absolute power so |P|=1
         #Can't normalize power phase and field relationship simultaneously
-        for layer in self.layers:
-            layer.coeffs *= sp.sqrt(enorm)
+        #for layer in self.layers:
+        #    layer.coeffs *= sp.sqrt(enorm)
 
         #Recalulate power & field for information
         Pang = angle(self.mode_power(coord=coord))
@@ -637,13 +639,14 @@ class LayeredSolver(Solve):
         #Field coefficients for first layer
         mode_coeffs = v/absmax(v)
         a0 = zeros(4, dtype=complex)
-        a0[:2] = a0[:2] = mode_coeffs
+        a0[:2] = a0[2:] = mode_coeffs
         
         #Create new layer list with coefficients
-        last = self.layers[0].copy()
-        last.coeffs = a0
-        mode_layers = [last]
+        layer = self.layers[0].copy()
+        layer.coeffs = a0
+        mode_layers = [layer]
         for ii in range(1, self.Nlayer):
+            last = layer
             layer = self.layers[ii].copy()
 
             T1 = last.calculate(beta, layer.r1)

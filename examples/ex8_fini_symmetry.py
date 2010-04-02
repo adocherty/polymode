@@ -33,12 +33,12 @@ if 0:
         mds += solver(wl, 1, 0.98, number=10)
         mds += solver(wl, 2, 0.98, number=10)
 
-elif 1:
+elif 0:
     #Create WL range solver
-    wlsolver = Solver.WavelengthTrackingSolver(solver)
+    wlsolver = Solver.AdaptiveWavelengthTrack(solver)
     wlsolver.ga_target = 1e-4
 
-    nefflist = [0.9999, 0.983428, 0.986677, 0.97, 0.965, 0.96]
+    nefflist = [0.9999, 0.983428]
     wlrange=[1.4,1.55]
     modes0 = wlsolver(wlrange, 0, nefflist=nefflist)
     #modes1 = wlsolver(wlrange, 1, nefflist=[0.99, 0.995])
@@ -49,9 +49,9 @@ elif 1:
 
     #Create WL range solver
     ksolver = KrylovSolver.NLBiArnoldiSolver(wg, Nx)
-    wlsolver = Solver.WavelengthTrackingSolver(ksolver)
+    wlsolver = Solver.AdaptiveWavelengthTrack(ksolver)
     wlsolver.ga_target = 1e-4
-    nefflo = [0.9999, 0.983428, 0.986677, 0.97, 0.965, 0.96]
+    nefflo = [0.9999, 0.983428]
 
     modes=[]
     wlrange=[1.4,1.55]

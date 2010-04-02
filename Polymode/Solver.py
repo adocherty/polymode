@@ -117,7 +117,7 @@ class Solve(object):
         self.force_electric_calculation = False
         
         self.dependancies = []              #Don't run this solver until these are true
-        self.label = label                          #Custom label to identify the solver
+        self.label = label                  #Custom label to identify the solver
         self.dtype = complex128
         self.modes = []
 
@@ -159,19 +159,8 @@ class Solve(object):
         p_.scatter(real(neffs), imag(neffs), s=5, c=colors, marker='o')
 
     ##
-    ## General modal functions
+    ## Mode information functions
     ##
-    def calculate_mode_properties(self, mode):
-        #Use rough sampling
-        cprop = coord.new(Nshape=(50, 5*mode.symmetry), symmetry=1)
-        #cprop = coord.new(Nshape=(100, 11), symmetry=mode.symmetry)
-
-        calc = {}
-        calc['effective_area'] = mode.effective_area(coord=cprop)
-        calc['spot_size'] = mode.spot_size(coord=cprop)
-        calc['group_velocity'] = mode.group_velocity(self.wg, coord=cprop)
-
-        mode.calculated_info = calc
 
     def guess_spurious_mode(self, mode, cutoff=5.0):
         '''
@@ -292,10 +281,6 @@ class Solve(object):
         for ii,mode in enumerate(self.modes):
             #Label the mode
             mode.label = self.label
-
-            #Store some quantities we may want if we throw away the vector info
-            if self.store_mode_properties:
-                self.calculate_mode_properties(mode)
 
             #Update spurious indicator
             self.guess_spurious_mode(mode)
