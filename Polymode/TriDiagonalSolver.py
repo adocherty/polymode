@@ -39,7 +39,7 @@ from .difflounge import finitedifference, boundary
 use_arpack=True
 if use_arpack:
     #ARPACK interface - this keeps changing in scipy
-    from scipy.sparse.linalg.eigen.arpack import eigen
+    from scipy.sparse.linalg.eigen.arpack import eigs
     from scipy.sparse.linalg.interface import LinearOperator
 else:
     from .mathlink.eigensolver import eigs
@@ -356,7 +356,7 @@ class FixedPointSolver(TriDiBlockSolve):
 
             #Solve linear eigenproblem
             if use_arpack:
-                evals, revecs = eigen(self.si, k=searchnum, \
+                evals, revecs = eigs(self.si, k=searchnum, \
                     which='LM', return_eigenvectors=True)
                 evals = self.si.eigenvalue_transform(evals)
             else:
