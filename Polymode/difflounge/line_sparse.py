@@ -40,7 +40,7 @@ class DefaultDict(dict):
 		dict.__init__(self)
 		
 	def __getitem__(self, ii):
-		if self.has_key(ii):
+		if ii in self:
 			return dict.__getitem__(self,ii)
 		else:
 			return self.default
@@ -117,10 +117,10 @@ if __name__=="__main__":
 
 	x = random.random(N)
 	y = AS.matvec(x)
-	print "matvec error:", abs(y-dot(A,x)).max()
+	print("matvec error:", abs(y-dot(A,x)).max())
 	
 	yr = AS.rmatvec(x)
-	print "matvec error:", abs(yr-dot(A.T,x)).max()
+	print("matvec error:", abs(yr-dot(A.T,x)).max())
 
 	import timer
 	
@@ -137,7 +137,7 @@ if __name__=="__main__":
 		y = AS.rmatvec(x)
 	tick.stop('rmatvec')
 
-	print tick.report()
+	print(tick.report())
 
 	#Try multidimensional arrays
 	x = random.random((N,2,5))
@@ -156,10 +156,10 @@ if __name__=="__main__":
 
 	for K in ndindex(x.shape[1:]):
 		yd = dot(A, x[(slice(None),)+K])
-		print K, abs(yd-y2[(slice(None),)+K]).max()
+		print(K, abs(yd-y2[(slice(None),)+K]).max())
 
 	for K in ndindex(x.shape[1:]):
 		yrd = dot(A.T, x[(slice(None),)+K])
-		print K, abs(yrd-y2r[(slice(None),)+K]).max()
+		print(K, abs(yrd-y2r[(slice(None),)+K]).max())
 
 

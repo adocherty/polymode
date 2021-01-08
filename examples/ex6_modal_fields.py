@@ -22,8 +22,8 @@ m = modes[1]
 hr,ha,hz = m.magnetic_field(coord=c1)
 er,ea,ez = m.electric_field(wg, coord=c1)
 
-print "TM like mode factor", sqrt(abs(hr)**2+abs(ha)**2).sum()/abs(hz).sum()
-print "TE like mode factor", sqrt(abs(er)**2+abs(ea)**2).sum()/abs(ez).sum()
+print("TM like mode factor", sqrt(abs(hr)**2+abs(ha)**2).sum()/abs(hz).sum())
+print("TE like mode factor", sqrt(abs(er)**2+abs(ea)**2).sum()/abs(ez).sum())
 
 #The components of e and h for cartesian fields
 h2 = m.magnetic_field(coord=c2)

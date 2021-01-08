@@ -25,7 +25,7 @@ To Do:
 * 
 """
 
-from __future__ import division
+
 
 import logging
 from numpy import *
@@ -49,10 +49,10 @@ class guardedarray(ndarray):
                 ilen = 1
                 index=[index]
             
-            if self.ndim<>ilen:
-                raise IndexError, "Index has more dimentions than array"
+            if self.ndim!=ilen:
+                raise IndexError("Index has more dimentions than array")
 
-            for dim in xrange(ilen):
+            for dim in range(ilen):
                 if isinstance(index[dim], ndarray):
                     index[dim][index[dim]>=self.shape[dim]] = self.shape[dim]-1
                 elif isinstance(index[dim], slice):

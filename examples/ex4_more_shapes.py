@@ -30,7 +30,7 @@ modes = solver(wl, 1, 1.449, number=4)
 losses = [m.loss for m in modes]
 llmode = modes[argmin(losses)]
 
-print "Found low loss mode:", llmode
+print("Found low loss mode:", llmode)
 
 Plotter.figure()
 

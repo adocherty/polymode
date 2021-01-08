@@ -69,7 +69,7 @@ for wl in wls:
             bifi = modes[1].beta-modes[0].beta
         neffapprox = modes[0].neff
 
-    print "B:",bifi
+    print("B:",bifi)
     birefringence.append(bifi)
     allmodes.extend(modes)
 

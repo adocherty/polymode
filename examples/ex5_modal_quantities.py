@@ -25,13 +25,13 @@ modes = solver(wavelength, m0, number=2)
 for m in modes:
     m.normalize(by='ext')
 
-    print
-    print "Mode effective index:", m.neff
-    print "Loss: %.3g dB" % m.loss
-    print "Symmetry class:", m.m0
-    print "Propagation constant:", m.beta
-    print "Wavelength:", m.wl
+    print()
+    print("Mode effective index:", m.neff)
+    print("Loss: %.3g dB" % m.loss)
+    print("Symmetry class:", m.m0)
+    print("Propagation constant:", m.beta)
+    print("Wavelength:", m.wl)
 
-    print "Group index:", m.group_index(wg)
-    print "Propagation contant from integral:", m.integral_propagation(wg)
-    print "Proportion of power in core:", real(m.mode_power(r=wg.core_size)/m.mode_power())
+    print("Group index:", m.group_index(wg))
+    print("Propagation contant from integral:", m.integral_propagation(wg))
+    print("Proportion of power in core:", real(m.mode_power(r=wg.core_size)/m.mode_power()))

@@ -25,4 +25,4 @@ for mat in [pmma, silica, sige]:
     mat.plot()
 
     #calculate the refractive index
-    print "Refractive index at %gum is %.6g+%.4gi\n" % (wl, real(ri), imag(ri))
+    print("Refractive index at %gum is %.6g+%.4gi\n" % (wl, real(ri), imag(ri)))

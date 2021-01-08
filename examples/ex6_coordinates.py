@@ -40,7 +40,7 @@ subplot(224)
 Plotter.plot_v(c2,real(g2))
 axis('tight')
 
-print "Function integral on polar grid:", c1.int_dA(abs(f(x1,y1)))
-print "Function integral on cartesian grid:", c2.int_dA(abs(f(x2,y2)))
+print("Function integral on polar grid:", c1.int_dA(abs(f(x1,y1))))
+print("Function integral on cartesian grid:", c2.int_dA(abs(f(x2,y2))))
 
 draw()

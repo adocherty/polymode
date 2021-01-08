@@ -67,7 +67,7 @@ def asign(f):
 def machine_precision(dtype=float):
     "Caclulated the machine precision of a number with type dtype"
     d=dtype(1.0)
-    while (1.0+d)<>1.0:
+    while (1.0+d)!=1.0:
         d/=2
     return d
 

@@ -46,7 +46,7 @@ Functions in this module
    Construct a mode from a linear combination of other modes.
 """
 
-from __future__ import division
+
 import sys, time, logging
 
 import numpy as np
@@ -57,7 +57,7 @@ from numpy import fft as fft
 #Import certain special cases
 from numpy import pi, newaxis
 
-from .mathlink  import utf8out, misc, timer, coordinates, constants, hankel1, hankel1p, jv
+from .mathlink  import misc, timer, coordinates, constants, hankel1, hankel1p, jv # utf8out
 from .difflounge import finitedifference
 from . import Plotter, Waveguide
 
@@ -140,7 +140,7 @@ def filter_unique_modes(modes, cutoff=1e-8):
         if np.abs(m1.evalue-m2.evalue)<abs(m1.evalue)*cutoff:
             ip = np.dot(np.conj(m1.left), m2.right)
             if np.abs(ip)>1e-8:
-                print "Repeated:",m1.neff,m2.neff
+                print("Repeated:",m1.neff,m2.neff)
                 unique[ii+1] = 0
     
     modes = [smodes[ii] for ii in np.transpose(np.nonzero(unique))]
@@ -825,10 +825,10 @@ class Mode(object):
         """Print information about the current mode, if the waveguide
             is given as an argument more information will be given
         """
-        info_str = self.__str__().decode('utf8') + "\n"
-        info_str += u" | Effective area: %.5g μm²\n" % self.effective_area()
-        info_str += u" | Spot size: %.5g μm\n" %(self.spot_size())
-        info_str += u" | Single moded numerical aperture: %.5g\n" %(self.numerical_aperture())
+        info_str = self.__str__() + "\n"
+        info_str += " | Effective area: %.5g μm²\n" % self.effective_area()
+        info_str += " | Spot size: %.5g μm\n" %(self.spot_size())
+        info_str += " | Single moded numerical aperture: %.5g\n" %(self.numerical_aperture())
         if self.is_spurious:
             info_str += " | Possible spurious mode\n"
 
@@ -839,7 +839,7 @@ class Mode(object):
             info_str += " | Group index: %s m/s\n" % self.group_index(wg)
             info_str += " | Mode class: %s\n" % self.estimate_class(wg)
             info_str += " | Power in core: %.5g%%\n" % (100*self.mode_power(r=rc)/self.mode_power())
-        print utf8out(info_str)
+        print((info_str))
 
     # -------------------------------------------------------------------
     # Misc functions for 2 Modes
@@ -857,7 +857,7 @@ class Mode(object):
         if hasattr(self,'right') and hasattr(other,'left'):
             return sum(self.right*other.left)
         else:
-            raise IndexError, "Modes do not have left & right members!"
+            raise IndexError("Modes do not have left & right members!")
 
     def __str__(self):
         info_dict = {}
@@ -875,10 +875,10 @@ class Mode(object):
             info_dict['symm'] = "C%d" % self.symmetry
         
         #Construct information string
-        info_str = u"Mode, size: %(shape)s, symmetry: %(symm)s, m₀: %(m0)d\n" % info_dict
-        info_str += u"λ: %(wl).4g, r: %(rmin).3g -> %(rmax).3g, res: %(res).2g\n" % info_dict
-        info_str += u"neff=%s, loss=%.4gdB/m, %s" % (misc.format_complex(self.neff), self.loss, info_dict['userlab'])
-        return utf8out(info_str)
+        info_str = "Mode, size: %(shape)s, symmetry: %(symm)s, m₀: %(m0)d\n" % info_dict
+        info_str += "λ: %(wl).4g, r: %(rmin).3g -> %(rmax).3g, res: %(res).2g\n" % info_dict
+        info_str += "neff=%s, loss=%.4gdB/m, %s" % (misc.format_complex(self.neff), self.loss, info_dict['userlab'])
+        return (info_str)
 
     def __repr__(self):
         res = np.max(np.atleast_1d(self.residue))
@@ -886,10 +886,10 @@ class Mode(object):
         clab = ("E","")[self.is_converged()]
         userlab = ", ".join(["%s: %s" % (x,self.label[x]) for x in self.label])
 
-        info_str = u"<%s: m₀=%d λ=%.4g neff=%s r:%.2g %s [%s%s]>" \
+        info_str = "<%s: m₀=%d λ=%.4g neff=%s r:%.2g %s [%s%s]>" \
             % (self.__class__.__name__, self.m0, self.wl, \
                 misc.format_complex(self.neff), res, userlab, slab, clab)
-        return utf8out(info_str)
+        return (info_str)
 
 
 # +-----------------------------------------------------------------------+
@@ -1015,7 +1015,7 @@ class VectorMode(Mode):
         swap: swap the Fourier frequencies m⟶-m
         """
         if self.right is None:
-            raise RuntimeError, "No right eigenvector is available!"
+            raise RuntimeError("No right eigenvector is available!")
 
         #Shape the vector correctly
         mdata = np.rollaxis(self.shape_vector(self.right),2)
@@ -1031,7 +1031,7 @@ class VectorMode(Mode):
         swap: swap the Fourier frequencies m⟶-m
         """
         if self.left is None:
-            raise RuntimeError, "No left eigenvector is available!"
+            raise RuntimeError("No left eigenvector is available!")
 
         #Shape the vector correctly
         mdata = np.rollaxis(self.shape_vector(self.left),2)
@@ -1121,7 +1121,7 @@ class VectorMode(Mode):
 
         #Recalulate power & field for information
         Pang = np.angle(self.mode_power(coord=coord))
-        logging.debug(u"Normalized mode to power angle ∠%.3gπ" % (Pang/pi))
+        logging.debug("Normalized mode to power angle ∠%.3gπ" % (Pang/pi))
         return enorm
         
     def _normalize_electric_field(self, wg, fourier=True, coord=None):

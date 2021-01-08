@@ -22,7 +22,7 @@ for nr in range(1,Nrings+1):
         wg.add_shape( Waveguide.Circle(air,center=(nr*D,ii*D),radius=d/2,xy=1) )
 
 aff = pi/(2*sqrt(3))*(d/D)**2
-print "Created waveguide with %d rings and air fill fraction f=%.2g" % (Nrings, aff)
+print("Created waveguide with %d rings and air fill fraction f=%.2g" % (Nrings, aff))
 
 #Set up batched solver
 m0s = [0,1,2]
@@ -56,4 +56,4 @@ po.join()
 print counter
 """
 
-print tick.report()
+print(tick.report())

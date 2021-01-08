@@ -130,7 +130,7 @@ def plot_v(coord, f, style='pcolor', cmap=None, color=None, alpha=1.0, aspect=No
         autoaspect = 'auto'
     
     else:
-        raise NotImplementedError, "Plot type not implemented"
+        raise NotImplementedError("Plot type not implemented")
     
     #Set aspect ratio for plot
     ax.set_aspect(autoaspect if aspect is None else aspect)

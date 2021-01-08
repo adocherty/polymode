@@ -1,4 +1,4 @@
-from __future__ import division
+
 import logging, datetime, time
 
 DefaultName = 1
@@ -51,7 +51,7 @@ class timer:
         return name
     
     def __str__(self):
-        sorted_keys = self.times.keys(); sorted_keys.sort()
+        sorted_keys = list(self.times.keys()); sorted_keys.sort()
         info_str = " ".join( [ "%s: %.4fs," % (name,self.get_seconds(name)) 
                             for name in sorted_keys ] )
         return info_str
@@ -60,15 +60,15 @@ class timer:
         "Print information on the timed events"
         if len(self.times)<1: return
 
-        ts = sorted(self.times.values(), reverse=1)
+        ts = sorted(list(self.times.values()), reverse=1)
         maxlen = max([len(str(t.label)) for t in ts])
         
-        print "Name%s Time \t\tCalls \tTime per call" % (" "*(maxlen-4))
+        print("Name%s Time \t\tCalls \tTime per call" % (" "*(maxlen-4)))
         
         for t in ts:
             gap = " "*(maxlen-len(str(t.label)))
-            print "%s%s %.4fs \t%d \t%.6fs" % \
-                (t.label, gap, t.time, t.count, t.average())
+            print("%s%s %.4fs \t%d \t%.6fs" % \
+                (t.label, gap, t.time, t.count, t.average()))
     
     def timenow(self):
         now = time.time()
@@ -79,7 +79,7 @@ class timer:
                                                         self.times.clear()
                                     else:
                                         name = self.__popname__(name)
-                                        if self.times.has_key(name):
+                                        if name in self.times:
                                             self.times.pop(name)
 
     def start(self, name=DefaultName):
@@ -168,7 +168,7 @@ class Marker:
         self.times += [t]                   #Save the current time and name
         self.save(t)                                    #Save in file, if it exists
         if self.verbose:
-            print "%s: %s" % (t[1], self.pretty_elapsed(t[0]))
+            print("%s: %s" % (t[1], self.pretty_elapsed(t[0])))
 
     def save(self,t):
         if hasattr(self,'file'):

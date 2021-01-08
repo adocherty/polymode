@@ -30,7 +30,7 @@ the wavelength and (in future) the temperature
  *  Use limits for all materials, not just interpolated ones
 """
 
-from __future__ import division
+
 import logging
 
 from numpy import (pi, asarray, array, arange, isscalar, vectorize, real, imag,
@@ -39,7 +39,7 @@ from numpy import (pi, asarray, array, arange, isscalar, vectorize, real, imag,
 from numpy.lib.scimath import *
 
 from .difflounge import finitedifference
-from .mathlink import constants, utf8out
+from .mathlink import constants#, utf8out
 
 aa_=asarray
 material_resource_dirs = [ 'Sopra', 'freesnell', 'luxpop' ]
@@ -55,7 +55,7 @@ class Material:
     def __str__(self):
         if hasattr(self, 'name'):
             try:
-                dscr = self.name.encode('utf-8')
+                dscr = self.name
             except:
                 dscr = self.__class__.__name__
         else:
@@ -63,10 +63,10 @@ class Material:
         return dscr
         
     def info(self):
-        print "%s" % self
-        print "Wavelength limits (um): %.4g->%.4g" % tuple(self.wl_limits)
-        print "Temperature limits (K): %.4g->%.4g" % tuple(self.temp_limits)
-        print "Cite: %s" % self.citation
+        print("%s" % self)
+        print("Wavelength limits (um): %.4g->%.4g" % tuple(self.wl_limits))
+        print("Temperature limits (K): %.4g->%.4g" % tuple(self.temp_limits))
+        print("Cite: %s" % self.citation)
         
     def wavelength_derivative(self, x, dx=0.01, units='wl'):
         '''
@@ -95,7 +95,7 @@ class Material:
                 else:
                     wlrange = "%.4g" % (wavelength)
 
-                logging.warning( utf8out(u"The wavelength %sμm is outside the valid\n" % (wlrange)
+                logging.warning( ("The wavelength %sμm is outside the valid\n" % (wlrange)
                 + u"\trange for this material, large errors may result.\n"
                 + u"\t%s only has data in the range (%.4g, %.4g)μm" % ((self,)+self.wl_limits)) )
                 
@@ -276,9 +276,9 @@ class Composite(Material):
         self.itype = interpolation
     
     def info(self):
-        print "Composite of:"
+        print("Composite of:")
         for mat,w in zip(self.materials, self.weights):
-            print "> %.2g%% \t%s " % (w*100, mat)
+            print("> %.2g%% \t%s " % (w*100, mat))
         
     def index_function(self, wavelength):
         Nmaterial = len(self.materials)
@@ -374,7 +374,7 @@ class Interpolated(Material):
         * points is the number of points to use in the plot
         '''
         if showdata:
-            import Plotter as pl
+            from . import Plotter as pl
             if wlrange:
                 selectr = nonzero((min(wlrange)<self.wlr) & (self.wlr<max(wlrange)))
                 selecti = nonzero((min(wlrange)<self.wli) & (self.wli<max(wlrange)))
@@ -421,7 +421,7 @@ class GeneralFile(Interpolated):
             #Try and read in a line of numbers
             try:
                 #Replace the sep character with spaces to split on the whitespace
-                linedata += map(float, l.replace(sep,' ').split())
+                linedata += list(map(float, l.replace(sep,' ').split()))
 
                 if len(linedata)>=linelength:
                     data += [linedata[:linelength+1]]
@@ -474,10 +474,10 @@ class SopraFile(GeneralFile):
 
         #Read in first info line
         try:
-            params = map(float, f.readline().split())
-            if len(params)<>4: raise ValueError
+            params = list(map(float, f.readline().split()))
+            if len(params)!=4: raise ValueError
         except ValueError:
-            raise ValueError, "File %s not a SOPRA data file!"
+            raise ValueError("File %s not a SOPRA data file!")
         
         wlunits = {1:'ev', 2:'um', 3:'/cm', 4:'nm'}[int(params[0])]
         
@@ -504,11 +504,11 @@ class Sopra(SopraFile):
         
         respath = 'data/Sopra/'
         if pkg_resources.resource_exists(__name__, respath+'%s.all' % name):
-            raise NotImplementedError, "Multi-file luxpop data not implemented"
+            raise NotImplementedError("Multi-file luxpop data not implemented")
         elif pkg_resources.resource_exists(__name__, respath+'%s.nk' % name):
             sopra_file = pkg_resources.resource_stream(__name__, respath+'%s.nk' % (name))
         else:
-            raise RuntimeError, "Couldn't find Sopra datafile"
+            raise RuntimeError("Couldn't find Sopra datafile")
         
         SopraFile.__init__(self,sopra_file)
 
@@ -551,7 +551,7 @@ class Luxpop(GeneralFile):
                 wli = wlr; nimag = nreal*0
 
         else:
-            raise ValueError, "Material file not found"
+            raise ValueError("Material file not found")
 
         #Convert the wavelengths and store the data
         self.wlr = self.convertwavelength(wlr, wlunits)
@@ -687,7 +687,7 @@ class Air(Fixed):
 #==================== Optical Polymers ========================#
 
 class PMMA(CauchyApproximation):
-    __doc__ = utf8out(u"Polymethyl methacrylate (C₅O₂H₈)n")
+    __doc__ = ("Polymethyl methacrylate (C₅O₂H₈)n")
     name = "PMMA"
     color = 'dodgerblue'
     wl_limits = (0.25,1.5)
@@ -696,7 +696,7 @@ class PMMA(CauchyApproximation):
 Polymer = PMMA
 
 class PMMAKasarova(CauchyApproximation):
-    __doc__ = utf8out(u"Polymethyl methacrylate (C₅O₂H₈)n Polymer at 20°C")
+    __doc__ = ("Polymethyl methacrylate (C₅O₂H₈)n Polymer at 20°C")
     citation = "S. N. Kasarova et al., Optical Materials 29, 1481-1490, 2007"
     link = "doi:10.1016/j.optmat.2006.07.010"
     name = "PMMA"
@@ -706,7 +706,7 @@ class PMMAKasarova(CauchyApproximation):
     A = [2.399964,-8.308636e-2,-1.919569e-1,8.720608e-2,-1.666411e-2,1.169519E-3]
 
 class Polystyrene(CauchyApproximation):
-    __doc__ = utf8out(u"Polystyrene (C8H9)n at 20°C")
+    __doc__ = ("Polystyrene (C8H9)n at 20°C")
     citation = "S. N. Kasarova et al., Optical Materials 29, 1481-1490, 2007"
     link = "doi:10.1016/j.optmat.2006.07.010"
     name = "Polystyrene"
@@ -716,7 +716,7 @@ class Polystyrene(CauchyApproximation):
     A=[2.610025, -6.143673E-2, -1.312267E-1, 6.865432E-2, -1.295968E-2, 9.055861E-4]
 
 class Polycarbonate(CauchyApproximation):
-    __doc__ = utf8out(u"Polycarbonate at 20°C")
+    __doc__ = ("Polycarbonate at 20°C")
     citation = "S. N. Kasarova et al., Optical Materials 29, 1481-1490, 2007"
     link = "doi:10.1016/j.optmat.2006.07.010"
     name = "Polycarbonate"
@@ -726,7 +726,7 @@ class Polycarbonate(CauchyApproximation):
     A=[2.633127, -7.937823E-2, -1.734506E-1, 8.609268E-2, -1.617892E-2, 1.128933E-3]
 
 class SAN(CauchyApproximation):
-    __doc__ = utf8out(u"Styrene acrylonitrile at 20°C")
+    __doc__ = ("Styrene acrylonitrile at 20°C")
     citation = "S. N. Kasarova et al., Optical Materials 29, 1481-1490, 2007"
     link = "doi:10.1016/j.optmat.2006.07.010"
     name = "SAN"
@@ -736,7 +736,7 @@ class SAN(CauchyApproximation):
     A=[2.595568, -6.848245E-2, -1.459074E-1, 7.329172E-2, -1.372433E-2, 9.426682E-4]
 
 class CTERich(CauchyApproximation):
-    __doc__ = utf8out(u"CTE Rich.® at 20°C")
+    __doc__ = ("CTE Rich.® at 20°C")
     citation = "S. N. Kasarova et al., Optical Materials 29, 1481-1490, 2007"
     link = "doi:10.1016/j.optmat.2006.07.010"
     name = "CTE Rich"
@@ -746,7 +746,7 @@ class CTERich(CauchyApproximation):
     A=[2.663794, -1.059116E-1, -2.492271E-1, 1.165541E-1, -2.211611E-2, 1.545711E-3]
 
 class NAS21(CauchyApproximation):
-    __doc__ = utf8out(u"Methyl methacrylate styrene copolymer at 20°C")
+    __doc__ = ("Methyl methacrylate styrene copolymer at 20°C")
     citation = "S. N. Kasarova et al., Optical Materials 29, 1481-1490, 2007"
     link = "doi:10.1016/j.optmat.2006.07.010"
     name = "NAS21"
@@ -756,7 +756,7 @@ class NAS21(CauchyApproximation):
     A=[2.054612, 1.374019E-1, 3.200690E-1, -1.152867E-1, 2.077225E-2, -1.383569E-3]
 
 class LowStyrene(CauchyApproximation):
-    __doc__ = utf8out(u"Low Styrene® at 20°C")
+    __doc__ = ("Low Styrene® at 20°C")
     citation = "S. N. Kasarova et al., Optical Materials 29, 1481-1490, 2007"
     link = "doi:10.1016/j.optmat.2006.07.010"
     name = "Low Styrene"
@@ -766,7 +766,7 @@ class LowStyrene(CauchyApproximation):
     A=[2.360004, -4.014429E-2, -8.371568E-2, 4.160019E-2, -7.586052E-3, 5.071533E-4]
 
 class Optorez(CauchyApproximation):
-    __doc__ = utf8out(u"Optorez 1330® at 20°C")
+    __doc__ = ("Optorez 1330® at 20°C")
     citation = "S. N. Kasarova et al., Optical Materials 29, 1481-1490, 2007"
     link = "doi:10.1016/j.optmat.2006.07.010"
     name = "Optorez"
@@ -776,7 +776,7 @@ class Optorez(CauchyApproximation):
     A=[2.291142, -3.311944E-2, -1.630099E-2, 7.265983E-3, -6.806145E-4, 1.960732E-5]
 
 class Zeonex(CauchyApproximation):
-    __doc__ = utf8out(u"Zeonex E48R® at 20°C")
+    __doc__ = ("Zeonex E48R® at 20°C")
     citation = "S. N. Kasarova et al., Optical Materials 29, 1481-1490, 2007"
     link = "doi:10.1016/j.optmat.2006.07.010"
     name = "Zeonex"
@@ -786,7 +786,7 @@ class Zeonex(CauchyApproximation):
     A=[2.482396, -6.959910E-2, -1.597726E-1, 7.383333E-2, -1.398485E-2, 9.728455E-4]
 
 class Bayer(CauchyApproximation):
-    __doc__ = utf8out(u"Bayer® polycarbonate at 20°C")
+    __doc__ = ("Bayer® polycarbonate at 20°C")
     citation = "S. N. Kasarova et al., Optical Materials 29, 1481-1490, 2007"
     link = "doi:10.1016/j.optmat.2006.07.010"
     name = "Bayer"
@@ -796,7 +796,7 @@ class Bayer(CauchyApproximation):
     A=[2.542676, -4.366727E-2, -8.196872E-2, 4.718432E-2, -8.892747E-3, 6.324010E-4]
 
 class Cellulose(CauchyApproximation):
-    __doc__ = utf8out(u"Cellulose (laboratory specimen) at 20°C")
+    __doc__ = ("Cellulose (laboratory specimen) at 20°C")
     citation = "S. N. Kasarova et al., Optical Materials 29, 1481-1490, 2007"
     link = "doi:10.1016/j.optmat.2006.07.010"
     name = "Cellulose"
@@ -806,7 +806,7 @@ class Cellulose(CauchyApproximation):
     A=[2.139790, -6.317682E-3, -5.920813E-3, 9.613514E-3, -1.967293E-3, 1.363793E-4]
 
 class Polyacrylate(CauchyApproximation):
-    __doc__ = utf8out(u"Polyacrylate (laboratory specimen) at 20°C")
+    __doc__ = ("Polyacrylate (laboratory specimen) at 20°C")
     citation = "S. N. Kasarova et al., Optical Materials 29, 1481-1490, 2007"
     link = "doi:10.1016/j.optmat.2006.07.010"
     name = "Polyacrylate"
@@ -816,7 +816,7 @@ class Polyacrylate(CauchyApproximation):
     A=[2.364830, -6.955268E-2, -1.356107E-1, 6.053900E-2, -1.166640E-2, 8.542615E-4]
 
 class Styrene(CauchyApproximation):
-    __doc__ = utf8out(u"Styrene (laboratory specimen) at 20°C")
+    __doc__ = ("Styrene (laboratory specimen) at 20°C")
     citation = "S. N. Kasarova et al., Optical Materials 29, 1481-1490, 2007"
     link = "doi:10.1016/j.optmat.2006.07.010"
     name = "Styrene"
@@ -826,7 +826,7 @@ class Styrene(CauchyApproximation):
     A=[2.274658, -5.700326E-3, -7.262838E-3, 1.233343E-2, -2.481307E-3, 1.784805E-4]
 
 class PolycarbonateLS(CauchyApproximation):
-    __doc__ = utf8out(u"Polycarbonate (laboratory specimen)  at 20°C")
+    __doc__ = ("Polycarbonate (laboratory specimen)  at 20°C")
     citation = "S. N. Kasarova et al., Optical Materials 29, 1481-1490, 2007"
     link = "doi:10.1016/j.optmat.2006.07.010"
     name = "PCLS"
@@ -836,7 +836,7 @@ class PolycarbonateLS(CauchyApproximation):
     A=[2.496875, -5.014035E-2, -4.188992E-2, 1.732175E-2, -1.240544E-3, -1.977750E-5]
 
 class PolystyreneLS(CauchyApproximation):
-    __doc__ = utf8out(u"Polystyrene (laboratory specimen) at 20°C")
+    __doc__ = ("Polystyrene (laboratory specimen) at 20°C")
     citation = "S. N. Kasarova et al., Optical Materials 29, 1481-1490, 2007"
     link = "doi:10.1016/j.optmat.2006.07.010"
     name = "PSLS"
@@ -846,7 +846,7 @@ class PolystyreneLS(CauchyApproximation):
     A=[2.721609, -9.982812E-2, -2.518650E-1, 1.269202E-1, -2.549211E-2, 1.867696E-3]
 
 class Acrylic(CauchyApproximation):
-    __doc__ = utf8out(u"Acrylic (laboratory specimen) at 20°C")
+    __doc__ = ("Acrylic (laboratory specimen) at 20°C")
     citation = "S. N. Kasarova et al., Optical Materials 29, 1481-1490, 2007"
     link = "doi:10.1016/j.optmat.2006.07.010"
     name = "Acrylic"
@@ -859,7 +859,7 @@ class Acrylic(CauchyApproximation):
 #================= Glasses ===================#
 
 class Silica(Sellmeier):
-    __doc__ = name = utf8out(u"Fused Silicon Oxide (SiO₂)")
+    __doc__ = name = ("Fused Silicon Oxide (SiO₂)")
     citation = "Malitson 1965, http://www.opticsinfobase.org/abstract.cfm?URI=josa-55-10-1205"
     color = 'yellow'
     wl_limits = (0.2,3.8)
@@ -885,7 +885,7 @@ class Quartz(Laurent):
         -1.94741000e-06, 9.36476000e-08 ]
 
 class Germania(ClassiusMorlotti):
-    __doc__ = name = utf8out(u"Germanium Oxide (GeO₂)")
+    __doc__ = name = ("Germanium Oxide (GeO₂)")
     citation = "Sunak, H.R.D.; Bastien, S.P., Photonics Technology Letters V1 N6 142-145, 1989"
     color = 'lawngreen'
     wl_limits = (0.6,1.8)
@@ -894,7 +894,7 @@ class Germania(ClassiusMorlotti):
     L = aa_([0.060928804, 0.1419148170, 10.86114943])
 
 class SiO2GeO2(ClassiusMorlotti):
-    __doc__ = utf8out(u"Silica (SiO₂) doped with a molar fraction f of Germania (GeO₂)")
+    __doc__ = ("Silica (SiO₂) doped with a molar fraction f of Germania (GeO₂)")
     name = "Silica doped with Germania"
     citation = "Sunak, H.R.D.; Bastien, S.P., Photonics Technology Letters V1 N6 142-145, 1989"
     color = 'lightgreen'
@@ -905,11 +905,11 @@ class SiO2GeO2(ClassiusMorlotti):
     D = aa_([-0.1011783769, 0.1778934999, -0.164179581])
     def __init__(self, f=0):
         if f>0.2:
-            logging.warning(utf8out(u"SiO₂/GeO₂: Dopant levels greater than 20% may be inaccurate") )
+            logging.warning(("SiO₂/GeO₂: Dopant levels greater than 20% may be inaccurate") )
         self.f = f
 
 class SiO2Fl(ClassiusMorlotti):
-    __doc__ = utf8out(u"Silica (SiO₂) doped with a molar fraction f of Flourine")
+    __doc__ = ("Silica (SiO₂) doped with a molar fraction f of Flourine")
     name = "Silica doped with Flourine"
     citation = "Sunak, H.R.D.; Bastien, S.P., Photonics Technology Letters V1 N6 142-145, 1989"
     color = 'cornsilk'
@@ -920,7 +920,7 @@ class SiO2Fl(ClassiusMorlotti):
     D = aa_([-0.05413938039, -0.1788588824, -0.07445931332])
     def __init__(self, f=0):
         if f>0.02:
-            logging.warning(utf8out(u"SiO₂Fl: Dopant levels greater than 2% may be inaccurate") )
+            logging.warning(("SiO₂Fl: Dopant levels greater than 2% may be inaccurate") )
         self.f = f
 
 
@@ -929,7 +929,7 @@ class SiO2Fl(ClassiusMorlotti):
 #Find available materials
 __doc__ = "Material: Classes for modelling materials"
 __doc__ += "\n\n**** Inbuilt Materials ****\n"
-allinstances = filter( lambda item: hasattr(item[1],'name'), locals().items() )
+allinstances = [item for item in list(locals().items()) if hasattr(item[1],'name')]
 __doc__ += "\n".join( [ "%s:  %s" % (name, mat.name) for name,mat in allinstances ] )
 __doc__ += "\n\nUse the Material.find_materials() function to find other materials"
 
@@ -959,14 +959,14 @@ def find_materials(search_string):
         for datadir in material_resource_dirs:
             if pkg_resources.resource_isdir(__name__, 'data/'+datadir):
                 names = pkg_resources.resource_listdir(__name__, 'data/'+datadir)
-                names = filter(lambda name: name.lower().find(ss)>=0, names)
-                names = filter(lambda name: name.lower()[-4:]<>'html', names)
+                names = [name for name in names if name.lower().find(ss)>=0]
+                names = [name for name in names if name.lower()[-4:]!='html']
                 found[datadir.capitalize()] = names
 
-    print "\nMaterials found in internal datafiles:"
+    print("\nMaterials found in internal datafiles:")
     for resource in found:
         if len(found[resource])>0:
-            print "\n%s materials:" % resource
-            print "\n".join(found[resource]).replace('.nk','').replace('.dat','').replace('.all','')
-    print
+            print("\n%s materials:" % resource)
+            print("\n".join(found[resource]).replace('.nk','').replace('.dat','').replace('.all',''))
+    print()
     

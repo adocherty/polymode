@@ -1,4 +1,4 @@
-from __future__ import division
+
 
 from numpy import size, r_, zeros, pi, tan, arange, real, imag, empty, sin, mod, ndarray, eye
 from numpy.fft import fft,ifft,fftshift
@@ -19,10 +19,10 @@ def toeplitz(D, col_left, col_right = 0):
 		col_right = col_left
 	
 	N = len(col_left)
-	if N<>len(col_right):
-		raise IndexError, "Lengths of col_left & col_right not the same"
-	if D.shape<>(N,N):
-		raise IndexError, "Matrix not correct shape"
+	if N!=len(col_right):
+		raise IndexError("Lengths of col_left & col_right not the same")
+	if D.shape!=(N,N):
+		raise IndexError("Matrix not correct shape")
 
 	for j in np.arange(0,N):
 		D[j] = np.append(col_left[j::-1], col_right[1:N-j])

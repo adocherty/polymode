@@ -17,7 +17,7 @@
 #You should have received a copy of the GNU General Public License
 #along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #---------------------------------------------------------------------------------
-from __future__ import division
+
 import logging
 
 import pylab as pl
@@ -287,7 +287,7 @@ class LayeredMode(Mode):
 
         #Recalulate power & field for information
         Pang = angle(self.mode_power(coord=coord))
-        logging.debug(u"Normalized mode to power angle ∠%.3gπ" % (Pang/pi))
+        logging.debug("Normalized mode to power angle ∠%.3gπ" % (Pang/pi))
         return enorm
     
     def magnetic_transverse_field(self, fourier=False, cartesian=None, coord=None):
@@ -297,7 +297,7 @@ class LayeredMode(Mode):
         cartesian=True returns h_t=(h_x,h_y)
         '''
         if coord is None: #coord=self.coord
-            raise NotImplementedError, "Need a coord for LayeredMode"
+            raise NotImplementedError("Need a coord for LayeredMode")
 
         H, E=self._construct_fields_(coord, he=True)
         return self._convert_polar_vector(H, coord, cartesian=cartesian)[:2]
@@ -307,7 +307,7 @@ class LayeredMode(Mode):
         The three component magnetic field (h_r,h_ϕ,h_z) or (hx,hy,hz)
         """
         if coord is None: #coord=self.coord
-            raise NotImplementedError, "Need a coord for LayeredMode"
+            raise NotImplementedError("Need a coord for LayeredMode")
         
         H, E=self._construct_fields_(coord, he=True)
         return self._convert_polar_vector(H, coord, cartesian=cartesian)
@@ -321,7 +321,7 @@ class LayeredMode(Mode):
         if calculated_electric_field is true then calculate from the the magnetic field
         '''
         if coord is None: #coord=self.coord
-            raise NotImplementedError, "Need a coord for LayeredMode"
+            raise NotImplementedError("Need a coord for LayeredMode")
         
         H, E=self._construct_fields_(coord, he=True)
         return self._convert_polar_vector(E, coord, cartesian=cartesian)[:2]
@@ -332,7 +332,7 @@ class LayeredMode(Mode):
         if calculated_electric_field is true then calculate from the the magnetic field
         """
         if coord is None: #coord=self.coord
-            raise NotImplementedError, "Need a coord for LayeredMode"
+            raise NotImplementedError("Need a coord for LayeredMode")
         
         H, E=self._construct_fields_(coord, he=True)
         return self._convert_polar_vector(E, coord, cartesian=cartesian)
@@ -355,7 +355,7 @@ class LayeredMode(Mode):
         #Iterate over each layer
         Nlayer = len(self.layers)
         rmin = 0
-        for ii in xrange(0, Nlayer):
+        for ii in range(0, Nlayer):
             layer = self.layers[ii]
             
             #Select points inside layer
@@ -364,7 +364,7 @@ class LayeredMode(Mode):
 
             #all rm within this layer
             number_different=0; last_r = None
-            for kk in xrange(lstart, lend):
+            for kk in range(lstart, lend):
                 sii = sri[kk]; r = rm.flat[sii]; phi = phim.flat[sii]
                 
                 #Check if r change changed

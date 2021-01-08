@@ -1,6 +1,6 @@
 #Unit test for VWE_Action
 
-from __future__ import division
+
 
 import numpy as np
 from numpy.testing import *
@@ -57,15 +57,15 @@ class test_blockarray(TestCase):
 
     def _run_algorithms(self, f, fp=None, z0=0, roots=[]):
         if fp is not None:
-            print "\nChecking Delves"
+            print("\nChecking Delves")
             czd = findzero_delves(f, fp, z0=z0, R=4)
             self._compare_best_candidates(czd,roots)
 
-        print "\nChecking  Carpentier"
+        print("\nChecking  Carpentier")
         czc = findzero_carpentier(f, z0=z0, R=4)
         self._compare_best_candidates(czc,roots)
 
-        print "\nChecking ADR"
+        print("\nChecking ADR")
         cza = findzero_adr(f, z0=z0, R=4)
         self._compare_best_candidates(cza,roots)
 

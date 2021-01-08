@@ -35,7 +35,7 @@ from scipy import optimize
 
 from . import Material, Waveguide, Equation, Modes
 from .TriDiagonalSolver import Solve,TriDiBlockSolve,ShiftInvertBlock
-from .mathlink import blockarray,eigensolver,timer, utf8out
+from .mathlink import blockarray,eigensolver,timer#, utf8out
 from .mathlink.misc import format_complex
 
 
@@ -329,7 +329,7 @@ class NlepResidualIteration(TriDiBlockSolve):
             mode.convergence += [mode.residue]
 
             status_str = {0:"", 1:"L", 2:"*"}[locked_on]
-            logging.debug( utf8out(u"[%d:%s] %s +- %.2g s:%.2g eo:%.2g ei:%d res:%.2g" \
+            logging.debug( ("[%d:%s] %s +- %.2g s:%.2g eo:%.2g ei:%d res:%.2g" \
                 % (niter,status_str,mode.evalue,evchange,stagnation,eoortho,eoiter,res)) )
             niter+=1
 

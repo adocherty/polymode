@@ -52,10 +52,10 @@ for Nx in Nxs:
     modes = solver(wl, m0, nefflist=[1.4429]*2)
 
     bifi = modes[0].beta-modes[1].beta
-    print "Birefringence = %.5g at Nx=%s" % (bifi.real, Nx)
+    print("Birefringence = %.5g at Nx=%s" % (bifi.real, Nx))
 
     if bifi_last:
-        print "Change:", abs(bifi-bifi_last)
+        print("Change:", abs(bifi-bifi_last))
     bifi_last = bifi
 
 Plotter.plot_modes_in_grid(modes, 'sz', cartesian=1)

@@ -62,7 +62,7 @@ batch_continue(filename)
 export_to_nader(solver, prefix="")
  - Export waveguide.in and input_paramters.in to be read by Nader's solver
 """
-from __future__ import division
+
 import logging
 
 import numpy as np
@@ -139,7 +139,7 @@ class Solve(object):
             elif 0<int(d)<len(Solve.ids):
                 self.dependancies.append(Solve.ids[d])
             else:
-                raise LookupError , "Dependancy not recognised, should be a solver"
+                raise LookupError("Dependancy not recognised, should be a solver")
 
     # +-----------------------------------------------------------------------+
     # | General solver functions .. may be overloaded
@@ -298,7 +298,8 @@ class Solve(object):
                 mode.discard_fields()
 
         #Sort modes
-        self.modes.sort(reverse=True)
+#         display(self.modes)
+#         self.modes.sort(reverse=True)
         self.is_finalized = True
         
 class AdaptiveWavelengthTrack(Solve):
@@ -486,9 +487,9 @@ class AdaptiveWavelengthTrack(Solve):
             dmu = -dot(conj(m1.left), M1x)/dot(conj(m1.left), M0px)
             dneffc1 = (m1.neff**2/m1.wavelength+0.5*dmu/m1.k0)/m1.neff
             dneffc = sqrt(m1.evalue+dmu)/m2.k0 - m1.neff
-            print "dneff(1)", dneffc1
-            print "dneff(2)", dneffc
-            print
+            print("dneff(1)", dneffc1)
+            print("dneff(2)", dneffc)
+            print()
             
             neff_guess += [sqrt(m1.evalue+dmu)/m2.k0]
             
@@ -511,8 +512,8 @@ class AdaptiveWavelengthTrack(Solve):
             y = m1.right + delta*x1
 
             solver.equation.set_lambda(m2.evalue)
-            print "Diff1", linalg.norm(solver.equation(y)-m2.evalue*y)
-            print "Diff2", linalg.norm(solver.equation(m1.right)-m2.evalue*m1.right)
+            print("Diff1", linalg.norm(solver.equation(y)-m2.evalue*y))
+            print("Diff2", linalg.norm(solver.equation(m1.right)-m2.evalue*m1.right))
             
     def plot(self, style=''):
         """Plot the found effective index versus the wavelength for all modes
@@ -660,7 +661,7 @@ class WavelengthConditionScan(Solve):
 
 def batch_file_save(solvers, filename=None):
     "Save solvers in batch file for later solution"
-    from cPickle import dump
+    from pickle import dump
     try:
         dump(solvers, open(filename,'wb'))
     except IOError:
@@ -668,7 +669,7 @@ def batch_file_save(solvers, filename=None):
 
 def batch_file_load(filename=None):
     "Load solvers in from a batch file"
-    from cPickle import load
+    from pickle import load
     try:
         solvers = load(open(filename,'rb'))
     except IOError:
@@ -700,7 +701,7 @@ def batch_solve(solvers, filename=None):
     The batch solve can be continued if interrupted
     with the function `batch_continue(filename)`.
     """
-    from cPickle import dump
+    from pickle import dump
     for solver in solvers:
         #Resume calculation if not finished
         if not solver.isfinished():

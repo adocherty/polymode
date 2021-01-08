@@ -8,7 +8,7 @@
 #
 #
 #
-from __future__ import division
+
 from numpy import size, r_, zeros, empty, eye, diag, pi, tan, arange, real, imag, \
 				sin, cos, mod, ndarray, mat, newaxis, sum, absolute
 from numpy.fft import fft,ifft,fftshift
@@ -54,7 +54,7 @@ class ChebyshevDense(ChebyshevBase):
 		self.cache = {}
 		
 	def diff_matrix(self, dn=1):
-		if not self.cache.has_key('N') or self.N <> self.cache['N']:
+		if 'N' not in self.cache or self.N != self.cache['N']:
 			self.cache = {}
 			self.cache['N'] = self.N
 			self.cache['maxdn'] = 0
@@ -82,7 +82,7 @@ class ChebyshevDense(ChebyshevBase):
 		if dn_from==0:
 			self.cache[0] = eye(N)
 		
-		for ii in xrange(dn_from, dn_to):
+		for ii in range(dn_from, dn_to):
 			D = self.cache[ii]
 
 			#Off-diagonal matrix

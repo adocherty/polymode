@@ -33,8 +33,8 @@ subplot(122)
 m.plot(coord=c2)
 
 #Mode quantities can be calculated with a user-defined coordinate
-print "The group index using polar coordinates:", m.group_index(wg, coord=c1).real
-print "The group index using cartesian coordinates:", m.group_index(wg, coord=c2).real
+print("The group index using polar coordinates:", m.group_index(wg, coord=c1).real)
+print("The group index using cartesian coordinates:", m.group_index(wg, coord=c2).real)
 
 #The transverse components of the electric and magnetic fields
 ht = m.magnetic_transverse_field(coord=c1)
@@ -53,5 +53,5 @@ n2 = m145.index(wl)**2
 #The integral approximation to the propagation constat
 beta = 2*(2*pi/wl)*c1.int_dA(n2*exh)/c1.int_dA(h2 + conj(n2)*e2)
 
-print "Propagation constant from integral", beta
-print "Propagation constant of mode", m.beta
+print("Propagation constant from integral", beta)
+print("Propagation constant of mode", m.beta)

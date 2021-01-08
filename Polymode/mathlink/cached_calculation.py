@@ -38,7 +38,7 @@ class CachedCalculation(object):
             self.cache[obj] = self.calculate(obj)
             return self.cache[obj]
         else:
-            raise AttributeError, "No calculation specified"
+            raise AttributeError("No calculation specified")
 
     def __set__(self, obj, value):
         "Manually set cache"
