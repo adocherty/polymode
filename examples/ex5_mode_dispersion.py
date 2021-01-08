@@ -30,6 +30,6 @@ m = modes[1]
 ng = -dbetadwl*wl**2/(2*pi)
 ngm = m.group_index(wg)
 
-print "\nCalculations of group index:\n"
-print "ng from wavelength:",ng
-print "ng from integral:", ngm
+print("\nCalculations of group index:\n")
+print("ng from wavelength:",ng)
+print("ng from integral:", ngm)

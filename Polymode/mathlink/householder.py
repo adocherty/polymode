@@ -6,7 +6,7 @@ QR decomposition implemented with Householder transformations
 
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 '''
-from __future__ import division
+
 
 from numpy import *
 import os, sys, logging
@@ -188,7 +188,7 @@ class ZeroGivensRotation(GivensRotation):
             s = c*t
             r = v[i]*u
 
-        print c,s
+        print(c,s)
 
         self.r = r
         GivensRotation.__init__(self, cs=(c,s), locations=locations)

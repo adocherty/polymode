@@ -5,23 +5,23 @@ from numpy import *
 from scipy import fftpack as fftp
 
 _output_unicode = False
-def utf8out(s):
-    """
-    Encode string to utf8 if unicode output is enabled, otherwise replace with ascii
-    representations of technical symbols.
-    """
-    if _output_unicode:
-        s = s.encode('utf8')
-    else:
-        unicode_greek = {'α':'alpha', 'β':'beta','γ':'gamma','δ':'delta','ε':'epsilon',
-            'θ':'theta', 'λ':'wl', 'μ':'u', 'π':'pi', 'φ':'phi', 'ω':'ang. freq.', 'ϕ':'phi',
-            '₀':'0', '₂':'2', '₁':'1', '₃':'3', '₄':'4', '₅':'5', '₆':'6', '₇':'7', '₈':'8', '₉':'9'}
+# def utf8out(s):
+#     """
+#     Encode string to utf8 if unicode output is enabled, otherwise replace with ascii
+#     representations of technical symbols.
+#     """
+#     if _output_unicode:
+#         s = s.encode('utf8')
+#     else:
+#         unicode_greek = {'α':'alpha', 'β':'beta','γ':'gamma','δ':'delta','ε':'epsilon',
+#             'θ':'theta', 'λ':'wl', 'μ':'u', 'π':'pi', 'φ':'phi', 'ω':'ang. freq.', 'ϕ':'phi',
+#             '₀':'0', '₂':'2', '₁':'1', '₃':'3', '₄':'4', '₅':'5', '₆':'6', '₇':'7', '₈':'8', '₉':'9'}
         
-        for x in unicode_greek.keys():
-            s = s.replace(unicode(x,'utf8'), unicode_greek[x])
+#         for x in list(unicode_greek.keys()):
+#             s = s.replace(str(x,'utf8'), unicode_greek[x])
 
-        s = s.encode('ascii', 'ignore')
-    return s
+#         s = s.encode('ascii', 'ignore')
+#     return s
 
 #Import bessel functions from scipy or amos
 #from .amos import hankel1, hankel1p, hankel2, hankel2p
@@ -58,6 +58,6 @@ try:
 except ImportError:
     from . import physcon as constants
 
-__all__ = filter(lambda s:not s.startswith('_'),dir())
+__all__ = [s for s in dir() if not s.startswith('_')]
 
 

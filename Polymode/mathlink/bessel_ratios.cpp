@@ -5863,15 +5863,15 @@ static INLINE void __Pyx_ErrRestore(PyObject *type, PyObject *value, PyObject *t
 
 #if PY_MAJOR_VERSION >= 3
     /* Note: this is a temporary work-around to prevent crashes in Python 3.0 */
-    if ((tstate->exc_type != NULL) & (tstate->exc_type != Py_None)) {
-        tmp_type = tstate->exc_type;
-        tmp_value = tstate->exc_value;
-        tmp_tb = tstate->exc_traceback;
+    if ((tstate->curexc_type != NULL) & (tstate->curexc_type != Py_None)) {
+        tmp_type = tstate->curexc_type;
+        tmp_value = tstate->curexc_value;
+        tmp_tb = tstate->curexc_traceback;
         PyErr_NormalizeException(&type, &value, &tb);
         PyErr_NormalizeException(&tmp_type, &tmp_value, &tmp_tb);
-        tstate->exc_type = 0;
-        tstate->exc_value = 0;
-        tstate->exc_traceback = 0;
+        tstate->curexc_type = 0;
+        tstate->curexc_value = 0;
+        tstate->curexc_traceback = 0;
         PyException_SetContext(value, tmp_value);
         Py_DECREF(tmp_type);
         Py_XDECREF(tmp_tb);

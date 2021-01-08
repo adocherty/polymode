@@ -27,7 +27,7 @@ except ImportError:
 from numpy.distutils.command import build_src
 
 if have_cython and not build_src.have_pyrex:
-    print "Numpy doesn't support Cython!"
+    print("Numpy doesn't support Cython!")
 
 def configuration(parent_package='', top_path=None):
     config = Configuration('mathlink', parent_package, top_path)
@@ -49,7 +49,7 @@ def configuration(parent_package='', top_path=None):
             ext.libraries.append('gfortran')
         elif fc_type=='gnu':
             ext.libraries.append('g2c')
-        print "Compiler: %s,  Extend libraries: %s" % (fc_type, ext.libraries)
+        print("Compiler: %s,  Extend libraries: %s" % (fc_type, ext.libraries))
         return None
 
     config.add_extension('bessel_ratios',
@@ -68,7 +68,7 @@ def configuration(parent_package='', top_path=None):
 
     if not lapack_opt:
         from numpy.distutils.system_info import NotFoundError
-        raise NotFoundError,'no lapack/blas resources found'
+        raise NotFoundError('no lapack/blas resources found')
 
     ublock_sources = ['ublas_block_lu/ublocklu.cpp','ublas_block_lu/numimport.cpp']
     ublock_depends = ['ublas_block_lu/ublocklu.hpp','ublas_block_lu/numimport.hpp']
@@ -80,18 +80,18 @@ def configuration(parent_package='', top_path=None):
 
     #If boost_src is found, use that, otherwise use default directories
     if boost_src:
-        print "Compiling boost-python from source"
+        print("Compiling boost-python from source")
         ublock_include_dirs += boost_src['include_dirs']
         ublock_libraries += boost_src['libraries']
     elif _ublock_boost_prefix:
-        print "Using user configured boost-python"
+        print("Using user configured boost-python")
         boost_include_dir = join(_ublock_boost_prefix,'include')
         boost_library_dir = join(_ublock_boost_prefix,'lib')
         ublock_library_dirs=[boost_library_dir]
         ublock_include_dirs=['ublas_block_lu', boost_include_dir]
         ublock_libraries=[_ublock_boost_lib]
     else:
-        print "Using system boost-python"
+        print("Using system boost-python")
         boost_include_dir = "/usr/include"
         boost_library_dir = "/usr/lib"
         ublock_library_dirs=[boost_library_dir]

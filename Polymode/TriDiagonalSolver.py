@@ -26,7 +26,7 @@ Implements a dense block-tridiagonal solver
 
 """
 
-from __future__ import division
+
 import logging, datetime
 from numpy import inf, dtype, array, zeros, append, conj
 
@@ -177,7 +177,7 @@ class TriDiBlockSolve(Solve):
             self.mode_class = Modes.VectorMode
         
         elif eqtype=='scalar':
-            raise NotImplementedError, "Scalar Wave Equation not implemented"
+            raise NotImplementedError("Scalar Wave Equation not implemented")
             #self.equation = Equation.Scalar_Wave_Equation(fd_diff)
             #self.jacobian = Equation.Scalar_Wave_Jacobian(fd_jac)
             #self.mode_class = Modes.ScalarMode
@@ -229,13 +229,13 @@ class TriDiBlockSolve(Solve):
         
         #Only update or full construction
         if not leftbc and not rightbc:
-            rows = range(Nr)
+            rows = list(range(Nr))
         else:
             rows=array([])
             if leftbc:
-                rows = append(rows, range(bcstart))
+                rows = append(rows, list(range(bcstart)))
             if rightbc:
-                rows = append(rows, range(Nr-bcend, Nr))
+                rows = append(rows, list(range(Nr-bcend, Nr)))
         
         #Block constrcution of matrix
         vec_row = zeros((1,Naz,pmax), dtype=self.dtype)
@@ -244,8 +244,7 @@ class TriDiBlockSolve(Solve):
             for kk in range(pmax*Naz):
                 vec_row.flat[kk] = 1
                 y = self.equation.construct(vec_row, ii)
-                M[ii,blockstart:blockstart+y.shape[0],:,kk] = \
-                    y.reshape((y.shape[0], 2*Naz))
+                M[int(ii),int(blockstart):int(blockstart+y.shape[0]),:,kk] = y.reshape((int(y.shape[0]), int(2*Naz)))
                 vec_row.flat[kk] = 0
 
     def create(self, generate=True):
@@ -445,7 +444,7 @@ class CenterSolver(FixedPointSolver):
         
         #Filter cev within range
         if self.ignore_outside_interval:
-            cev = filter(lambda x: min(evrange)<=real(x)<=max(evrange), cev)
+            cev = [x for x in cev if min(evrange)<=real(x)<=max(evrange)]
         
         #Refine modes
         for ii in range(len(cev)):

@@ -25,7 +25,7 @@ Todo:
  - Add reflection symmetry
 """
 
-from __future__ import division
+
 import logging
 
 #Numpy and Scipy imports
@@ -81,7 +81,7 @@ class VectorWaveEquation(Equation):
 
     def __str__(self):
         infostr = "Vector Wave Equation with "
-        infostr += u"m0=%d, \u03bb=%.4g\n".encode('utf-8') % (self.m0, 2*pi/self.k0)
+        infostr += "m0=%d, \u03bb=%.4g\n".encode('utf-8') % (self.m0, 2*pi/self.k0)
         infostr += self.diff.__str__()
         return infostr
 
@@ -220,7 +220,7 @@ class VectorWaveEquation(Equation):
     def matvec(self, x):
         "Apply the VWE to the vector x"
         xshape = x.shape
-        if x.ndim<>3: x = x.reshape(self.shape)
+        if x.ndim!=3: x = x.reshape(self.shape)
         r = self.coord.rv[:, newaxis, newaxis]
         
         #The SWE L and the vector contribution G and cross-contribution Gx
@@ -233,7 +233,7 @@ class VectorWaveEquation(Equation):
     def rmatvec(self, x):
         "Apply the adjoint of the VWE to the vector x"
         xshape=x.shape
-        if x.ndim<>3: x = x.reshape(self.shape)
+        if x.ndim!=3: x = x.reshape(self.shape)
         x = conj(x)
         r = self.coord.rv[:, newaxis, newaxis]
 
@@ -246,6 +246,7 @@ class VectorWaveEquation(Equation):
 
     def construct(self, x, row=0):
         "Apply the VWE to construct the matrix"
+        row = int(row)
         r = self.coord.rv[row:row+1, newaxis, newaxis]
         drln = self.drlogn[row:row+1]
         daln = self.dazlogn[row:row+1]

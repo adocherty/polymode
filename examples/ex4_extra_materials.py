@@ -17,7 +17,7 @@ zeo = Material.Zeonex()
 #This will give some errors as we are extrapolating
 #outside the valid region of wavelengths
 for mat in [pmma, pc, ps, zeo]:
-    print mat
+    print(mat)
     mat.plot([0.4,1.2], showdata=True)
 Plotter.title("The refractive index of different optical polymers")
 Plotter.show()
