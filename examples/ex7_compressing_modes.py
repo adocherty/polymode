@@ -32,9 +32,9 @@ modes_comp = solver(wl, 0, neffstart, number=2)
 solver = NLSolver.DefaultSolver(wg, Nx, store = False)
 modes_novec = solver(wl, 0, neffstart, number=2)
 
-print "Size of uncompressed modes: %dkb" % (len(pickle.dumps(modes))/1024)
-print "Size of compressed modes: %dkb" % (len(pickle.dumps(modes_comp))/1024)
-print "Size of modes without vectors: %dkb" % (len(pickle.dumps(modes_novec))/1024)
+print("Size of uncompressed modes: %dkb" % (len(pickle.dumps(modes))/1024))
+print("Size of compressed modes: %dkb" % (len(pickle.dumps(modes_comp))/1024))
+print("Size of modes without vectors: %dkb" % (len(pickle.dumps(modes_novec))/1024))
 
 clf()
 subplot(121)

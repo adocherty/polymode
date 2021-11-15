@@ -8,13 +8,13 @@ Still to do: locking/purging of converged eigenvectors
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 '''
 
-from __future__ import division
+
 
 from numpy import *
 import os, sys, logging
 
-from misc import machine_precision
-from householder import *
+from .misc import machine_precision
+from .householder import *
 
 def iprod(x,y):
     return dot(conj(x),y)
@@ -364,7 +364,7 @@ class ArnoldiIR:
         #There is a strange error that causes the eigensolver to deflate the last
         #entry after previous deflations, why does this have such small residue?
         if len(ilock)>0 and ilock[0]<len(ilock):
-            if eigensolver_debug: print "Deflating %s" % (ilock,)
+            if eigensolver_debug: print("Deflating %s" % (ilock,))
             Xi = self.Hvec[self.kmin:, self.kmin:][:, ilock]
             self.lock(Xi)
             self.kmin += len(ilock)
@@ -399,7 +399,7 @@ class ArnoldiIR:
         Hm=self.Hm
         Vm=self.Vm
         
-        print
+        print()
         
         #Test esolution
         avec = self.ritz_vectors(which)
@@ -408,7 +408,7 @@ class ArnoldiIR:
         for ii in range(len(which)):
             fres = absolute(self.matrix.matvec(avec[ii]) -  val[ii]*avec[ii]).max()
             fres_min = min(fres_min,fres); fres_max = max(fres_max,fres)
-        print "Wanted Residue: %.4g -> %.4g" % (fres_min, fres_max)
+        print("Wanted Residue: %.4g -> %.4g" % (fres_min, fres_max))
 
         uvec = self.ritz_vectors(unwhich)
         uval = self.Hval[unwhich]
@@ -416,7 +416,7 @@ class ArnoldiIR:
         for ii in range(len(unwhich)):
             ures = absolute(self.matrix.matvec(uvec[ii]) -  uval[ii]*uvec[ii]).max()
             ures_min = min(ures_min,ures); ures_max = max(ures_max,ures)
-        print "Unwanted Residue: %.4g -> %.4g" % (ures_min, ures_max)
+        print("Unwanted Residue: %.4g -> %.4g" % (ures_min, ures_max))
 
         #Check arnoldi expansion with residue
         X = self.Vm[:-1].T.copy()
@@ -424,9 +424,9 @@ class ArnoldiIR:
             X[:,i] = self.matrix.matvec(X[:,i])
         X -= dot(self.Vm[:-1].T, self.Hm[:-1])
         X[:,-1] -= self.Hm[-1,-1]*self.Vm[-1]
-        print "Error in Arnoldi expansion:", absolute(X).max()
+        print("Error in Arnoldi expansion:", absolute(X).max())
 
-        print "V orthogonality: %.4g" % absolute(iprod(Vm,Vm.transpose())-eye(self.Nv+1)).max()
+        print("V orthogonality: %.4g" % absolute(iprod(Vm,Vm.transpose())-eye(self.Nv+1)).max())
 
         #print "Res:",absolute(self.Hvec[-1]*self.hjp_last)
         
@@ -470,8 +470,8 @@ class ArnoldiIR:
 
             niter+=1
             if eigensolver_debug:
-                print "[%d] Res: %.4g->%.4g, Deflated: %d" \
-                    % (niter, ar_residue.max(), ar_residue.min(), self.kmin)
+                print("[%d] Res: %.4g->%.4g, Deflated: %d" \
+                    % (niter, ar_residue.max(), ar_residue.min(), self.kmin))
 
             #Save all converging solutions for debugging
             self.tracked_solutions += [ (self.ritz_values(iwanted), \
@@ -611,8 +611,8 @@ def eigs(A, number=None, shift=None, v0=None, tol=1e-10, maxiter=100, \
         evals = matrix.eigenvalue_transform(evals)
 
     if asolve.final_residue.max()>tol:
-        print "Warning: Eigensolve has not converged to required tolerance"
-        print asolve.final_residue
+        print("Warning: Eigensolve has not converged to required tolerance")
+        print(asolve.final_residue)
 
     #Return the calculated eigenvalues and vectors
     return evals, evecs

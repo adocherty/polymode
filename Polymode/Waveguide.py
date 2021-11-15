@@ -24,14 +24,14 @@ Each waveguide had a material, an exterior material and one or more shapes withi
 
 """
 
-from __future__ import division
+
 import logging
 
 import numpy as np
 from numpy import *
 
 from .difflounge import finitedifference, boundary
-from .mathlink import fftp, misc, coordinates, utf8out
+from .mathlink import fftp, misc, coordinates#, utf8out
 from . import Material
 
 class WgCoord(coordinates.Coord):
@@ -96,7 +96,7 @@ class WgCoord(coordinates.Coord):
         "Pickle all needed data, ignore cached data"
         state = self.__dict__.copy()
         #Remove cached information
-        for key in state.keys():
+        for key in list(state.keys()):
             if key.startswith('_'):
                 del state[key]
         return state
@@ -677,7 +677,7 @@ class Circle(WgShape):
         r0,phi0 = self.center
         
         annuli = []
-        phiv_inrange = filter(lambda p: phia<=p+dphi/2<=phib, phiv)
+        phiv_inrange = [p for p in phiv if phia<=p+dphi/2<=phib]
         
         if r0<ax:
             for phi in phiv_inrange:
@@ -900,7 +900,7 @@ class RegularPolygon(Polygon):
         
         #Create nodes for polygon without rotation at center 0
         phi = arange(0,Nsides)*a + 0.5*a
-        xynodes = zip(r*cos(phi), r*sin(phi))
+        xynodes = list(zip(r*cos(phi), r*sin(phi)))
         self.nodes = self.nodes_cartesian_to_polar(xynodes)
         
         #Final setup: apply rotation and center shift
@@ -1049,7 +1049,7 @@ class Annulus(WgShape):
         ra,rb,phia,phib = self.extents()
         
         annuli = []
-        for phi in filter(lambda p: phia<=p+dphi/2<=phib, phiv):
+        for phi in [p for p in phiv if phia<=p+dphi/2<=phib]:
             annuli += [ WgAnnulus(self, (ra,rb), (phi,phi+dphi)) ]
         return annuli
 
@@ -1356,7 +1356,7 @@ class AnnularCombine(Combine):
 
         na += [WgAnnulus(zone2, (a2.rstart,rendsort[0]), a1.phi)]
     
-        if a2.rend<>a1.rend:
+        if a2.rend!=a1.rend:
             na += [WgAnnulus(zone3, rendsort, a1.phi)]
         return na
 
@@ -1429,7 +1429,7 @@ class AnnularCombine(Combine):
         self.annuli=[]
         for phi in self.coord.calc_phiv():
             #Select annuli at specific phi (assume all the same width)
-            pan = filter(lambda a: abs(a.phi[0]-phi)<dphi/10, new_annuli)
+            pan = [a for a in new_annuli if abs(a.phi[0]-phi)<dphi/10]
 
             #If more than one annulus at specific phi, split and merge any overlapping
             if len(pan)>1:
@@ -1539,7 +1539,7 @@ class AnnularCombine(Combine):
             # G_0 = μ/(2π) [ϕ₁ - ϕ₀]
             #
             elif self.coord.reflect:
-                raise NotImplementedError, "Reflection symmetry not yet implemented"
+                raise NotImplementedError("Reflection symmetry not yet implemented")
             else:
                 Fth[1:]=dm/(ms[1:]*2j*pi)*(exp(-1j*ms[1:]*phia)-exp(-1j*ms[1:]*phib))
                 Fth[0]=dm*(phib-phia)/(2*pi)
@@ -1606,8 +1606,8 @@ class AnnularCombine(Combine):
         minphi = min([a.phi[0] for a in self.annuli])
         maxphi = max([a.phi[1] for a in self.annuli])
 
-        print "Found annuli in range %.6g to %.6g" % (minphi*180/pi, maxphi*180/pi)
-        print "Saving %d annuli to '%s'" % (numannuli,filename)
+        print("Found annuli in range %.6g to %.6g" % (minphi*180/pi, maxphi*180/pi))
+        print("Saving %d annuli to '%s'" % (numannuli,filename))
 
         waveguidefile = open(filename, "w")
         
@@ -1839,7 +1839,7 @@ class Waveguide(object):
         "Pickle all needed data, ignore cached data"
         state = self.__dict__.copy()
         #Remove cached information
-        for key in state.keys():
+        for key in list(state.keys()):
             if key.startswith('_'):
                 del state[key]
         return state
@@ -1962,7 +1962,7 @@ class Waveguide(object):
         if not self.quiet:
             logging.info("Generating index profile from %d object%s" % misc.numands(len(self.shapes)))
         
-        from LayeredSolver import MidLayer, InteriorLayer, ExteriorLayer
+        from .LayeredSolver import MidLayer, InteriorLayer, ExteriorLayer
         
         #Add layers from shapes
         layer_list = []
@@ -2121,7 +2121,7 @@ class Waveguide(object):
         style:          pcolor, 3d, line and contour
         cmap:       color map from matplotlib.cm
         '''
-        from Plotter import plot_v, title, colorbar, pcolor, plot, xlabel, ylabel, legend, draw
+        from .Plotter import plot_v, title, colorbar, pcolor, plot, xlabel, ylabel, legend, draw
 
         if opts=={}: opts = {'style':'pcolor'}
         if coord is None: coord = self.get_coord(Nx, border=0)

@@ -24,7 +24,7 @@ dlayer = d1+d2
 
 wlrange=[0.4,1.4]
 
-print "Bragg layer widths d1=%.4g, d2=%.4g, rcore = %.5g " % (d1,d2, rcore)
+print("Bragg layer widths d1=%.4g, d2=%.4g, rcore = %.5g " % (d1,d2, rcore))
 
 mg = Material.Fixed(ncore)
 m1 = Material.Fixed(n1)

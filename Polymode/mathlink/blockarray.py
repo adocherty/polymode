@@ -59,7 +59,7 @@ class TriBlockLU:
             self.Alu=BlockArray(A.mshape, A.blockshape, dtype=A.dtype)
 
         #Create new internal matrix if A is different shape
-        elif (self.Alu.mshape<>A.mshape) or (self.Alu.blockshape<>A.blockshape):
+        elif (self.Alu.mshape!=A.mshape) or (self.Alu.blockshape!=A.blockshape):
             logging.debug( "Internal LU matrix incorrect shape; creating new one" )
             del self.Alu
             self.Alu = BlockArray(A.mshape, A.blockshape, dtype=A.dtype)
@@ -172,7 +172,7 @@ class TriBlockLU:
             if row>0:
                 x[row] = d[row] - dot(self.Alu.get_raw_block(row-1,2).T, x[row-1])
             if any(isnan(x[row])) or any(isinf(x[row])):
-                print row, x[row]
+                print(row, x[row])
             x[row] = lu_solve((self.Alu.get_raw_block(row,1),self.pivots[row]),\
                      x[row], trans=1)
 
@@ -202,7 +202,7 @@ class BlockArray(ndarray):
         #Allow square shapes easily
         if isscalar(blockshape): blockshape = (blockshape,blockshape)
         if shape[1]%2==0:
-            raise RuntimeError, "Currently BlockArray only takes odd bandwidths"
+            raise RuntimeError("Currently BlockArray only takes odd bandwidths")
                 
         self.blockshape = blockshape
         self.mshape = shape
@@ -321,7 +321,7 @@ class BlockArray(ndarray):
             diag_length = min(size(value), self.shape[0])
 
         #Iterate over rows
-        for row in xrange(diag_length):
+        for row in range(diag_length):
             col = row%self.blockshape[1] + self.blockshape[1]*(self.bandwidth//2)
             if iterable(value):
                 self[row,col] = value.flat[row]
@@ -333,7 +333,7 @@ class BlockArray(ndarray):
         diag = empty(self.shape[0], dtype=self.dtype)
 
         #Iterate over rows
-        for row in xrange(self.shape[0]):
+        for row in range(self.shape[0]):
             col = row%self.blockshape[1] + self.blockshape[1]*(self.bandwidth//2)
             diag[row] = self[row,col]
         return diag
@@ -369,7 +369,7 @@ class BlockArray(ndarray):
 
     def get_dense_column(self,row):
         "Returns a column of the represented dense matrix"
-        raise NotImplementedError, "No right matvec yet"
+        raise NotImplementedError("No right matvec yet")
 
     def toarray(self):
         "Converts the block matrix to a dense matrix"
